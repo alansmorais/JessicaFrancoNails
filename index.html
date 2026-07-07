@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jéssica Franco Nails — Agendamento</title>
+<style>
+:root {
+  --bg: #FEFDFB; --card: #ffffff; --ink: #383027; --muted: #8b7d6b;
+  --line: #E9DDBE; --gold: #C49A3D; --gold-soft: #F3E8CF; --soft: #FBF6EC;
+  --radius: 28px;
+}
+* { box-sizing: border-box; scroll-behavior: smooth; }
+body { margin: 0; font-family: Inter, sans-serif; background: var(--bg); color: var(--ink); padding-bottom: 100px; }
+button, input, select, textarea { font: inherit; outline: none; }
+button { cursor: pointer; }
+a { text-decoration: none; color: inherit; }
+.app { max-width: 1180px; margin: auto; padding: 22px; }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.brand-logo { width: 180px; display: flex; align-items: center; }
+.brand-logo img { width: 100%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
+
+.public-nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.public-nav a, .public-nav button { font-weight: 600; font-size: 14px; transition: 0.2s; background: transparent; border: none; }
+.public-nav a:hover, .public-nav button:hover { color: var(--gold); }
+.public-nav .highlight { color: var(--gold); background: var(--gold-soft); padding: 8px 16px; border-radius: 999px; }
+
+.floating-btn { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white !important; padding: 16px 28px; border-radius: 50px; box-shadow: 0 10px 25px rgba(196, 154, 61, 0.4); font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 10px; z-index: 100; transition: 0.2s; }
+.floating-btn:hover { transform: translateY(-4px); }
+
+.hero, .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 22px 70px rgba(196, 154, 61, 0.08); }
+.hero { text-align: center; padding: 60px 20px; margin: 28px 0; }
+.eyebrow { color: var(--gold); font-weight: 900; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; }
+h1 { font-size: clamp(32px, 4vw, 56px); margin: 0 0 24px; }
+.lead { color: var(--muted); font-size: 16px; max-width: 750px; line-height: 1.6; margin: 0 auto 16px; }
+
+.primary { border: 0; border-radius: 18px; padding: 15px 22px; font-weight: 800; font-size: 15px; background: var(--gold); color: white; transition: 0.1s; width: 100%; margin-top: 18px; }
+
+.booking-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; align-items: start; margin-top: 40px; }
+.card { padding: 32px; }
+.step { display: flex; gap: 12px; align-items: center; margin: 32px 0 16px; }
+.step:first-child { margin-top: 0; }
+.step span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--gold-soft); color: var(--gold); font-weight: 900; font-size: 13px; }
+
+.two-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-bottom: 32px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: grid; gap: 8px; margin-bottom: 16px; }
+label { font-weight: 800; font-size: 13px; color: var(--ink); }
+input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 16px; padding: 15px 16px; transition: .2s; }
+input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-soft); }
+
+.service-grid { display: grid; gap: 12px; }
+.service { border: 1px solid var(--line); border-radius: 22px; padding: 16px; background: #fff; display: grid; grid-template-columns: 54px 1fr auto; gap: 14px; align-items: center; cursor: pointer; transition: .2s; }
+.service:hover, .service.active { border-color: var(--gold); background: var(--soft); transform: translateY(-2px); }
+.badge { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-soft); font-size: 24px; }
+.price { font-size: 18px; font-weight: 900; text-align: right; color: var(--ink); }
+
+.times { display: flex; gap: 10px; flex-wrap: wrap; }
+.time { border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; min-width: 90px; font-weight: 800; transition: .2s; }
+.time.active { background: var(--gold); color: white; border-color: var(--gold); }
+
+.summary { position: sticky; top: 20px; }
+.summary-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--line); }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; place-items: center; z-index: 9999; backdrop-filter: blur(4px); }
+.modal-overlay.active { display: grid; }
+.modal-content { background: var(--card); padding: 40px; border-radius: 24px; width: 90%; max-width: 450px; position: relative; }
+.close-modal { position: absolute; top: 20px; right: 20px; background: var(--soft); border: none; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+
+@media(max-width: 900px){ .booking-layout, .two-panels { grid-template-columns: 1fr; } .summary { position: static; } }
+</style>
+</head>
+<body>
+
+<a href="#agenda" class="floating-btn">📅 Reservar Horário</a>
+
+<div id="courseModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal()">✕</button>
+    <p class="eyebrow">Aprenda com Jéssica Franco</p>
+    <h2 style="margin-bottom: 20px;">Lista de Espera VIP</h2>
+    <form id="courseForm">
+      <div class="field"><label>Nome Completo</label><input type="text" id="courseName" required></div>
+      <div class="field"><label>WhatsApp</label><input type="tel" id="coursePhone" required></div>
+      <div class="field"><label>Nível de Experiência</label>
+        <select id="courseLevel" required>
+          <option value="Iniciante">Iniciante (Do zero)</option>
+          <option value="Aperfeiçoamento">Aperfeiçoamento Gel/Fibra</option>
+        </select>
+      </div>
+      <button type="submit" class="primary" id="btnCourse">Quero minha vaga</button>
+    </form>
+  </div>
+</div>
+
+<main class="app">
+  <nav class="topbar">
+    <a href="#" class="brand-logo"><img src="jessica_franco_nail_designer_logo.jpg" alt="Logo"></a>
+    <div class="public-nav">
+      <a href="#perfil">Meu Perfil</a>
+      <button class="highlight" onclick="openModal()">Cursos (Inscreva-se)</button>
+      <a href="#agenda">Agendamento</a>
+    </div>
+  </nav>
+
+  <section id="perfil" class="hero">
+    <p class="eyebrow">Nail Designer Premium</p>
+    <h1>Jéssica Franco</h1>
+    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com extrema durabilidade e sofisticação.</p>
+  </section>
+
+  <div id="agenda">
+    <div class="booking-layout">
+      <form class="card" id="bookingForm">
+        <div class="two-panels">
+          <div>
+            <div class="step" style="margin-top:0;"><span>01</span><h2>Selecione o serviço</h2></div>
+            <div class="service-grid" id="serviceGrid"></div>
+          </div>
+          <div>
+            <div class="step" style="margin-top:0;"><span>02</span><h2>Data e horário</h2></div>
+            <div class="field"><label>Data</label><input id="date" type="date" required></div>
+            <div class="field" style="margin-top: 16px;"><label>Horários</label><div class="times" id="timeGrid"></div></div>
+          </div>
+        </div>
+        
+        <div class="step"><span>03</span><h2>Seus dados</h2></div>
+        <div class="two">
+          <div class="field"><label>Nome completo</label><input id="name" required></div>
+          <div class="field"><label>WhatsApp</label><input id="phone" required></div>
+        </div>
+        
+        <button type="submit" class="primary" id="btnBooking">Agendar via WhatsApp</button>
+      </form>
+
+      <aside class="card summary">
+        <h3>Resumo</h3>
+        <div class="summary-row"><span>Serviço</span><b id="sumService">-</b></div>
+        <div class="summary-row"><span>Data</span><b id="sumDate">Selecione</b></div>
+        <div class="summary-row"><span>Horário</span><b id="sumTime">Selecione</b></div>
+        <div class="summary-row" style="border: 0;"><span>Total</span><b id="sumPrice" style="font-size: 20px; color: var(--gold);">-</b></div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script>
+// ==========================================
+// CONFIGURAÇÃO DO BANCO DE DADOS
+// COLOQUE AQUI A SUA URL DO APPS SCRIPT
+// ==========================================
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
+
+const services = [
+  {id:"alongamento", icon:"✨", name:"Alongamento em Gel", price:140, duration:"2h 30m"},
+  {id:"banho", icon:"💅", name:"Banho em Gel", price:110, duration:"2h"},
+  {id:"manutencao", icon:"🔄", name:"Manutenção", price:90, duration:"1h 45m"}
+];
+const times = ["08:00", "09:00", "10:00", "14:00", "15:00", "16:00"];
+const BRL = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
+let selectedService = services[0], selectedTime = null;
+
+const $ = q => document.querySelector(q);
+
+function renderUI() {
+  $("#serviceGrid").innerHTML = services.map((s, i) => `
+    <div class="service ${i===0?"active":""}" onclick="selectSvc('${s.id}', this)">
+      <div class="badge">${s.icon}</div>
+      <div><b>${s.name}</b></div>
+      <div class="price">${BRL.format(s.price)}</div>
+    </div>`).join("");
+  $("#timeGrid").innerHTML = times.map(t => `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`).join("");
+}
+
+function selectSvc(id, el) {
+  document.querySelectorAll(".service").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  selectedService = services.find(s => s.id === id);
+  updateSum();
+}
+
+function selectTime(time, el) {
+  document.querySelectorAll(".time").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  selectedTime = time;
+  updateSum();
+}
+
+function updateSum() {
+  $("#sumService").textContent = selectedService.name;
+  $("#sumPrice").textContent = BRL.format(selectedService.price);
+  $("#sumDate").textContent = $("#date").value ? new Date($("#date").value+"T00:00").toLocaleDateString("pt-BR") : "Selecione";
+  $("#sumTime").textContent = selectedTime || "Selecione";
+}
+
+// Envia dados usando fetch sem headers complexos para evitar erro de CORS do Apps Script
+async function sendToGoogleSheets(payload) {
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+// Submit Cursos
+function openModal() { $("#courseModal").classList.add("active"); }
+function closeModal() { $("#courseModal").classList.remove("active"); }
+
+$("#courseForm").onsubmit = async e => {
+  e.preventDefault();
+  $("#btnCourse").textContent = "Enviando...";
+  await sendToGoogleSheets({
+    type: 'course',
+    name: $("#courseName").value,
+    phone: $("#coursePhone").value,
+    level: $("#courseLevel").value
+  });
+  alert("Inscrição realizada com sucesso!");
+  closeModal();
+  e.target.reset();
+  $("#btnCourse").textContent = "Quero minha vaga";
+};
+
+// Submit Agendamento
+$("#bookingForm").onsubmit = async e => {
+  e.preventDefault();
+  if(!selectedTime) return alert("Selecione um horário.");
+  
+  $("#btnBooking").textContent = "Enviando...";
+  
+  await sendToGoogleSheets({
+    type: 'booking',
+    client: $("#name").value,
+    phone: $("#phone").value,
+    service: selectedService.name,
+    date: $("#date").value,
+    time: selectedTime,
+    price: selectedService.price
+  });
+  
+  const msg = `Olá! Gostaria de agendar: ${selectedService.name} dia ${new Date($("#date").value+"T00:00").toLocaleDateString("pt-BR")} às ${selectedTime}.`;
+  window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`, '_blank');
+  
+  e.target.reset();
+  $("#btnBooking").textContent = "Agendar via WhatsApp";
+};
+
+$("#date").min = new Date().toISOString().slice(0,10);
+$("#date").onchange = updateSum;
+renderUI(); updateSum();
+</script>
+</body>
+</html>
