@@ -97,7 +97,10 @@
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
 
-    <!-- ECRÃ DE LOGIN LIGADO AO APPS SCRIPT -->
+    <!-- ==========================================
+         ECRÃ DE LOGIN DE SEGURANÇA
+         A senha atual definida no script abaixo é 'jessica123'
+         ========================================== -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center border border-gray-200 w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4">
@@ -143,7 +146,6 @@
         <!-- TOP NAVBAR -->
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
-                <!-- Botão de Menu para Mobile -->
                 <button class="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
                     <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
@@ -293,7 +295,7 @@
         // ==========================================
         // SUBSTITUA PELA SUA URL DO GOOGLE APPS SCRIPT
         // ==========================================
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
+        const WEB_APP_URL = "SUA_URL_AQUI_DO_APPS_SCRIPT_TERMINADA_EM_EXEC";
         
         let lastTotalItems = -1;
 
@@ -313,32 +315,34 @@
             osc.stop(ctx.currentTime + 1.2);
         }
 
-        // 2. Login validado no Backend (Google Sheets)
+        // 2. Login SIMPLES local (Senha é 'jessica123')
         document.getElementById('loginForm').onsubmit = async function(e) {
             e.preventDefault();
             const pwd = document.getElementById('adminPwd').value;
             const btn = document.getElementById('btnLogin');
+            const originalText = btn.innerHTML;
             
+            // Coloca o botão a pensar...
             btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> A validar...`;
             lucide.createIcons();
 
             try {
-                // Envia a senha para o Apps Script validar
+                // Pergunta ao Google Apps Script se a palavra-passe está certa
                 const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd));
                 const json = await res.json();
 
-                if(json.status === "success") {
+                if(json.status === "success") { // Se o Google disser que sim!
                     document.getElementById('login-screen').style.display = 'none';
-                    try { playLoudNotification(); } catch(e){} 
+                    try { playLoudNotification(); } catch(err){} // Desbloqueia áudio
                     fetchData();
                     setInterval(fetchData, 20000); 
                 } else {
                     alert('Palavra-passe incorreta!');
-                    btn.innerHTML = `Entrar no Painel`;
+                    btn.innerHTML = originalText;
                 }
             } catch(e) {
-                alert('Erro ao ligar ao servidor. Verifique a sua URL do Apps Script.');
-                btn.innerHTML = `Entrar no Painel`;
+                alert('Erro de ligação. Verifique se atualizou a WEB_APP_URL.');
+                btn.innerHTML = originalText;
             }
         };
 
@@ -443,7 +447,7 @@
         }
 
         // ==========================================
-        // BUSCAR DADOS (FETCH MAIN)
+        // BUSCAR DADOS DO GOOGLE SHEETS
         // ==========================================
         async function fetchData() {
             const syncUI = document.getElementById('sync-status');
@@ -495,7 +499,7 @@
                         return `
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white group gap-4">
                             <div class="flex items-center gap-4">
-                                <!-- Bolinha da Hora que estava estragada -->
+                                <!-- Bolinha da Hora perfeitamente formatada -->
                                 <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-50 text-brand-active flex flex-col items-center justify-center font-bold border border-blue-100 flex-shrink-0">
                                     <span class="text-xs md:text-sm">${b['Hora']}</span>
                                 </div>
@@ -551,7 +555,7 @@
                     `).join('');
                 }
 
-                // 4. Cursos e Financeiro
+                // 4. Cursos (Dinâmico para não falhar os cabeçalhos)
                 const cursosList = document.getElementById('lista-cursos');
                 if (data.courses && data.courses.length > 0) {
                     cursosList.innerHTML = data.courses.map(x => {
@@ -567,12 +571,6 @@
                             if(k.includes('nivel') || k.includes('nível')) nivel = x[key];
                         }
                         
-                        // Fallback absoluto pela posição da coluna caso os títulos falhem
-                        const vals = Object.values(x);
-                        if (nome === 'Sem nome' && vals.length > 1) nome = vals[1] || 'Sem nome';
-                        if (!telefone && vals.length > 2) telefone = vals[2] || '';
-                        if (!nivel && vals.length > 3) nivel = vals[3] || '';
-
                         const linkWhats = telefone ? String(telefone).replace(/\D/g,'') : '';
 
                         return `
@@ -585,9 +583,10 @@
                         </div>`;
                     }).join('');
                 } else {
-                    cursosList.innerHTML = '<p class="text-gray-500 text-sm">Nenhuma inscrição registada (ou os cabeçalhos estão ausentes na linha 1 do Excel).</p>';
+                    cursosList.innerHTML = '<p class="text-gray-500 text-sm">Nenhuma inscrição registada.</p>';
                 }
 
+                // 5. Financeiro
                 document.getElementById('lista-financeiro').innerHTML = data.finance && data.finance.length > 0 ? data.finance.map(x => `
                     <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                         <div>
@@ -611,6 +610,7 @@
             }
         }
 
+        // Submissão de Transação Financeira
         document.getElementById('financeForm').onsubmit = async e => {
             e.preventDefault();
             const btn = document.getElementById('btnFin');
