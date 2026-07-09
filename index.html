@@ -3,86 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- FORÇA O MODO CLARO DO NAVEGADOR -->
 <meta name="color-scheme" content="light">
-<title>Jéssica Franco Nails — Agendamento & Gestão Premium</title>
-
-<!-- SEO & Meta Tags -->
-<meta name="description" content="Agende seu horário com Jéssica Franco, especialista em Nail Design. Alongamento em Gel, Fibra de Vidro, Blindagem e muito mais." />
-<meta property="og:title" content="Jéssica Franco Nails - Agende seu Horário" />
-<meta property="og:description" content="Especialista em criar unhas impecáveis, naturais e de alta durabilidade." />
-<meta property="og:type" content="website" />
-
+<title>Jéssica Franco Nails — Agendamento</title>
 <style>
-/* =========================================================
-   STYLE.CSS - VARIÁVEIS E ESTILOS GLOBAIS
-   ========================================================= */
 :root {
-  --bg: #FEFDFB;
-  --card: #ffffff;
-  --ink: #383027;
-  --muted: #8b7d6b;
-  --line: #E9DDBE;
-  --gold: #C49A3D;
-  --gold-soft: #F3E8CF;
-  --soft: #FBF6EC;
-  --success: #187245;
-  --danger: #d32f2f;
-  --shadow: 0 22px 70px rgba(196, 154, 61, 0.08);
-  --radius: 28px;
+  --bg: #FEFDFB; --card: #ffffff; --ink: #383027; --muted: #8b7d6b;
+  --line: #E9DDBE; --gold: #C49A3D; --gold-soft: #F3E8CF; --soft: #FBF6EC;
+  --radius: 20px;
 }
 * { box-sizing: border-box; scroll-behavior: smooth; }
-
-/* Força a cor de fundo branca e texto escuro, ignorando modos escuros do sistema */
-body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background-color: var(--bg) !important; color: var(--ink) !important; padding-bottom: 100px; }
-
+body { margin: 0; font-family: Inter, sans-serif; background-color: var(--bg) !important; color: var(--ink) !important; padding-bottom: 100px; }
 button, input, select, textarea { font: inherit; outline: none; }
 button { cursor: pointer; }
 a { text-decoration: none; color: inherit; }
 .app { max-width: 1180px; margin: auto; padding: 22px; }
 
-/* Acessibilidade */
-*:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
-
-/* =========================================================
-   COMPONENTES DE UI
-   ========================================================= */
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; position: sticky; top: 0; z-index: 10; padding: 14px 0; background: var(--bg); border-bottom: 1px solid var(--line); margin-bottom: 24px; }
-.brand { display: flex; align-items: center; gap: 18px; min-width: 260px; }
-.brand-logo { width: 140px; height: 80px; display: grid; place-items: center; overflow: hidden; background: transparent; }
-/* O mix-blend-mode remove o fundo branco do JPG se mesclando com o fundo do site */
-.brand-logo img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
-.brand strong { font-size: 20px; letter-spacing: .02em; display: block; }
-.brand span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; letter-spacing: .18em; text-transform: uppercase; }
-
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.brand-logo { font-size: 22px; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; }
 .public-nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.public-nav a, .public-nav button { font-weight: 600; font-size: 14px; transition: color 0.2s; background: transparent; border: none; }
+.public-nav a, .public-nav button { font-weight: 600; font-size: 14px; transition: 0.2s; background: transparent; border: none; color: var(--ink); }
 .public-nav a:hover, .public-nav button:hover { color: var(--gold); }
 .public-nav .highlight { color: var(--gold); background: var(--gold-soft); padding: 8px 16px; border-radius: 999px; }
 
-/* Ícone de Rede Social */
-.social-icon { color: var(--ink); display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
-.social-icon:hover { color: var(--gold); }
+.hero, .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 15px 40px rgba(196, 154, 61, 0.06); }
+.hero { text-align: center; padding: 50px 20px; margin: 20px 0 40px; }
+.eyebrow { color: var(--gold); font-weight: 900; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; margin-bottom: 10px; display: block;}
+h1 { font-size: clamp(32px, 4vw, 48px); margin: 0 0 20px; }
+.lead { color: var(--muted); font-size: 16px; max-width: 750px; line-height: 1.6; margin: 0 auto; }
 
-.floating-btn { position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white !important; padding: 16px 28px; border-radius: 50px; box-shadow: 0 10px 25px rgba(196, 154, 61, 0.4); font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 10px; z-index: 1000; transition: transform 0.2s, box-shadow 0.2s; }
-.floating-btn:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(196, 154, 61, 0.5); }
-
-.hero, .card, .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
-.hero { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 28px 0; align-items: stretch; text-align: center; }
-.hero-main { padding: 60px 20px; display: flex; flex-direction: column; align-items: center; }
-.eyebrow { margin: 0 0 10px; color: var(--gold); font-weight: 900; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; }
-h1 { font-size: clamp(32px, 4vw, 56px); line-height: 1.05; letter-spacing: -.03em; margin: 0 0 24px; }
-h2 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
-.lead { color: var(--muted); font-size: 16px; max-width: 750px; line-height: 1.6; margin: 0 auto 16px; text-align: justify; text-align-last: center; }
-
-.primary, .secondary, .ghost { border: 0; border-radius: 18px; padding: 15px 22px; font-weight: 800; font-size: 15px; transition: transform 0.1s; }
-.primary:active, .secondary:active, .ghost:active { transform: scale(0.98); }
-.primary { background: var(--gold); color: white; box-shadow: 0 12px 25px rgba(196, 154, 61, 0.25); }
+.primary { border: 0; border-radius: 12px; padding: 16px 22px; font-weight: 800; font-size: 15px; background: var(--gold); color: white; transition: 0.2s; width: 100%; margin-top: 18px; }
+.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(196,154,61,0.3); }
 .primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-.wide { width: 100%; margin-top: 18px; }
 
-/* Formulários e Agendamento */
-.booking-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; align-items: start; margin-top: 40px; }
+.booking-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; align-items: start; }
 .card { padding: 32px; }
 .step { display: flex; gap: 12px; align-items: center; margin: 32px 0 16px; }
 .step:first-child { margin-top: 0; }
@@ -92,187 +45,84 @@ h2 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .field { display: grid; gap: 8px; margin-bottom: 16px; }
 label { font-weight: 800; font-size: 13px; color: var(--ink); }
-input, select, textarea { width: 100%; border: 1px solid var(--line); background: #fff; border-radius: 16px; padding: 15px 16px; outline: 0; transition: .2s; color: var(--ink); }
+input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; transition: .2s; background: white; color: var(--ink); }
 input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-soft); }
-textarea { resize: vertical; min-height: 90px; }
 
-/* Cards de Serviço Melhorados */
 .service-grid { display: grid; gap: 12px; }
-.service { border: 1px solid var(--line); border-radius: 22px; padding: 16px; background: #fff; display: grid; grid-template-columns: 54px 1fr auto; gap: 14px; align-items: center; text-align: left; transition: all .2s ease; cursor: pointer; }
-.service:hover, .service.active { border-color: var(--gold); box-shadow: 0 10px 25px rgba(196, 154, 61, 0.12); transform: translateY(-2px); }
-.service.active { background: var(--soft); border-width: 2px; padding: 15px; }
-.badge { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-soft); font-size: 24px; color: var(--gold); }
-.service small { color: var(--muted); display: block; margin-top: 5px; font-size: 12px; line-height: 1.4; }
-.price { font-size: 18px; font-weight: 900; text-align: right; white-space: nowrap; color: var(--ink); }
+.service { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: #fff; display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: center; cursor: pointer; transition: .2s; text-align: left;}
+.service:hover, .service.active { border-color: var(--gold); background: var(--soft); transform: translateY(-2px); }
+.badge { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-soft); font-size: 20px; }
+.service small { color: var(--muted); display: block; margin-top: 4px; font-size: 12px; line-height: 1.3;}
+.price { font-size: 18px; font-weight: 900; text-align: right; color: var(--ink); }
 
-/* Calendário */
 .times { display: flex; gap: 10px; flex-wrap: wrap; }
-.time { border: 1px solid var(--line); background: #fff; border-radius: 14px; padding: 12px 16px; min-width: 80px; font-weight: 800; color: var(--ink); transition: .2s; }
-.time:not(:disabled):hover { border-color: var(--gold); background: var(--soft); }
-.time.active { background: var(--gold); color: white; border-color: var(--gold); transform: scale(1.05); }
-.time:disabled { opacity: 0.4; cursor: not-allowed; background: #f5f5f5; text-decoration: line-through; }
+.time { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; min-width: 80px; font-weight: 800; transition: .2s; background: white; color: var(--ink); text-align: center; }
+.time:hover { border-color: var(--gold); background: var(--soft); }
+.time.active { background: var(--gold); color: white; border-color: var(--gold); }
 
-/* Resumo Lateral */
-.summary { position: sticky; top: 108px; }
-.summary-row { display: flex; justify-content: space-between; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--line); }
-.summary-row span { color: var(--muted); font-size: 15px; }
-.summary-row b { text-align: right; color: var(--ink); }
-.note { margin-top: 20px; background: var(--soft); border-radius: 16px; padding: 16px; color: var(--muted); line-height: 1.5; font-size: 13px; text-align: left;}
-.error-msg { color: var(--danger); font-size: 13px; font-weight: 600; padding: 10px; background: #ffebee; border-radius: 8px; margin-top: -5px; display: none; }
+.summary { position: sticky; top: 20px; }
+.summary-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.summary-row span { color: var(--muted); }
+.summary-row b { color: var(--ink); text-align: right; }
+.note { font-size: 12px; color: var(--muted); margin-top: 15px; line-height: 1.5; padding: 12px; background: var(--soft); border-radius: 10px; }
 
-/* Toast Notification (Substitui os alerts nativos) */
-.toast { visibility: hidden; min-width: 250px; background-color: var(--ink); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 10000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.error-msg { color: #d32f2f; font-size: 13px; font-weight: 600; padding: 10px; background: #ffebee; border-radius: 8px; margin-top: -5px; display: none; }
+
+.toast { visibility: hidden; min-width: 250px; background-color: var(--ink); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 .toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 4.5s; }
 @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
 @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
 
-/* Modal de Cursos */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; place-items: center; z-index: 9999; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(4px); }
-.modal-overlay.active { display: grid; opacity: 1; }
-.modal-content { background: var(--card); padding: 40px; border-radius: 24px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-.close-modal { position: absolute; top: 20px; right: 20px; background: var(--soft); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: bold; color: var(--ink); cursor: pointer; }
-
-@media(max-width: 900px){
-  .booking-layout, .two-panels { grid-template-columns: 1fr; }
-  .topbar { flex-direction: column; align-items: stretch; }
-  .public-nav { justify-content: center; }
-  .summary { position: static; }
-  .two { grid-template-columns: 1fr; }
-  .floating-btn { bottom: 20px; right: 20px; font-size: 14px; padding: 14px 20px; width: calc(100% - 40px); justify-content: center; }
-  .hero-main { padding: 40px 15px; }
-  h1 { font-size: 28px; }
-}
+@media(max-width: 900px){ .booking-layout, .two-panels { grid-template-columns: 1fr; } .summary { position: static; } .hero { padding: 30px 15px; } h1 {font-size: 26px;} }
 </style>
 </head>
 <body>
 
-<a href="#agenda" class="floating-btn" id="floatingBtn">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-  Reservar Horário
-</a>
-
-<div id="toast" class="toast">Mensagem</div>
-
-<!-- Modal Inscrição Cursos -->
-<div id="courseModal" class="modal-overlay">
-  <div class="modal-content">
-    <button class="close-modal" onclick="closeModal()">✕</button>
-    <p class="eyebrow">Aprenda com Jéssica Franco</p>
-    <h2 style="margin-bottom: 20px;">Lista de Espera VIP</h2>
-    <form id="courseForm">
-      <div class="field">
-        <label>Nome Completo</label>
-        <input type="text" id="courseName" required placeholder="Seu nome">
-      </div>
-      <div class="field">
-        <label>WhatsApp</label>
-        <input type="tel" id="coursePhone" required placeholder="(11) 99999-9999">
-      </div>
-      <div class="field">
-        <label>Nível de Experiência</label>
-        <select id="courseLevel" required>
-          <option value="Iniciante">Iniciante (Começando do zero)</option>
-          <option value="Aperfeiçoamento">Aperfeiçoamento em Gel/Fibra</option>
-        </select>
-      </div>
-      <button type="submit" class="primary" id="btnCourse">Quero minha vaga</button>
-    </form>
-  </div>
-</div>
-
 <main class="app">
-  
-  <!-- Navegação Topo -->
   <nav class="topbar">
-    <a href="#" class="brand">
-      <div class="brand-logo">   <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Nails logo"></div>
-    </a>
-    <div class="public-nav" id="publicMenu">
-      <a href="https://www.instagram.com/jefranco_nails/" target="_blank" class="social-icon" aria-label="Instagram">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-      </a>
-      <a href="#perfil">Meu Perfil</a>
-      <button class="highlight" onclick="openModal()">Cursos (Inscreva-se)</button>
-      <a href="#agenda">Agendamento</a>
+    <div class="brand-logo">Jéssica Franco</div>
+    <div class="public-nav">
+      <button class="highlight" onclick="alert('Inscrições para o curso em breve!')">Cursos (Inscreva-se)</button>
     </div>
   </nav>
 
-  <!-- Perfil -->
-  <section id="perfil" class="hero">
-    <div class="hero-main">
-      <p class="eyebrow">Nail Designer Premium</p>
-      <h1>Jéssica Franco</h1>
-      <p class="lead">Seja muito bem-vinda ao seu novo padrão de beleza. 🤍</p>
-      <p class="lead">Sou especialista em Nail Design e apaixonada por elevar a autoestima das minhas clientes através de unhas impecáveis. Com foco constante em inovação e aperfeiçoamento, entrego resultados que unem sofisticação, naturalidade e extrema durabilidade.</p>
-      <p class="lead">Minha expertise abrange as mais avançadas técnicas do mercado: <b>Alongamento em Fibra de Vidro, Molde Russo, Molde F1, Banho em Gel e Blindagem</b>. Além de transformar mãos, também transformo vidas profissionais por meio de Cursos VIP exclusivos.</p>
-      <p class="lead" style="margin-bottom: 0;">Sinta a confiança de ter unhas perfeitas. Meu compromisso é proporcionar um atendimento de excelência, focado nos mínimos detalhes. Será um prazer receber você em meu espaço! ✨</p>
-      
-      <div style="margin-top: 32px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; color: var(--ink);">
-        <div><b>✨ Atendimento Personalizado</b></div>
-        <div><b>💅 Produtos de Alta Qualidade</b></div>
-        <div><b>🏆 Biossegurança e Cuidado</b></div>
-      </div>
-    </div>
+  <section class="hero">
+    <span class="eyebrow">Nail Designer Premium</span>
+    <h1>Beleza e Durabilidade</h1>
+    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas, naturalidade e extrema durabilidade.</p>
   </section>
 
-  <!-- Cursos -->
-  <section id="cursos" class="card" style="margin: 40px 0; text-align: center; background: linear-gradient(135deg, var(--soft), #fff);">
-    <p class="eyebrow">Aprenda Comigo</p>
-    <h2>Cursos Profissionais de Nail Design</h2>
-    <p class="lead" style="margin: 12px auto 24px;">Transforme sua paixão em uma carreira lucrativa. Vagas abertas para capacitação VIP e turmas para iniciantes e aperfeiçoamento em gel.</p>
-    <button class="primary" onclick="openModal()" style="width: auto;">Garantir Minha Vaga</button>
-  </section>
-
-  <!-- Agendamento -->
-  <div id="agenda" style="margin-top: 60px;">
-    <div style="text-align: center; margin-bottom: 30px;">
-      <p class="eyebrow">Seu Momento</p>
-      <h2>Agende seu horário</h2>
-    </div>
-    
+  <div id="agenda">
     <div class="booking-layout">
       <form class="card" id="bookingForm">
-        
-        <!-- Serviços e Data Lado a Lado -->
         <div class="two-panels">
-          <!-- Coluna Esquerda: Serviços -->
           <div>
             <div class="step" style="margin-top:0;"><span>01</span><h2>Selecione o serviço</h2></div>
             <div class="service-grid" id="serviceGrid"></div>
           </div>
-          
-          <!-- Coluna Direita: Data e Hora -->
           <div>
             <div class="step" style="margin-top:0;"><span>02</span><h2>Data e horário</h2></div>
             <div class="field">
-              <label for="date">Data do agendamento</label>
-              <!-- Limite do calendário -->
-              <input id="date" type="date" min="2026-07-13" max="2027-01-13" required aria-label="Selecione a data">
+              <label>Data</label>
+              <input id="date" type="date" required>
               <div id="dateError" class="error-msg"></div>
             </div>
             <div class="field" style="margin-top: 16px;">
-              <label>Horários disponíveis</label>
+              <label>Horários Livres</label>
               <div class="times" id="timeGrid">
-                  <span style="color:var(--muted); font-size:14px;">Selecione uma data para ver os horários.</span>
+                <span style="color:var(--muted); font-size:14px;">Selecione uma data para ver os horários.</span>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="step"><span>03</span><h2>Dados da cliente e Pagamento</h2></div>
+        <div class="step"><span>03</span><h2>Dados da reserva</h2></div>
         <div class="two">
-          <div class="field">
-            <label for="name">Nome completo</label>
-            <input id="name" placeholder="Ex: Ana Clara Souza" required minlength="3">
-          </div>
-          <div class="field">
-            <label for="phone">WhatsApp</label>
-            <input id="phone" placeholder="(11) 99999-9999" required maxlength="15" type="tel">
-          </div>
+          <div class="field"><label>Nome completo</label><input id="name" required placeholder="Seu nome"></div>
+          <div class="field"><label>WhatsApp</label><input type="tel" id="phone" required placeholder="(11) 99999-9999"></div>
         </div>
-        
         <div class="field">
-          <label>Forma de Pagamento Desejada</label>
+          <label>Forma de Pagamento</label>
           <select id="paymentMethod" required>
             <option value="PIX">PIX</option>
             <option value="Cartão de Crédito">Cartão de Crédito</option>
@@ -280,107 +130,85 @@ textarea { resize: vertical; min-height: 90px; }
             <option value="Dinheiro">Dinheiro</option>
           </select>
         </div>
-
-        <div class="field">
-          <label for="notes">Observações <small style="color: var(--muted); font-weight: normal;">(Opcional)</small></label>
-          <textarea id="notes" placeholder="Ex: Manutenção, formato preferido, precisa de remoção..."></textarea>
-        </div>
         
-        <button type="submit" class="primary wide" id="submitBtn" disabled>Confirmar Agendamento</button>
+        <button type="submit" class="primary" id="btnBooking" disabled>Preencha os dados para confirmar</button>
       </form>
 
       <aside class="card summary">
-        <h3>Resumo do agendamento</h3>
-        <div class="summary-row"><span>Serviço</span><b id="sumService">Carregando...</b></div>
+        <h3>Resumo</h3>
+        <div class="summary-row"><span>Serviço</span><b id="sumService">-</b></div>
         <div class="summary-row"><span>Data</span><b id="sumDate">Selecione</b></div>
         <div class="summary-row"><span>Horário</span><b id="sumTime">Selecione</b></div>
-        <div class="summary-row" style="border: 0; padding-bottom: 0;"><span>Investimento</span><b id="sumPrice" style="font-size: 22px; color: var(--gold);">—</b></div>
-        <div class="note">* No banho em gel e no alongamento já está incluso esmaltação em gel simples. As vagas são confirmadas automaticamente.</div>
+        <div class="summary-row" style="border: 0;"><span>Total</span><b id="sumPrice" style="font-size: 22px; color: var(--gold);">-</b></div>
+        <div class="note">* No banho em gel e no alongamento já está incluso esmaltação em gel simples.</div>
       </aside>
     </div>
   </div>
 </main>
 
+<div id="toast" class="toast">Mensagem</div>
+
 <script>
 // ==========================================
-// CONFIGURAÇÃO DO BANCO DE DADOS (APPS SCRIPT)
+// SUA URL DO GOOGLE APPS SCRIPT
 // ==========================================
-// COLE AQUI A SUA URL GERADA NO GOOGLE APPS SCRIPT
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
 
-// Limites de Data
-const MIN_DATE = "2026-07-13";
-const MAX_DATE = "2027-01-13";
+// Limites Mínimos (Hoje)
+const minDateObj = new Date();
+const MIN_DATE = minDateObj.toISOString().split('T')[0];
+document.getElementById('date').setAttribute('min', MIN_DATE);
 
-// Feriados (Formato AAAA-MM-DD)
-const FERIADOS = [
-  "2026-09-07", "2026-10-12", "2026-11-02", "2026-11-15", "2026-12-24", "2026-12-25", "2026-12-31", "2027-01-01"
-];
-
-// Serviços conforme Tabela Atualizada
 const services = [
-  {id:"alongamento", icon:"✨", name:"Alongamento na fibra de vidro", desc:"Molde Russo ou Molde F1", price:160},
-  {id:"banho-gel", icon:"💅", name:"Banho em gel", desc:"Esmaltação em gel inclusa", price:130},
-  {id:"blindagem-maos", icon:"🛡️", name:"Blindagem + esmaltação em gel (mãos)", desc:"Acabamento perfeito", price:75},
-  {id:"blindagem-pes", icon:"👣", name:"Blindagem + esmaltação em gel (pés)", desc:"Durabilidade", price:80}
+  {id:"alongamento", icon:"✨", name:"Alongamento na fibra de vidro", desc:"Molde Russo ou Molde F1 (Esmaltação em gel inclusa)", price:160},
+  {id:"banho", icon:"💅", name:"Banho em gel", desc:"Esmaltação em gel simples inclusa", price:130},
+  {id:"blindagem-maos", icon:"🛡️", name:"Blindagem + Esmaltação (Mãos)", desc:"Esmaltação em gel nas mãos", price:75},
+  {id:"blindagem-pes", icon:"👣", name:"Blindagem + Esmaltação (Pés)", desc:"Esmaltação em gel nos pés", price:80}
 ];
 
-const allTimes = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
 const BRL = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
 
 let selectedService = services[0];
 let selectedTime = null;
-let occupiedBookings = []; // Armazena horários ocupados lidos da planilha
+let occupiedBookings = []; 
 
 const $ = q => document.querySelector(q);
-const $$ = q => Array.from(document.querySelectorAll(q));
 
-// --- Funções de UI (Toast, Modais) ---
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
   toast.innerText = message;
-  toast.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
+  toast.style.backgroundColor = isError ? "#d32f2f" : "#187245";
   toast.className = "toast show";
   setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 5000);
 }
 
-function openModal() { $("#courseModal").classList.add("active"); }
-function closeModal() { $("#courseModal").classList.remove("active"); }
+function renderServices() {
+  $("#serviceGrid").innerHTML = services.map((s, i) => `
+    <div class="service ${i===0?"active":""}" onclick="selectSvc('${s.id}', this)">
+      <div class="badge">${s.icon}</div>
+      <div><b>${s.name}</b><small>${s.desc}</small></div>
+      <div class="price">${BRL.format(s.price)}</div>
+    </div>`).join("");
+}
 
-// --- Buscar Horários Ocupados no Sheets ---
 async function fetchOccupiedTimes() {
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_all");
     const data = await res.json();
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
-        let dataStr = b['Data Agendamento'];
-        if(dataStr.includes('T')) dataStr = dataStr.split('T')[0]; 
-        return { date: dataStr, time: b['Hora'] };
+        let dataStr = String(b['Data Agendamento']);
+        if(dataStr.includes('T')) dataStr = dataStr.split('T')[0];
+        
+        let horaStr = String(b['Hora']);
+        let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
+        let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
+
+        return { date: dataStr, time: horaLimpa };
       });
     }
     if($("#date").value) renderTimes();
-  } catch(e) { console.error("Erro ao carregar horários", e); }
-}
-
-// --- Renderizar Interface ---
-function renderServices() {
-  $("#serviceGrid").innerHTML = services.map((s, i) => `
-    <button type="button" class="service ${i===0 ? "active" : ""}" data-id="${s.id}" aria-label="Selecionar ${s.name}">
-      <div class="badge">${s.icon}</div>
-      <div>
-        <b>${s.name}</b>
-        <small>${s.desc}</small>
-      </div>
-      <div class="price">${BRL.format(s.price)}</div>
-    </button>`).join("");
-
-  $$(".service").forEach(btn => btn.onclick = () => {
-    $$(".service").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedService = services.find(s => s.id === btn.dataset.id);
-    updateSummary();
-  });
+  } catch(e) { console.error("Erro a ler os horários.", e); }
 }
 
 function renderTimes() {
@@ -389,24 +217,16 @@ function renderTimes() {
   const timeGrid = $("#timeGrid");
   
   selectedTime = null;
-  updateSummary();
+  updateSum();
 
   if (!dateVal) return;
 
-  // Validação: Data limite
-  if (dateVal < MIN_DATE || dateVal > MAX_DATE) {
-    errorMsg.textContent = "Por favor, escolha uma data dentro do período permitido (13/07/26 a 13/01/27).";
-    errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
-  }
+  // CORREÇÃO DO FUSO HORÁRIO PARA O DIA DA SEMANA
+  const [year, month, day] = dateVal.split('-');
+  const dateObj = new Date(year, month - 1, day);
+  const dayOfWeek = dateObj.getDay();
 
-  // Validação: Feriados
-  if (FERIADOS.includes(dateVal)) {
-    errorMsg.textContent = "Não temos expediente neste feriado. Por favor, escolha outra data.";
-    errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
-  }
-
-  // Validação: Domingos
-  const dayOfWeek = new Date(dateVal + "T00:00:00").getUTCDay();
+  // Validação: Domingos (0 = Domingo)
   if (dayOfWeek === 0) {
     errorMsg.textContent = "Não funcionamos aos domingos. Por favor, escolha outra data.";
     errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
@@ -414,85 +234,75 @@ function renderTimes() {
 
   errorMsg.style.display = "none";
 
-  // Filtra horários já ocupados naquele dia
-  const occupiedToday = occupiedBookings.filter(b => b.date === dateVal).map(b => b.time);
+  // ========================================================
+  // REGRAS DE HORÁRIO: 2h30m de intervalo
+  // ========================================================
+  let horariosDoDia = [];
   
-  $("#timeGrid").innerHTML = allTimes.map(t => {
-    const isBooked = occupiedToday.includes(t);
-    return `<button type="button" class="time" data-time="${t}" ${isBooked ? 'disabled title="Horário Indisponível"' : ''}>${t}</button>`;
-  }).join("");
+  if (dayOfWeek === 6) { 
+    // SÁBADO (Meio Período)
+    horariosDoDia = ["09:00", "11:30"];
+  } else { 
+    // SEGUNDA A SEXTA
+    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"];
+  }
 
-  $$(".time:not(:disabled)").forEach(btn => btn.onclick = () => {
-    $$(".time").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedTime = btn.dataset.time;
-    updateSummary();
-  });
+  const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateVal).map(b => b.time);
+  const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
+
+  if (horariosDisponiveis.length === 0) {
+    timeGrid.innerHTML = "<p style='color:var(--muted);font-size:14px;'>Todos os horários esgotados neste dia.</p>";
+    return;
+  }
+
+  timeGrid.innerHTML = horariosDisponiveis.map(t => 
+    `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`
+  ).join("");
 }
 
-function updateSummary() {
+function selectSvc(id, el) {
+  document.querySelectorAll(".service").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  selectedService = services.find(s => s.id === id);
+  updateSum();
+}
+
+function selectTime(time, el) {
+  document.querySelectorAll(".time").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  selectedTime = time;
+  updateSum();
+}
+
+function updateSum() {
   $("#sumService").textContent = selectedService.name;
   $("#sumPrice").textContent = BRL.format(selectedService.price);
   
-  const d = $("#date").value;
-  $("#sumDate").textContent = d ? new Date(d + "T00:00").toLocaleDateString("pt-BR") : "Selecione a data";
-  $("#sumTime").textContent = selectedTime || "Selecione o horário";
-  
-  $("#submitBtn").disabled = !(d && selectedTime && $("#name").value && $("#phone").value.length >= 14);
-}
-
-// Máscara de Telefone
-$("#phone").addEventListener('input', function(e) {
-  let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
-  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-  updateSummary();
-});
-$("#name").addEventListener('input', updateSummary);
-$("#date").addEventListener('change', renderTimes);
-
-// --- Submissão de Formulários (Envio p/ Google Sheets) ---
-
-// Inscrição no Curso
-$("#courseForm").onsubmit = async e => {
-  e.preventDefault();
-  $("#btnCourse").textContent = "Enviando...";
-  $("#btnCourse").disabled = true;
-
-  try {
-    await fetch(WEB_APP_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'course',
-        name: $("#courseName").value.trim(),
-        phone: $("#coursePhone").value.trim(),
-        level: $("#courseLevel").value
-      })
-    });
-    showToast("Inscrição na lista de espera realizada com sucesso!");
-    closeModal();
-    e.target.reset();
-  } catch(err) {
-    showToast("Erro ao inscrever. Tente novamente.", true);
+  if ($("#date").value) {
+      const [y, m, d] = $("#date").value.split('-');
+      $("#sumDate").textContent = `${d}/${m}/${y}`;
+  } else {
+      $("#sumDate").textContent = "Selecione";
   }
   
-  $("#btnCourse").textContent = "Quero minha vaga";
-  $("#btnCourse").disabled = false;
-};
+  $("#sumTime").textContent = selectedTime || "Selecione";
+  
+  const isReady = selectedService && selectedTime && $("#date").value;
+  $("#btnBooking").disabled = !isReady;
+  $("#btnBooking").textContent = isReady ? "Confirmar Reserva" : "Preencha os dados para confirmar";
+}
 
-// Agendamento
 $("#bookingForm").onsubmit = async e => {
   e.preventDefault();
-  if(!selectedTime) return showToast("Por favor, selecione um horário disponível.", true);
-
-  $("#submitBtn").textContent = "Registrando...";
-  $("#submitBtn").disabled = true;
-
+  if(!selectedTime) return showToast("Por favor, selecione um horário.", true);
+  
+  $("#btnBooking").textContent = "A registar...";
+  $("#btnBooking").disabled = true;
+  
   const payload = {
     type: 'booking',
-    client: $("#name").value.trim(),
-    phone: $("#phone").value.trim(),
+    client: $("#name").value,
+    phone: $("#phone").value,
     service: selectedService.name,
     date: $("#date").value,
     time: selectedTime,
@@ -501,45 +311,31 @@ $("#bookingForm").onsubmit = async e => {
   };
 
   try {
-    const response = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload) 
-      // Nota: mode: 'no-cors' não permite ler a resposta, portanto o bloqueio de duplicatas precisa retornar o CORS configurado ou você pode usar isso sem ler o JSON.
-      // Como precisamos ler a resposta de erro ("Horário Ocupado"), enviamos normalmente.
-    });
+    const res = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const json = await res.json();
     
-    // Tenta ler o JSON se o servidor permitir CORS
-    let result;
-    try { result = await response.json(); } catch(e) { result = {status: 'success'}; }
-
-    if(result.status === "error") {
-      showToast("Ops! Este horário já foi reservado. Escolha outro.", true);
-      fetchOccupiedTimes(); // Recarrega os horários
+    if (json.status === "error") {
+      showToast("Ops! Alguém reservou este horário primeiro. Escolha outro.", true);
+      fetchOccupiedTimes(); 
     } else {
-      showToast("Agendamento confirmado com sucesso!");
-      $("#bookingForm").reset();
+      showToast("Reserva confirmada com sucesso!");
+      e.target.reset();
       selectedTime = null;
       $("#date").value = "";
       fetchOccupiedTimes(); 
-      updateSummary();
+      updateSum();
     }
   } catch(err) {
-    showToast("Sucesso! Agendamento registrado na agenda.", false);
-    // Se der erro de CORS, assumimos que enviou no modo 'no-cors' com sucesso para o Sheets.
-    $("#bookingForm").reset();
-    selectedTime = null;
-    $("#date").value = "";
-    fetchOccupiedTimes(); 
-    updateSummary();
+    showToast("Erro na ligação. Tente novamente.", true);
   }
-
-  $("#submitBtn").textContent = "Confirmar Agendamento";
+  
+  $("#btnBooking").textContent = "Preencha os dados para confirmar";
 };
 
-// --- Iniciar ---
 renderServices();
-updateSummary();
-fetchOccupiedTimes();
+updateSum();
+fetchOccupiedTimes(); 
+$("#date").onchange = renderTimes;
 
 </script>
 </body>
