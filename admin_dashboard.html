@@ -47,9 +47,12 @@
         /* Estilos do Calendário CSS Grid */
         .cal-grid {
             display: grid;
-            grid-template-columns: 60px repeat(6, 1fr);
+            grid-template-columns: 50px repeat(6, 1fr);
             border-top: 1px solid #e5e7eb;
             border-left: 1px solid #e5e7eb;
+        }
+        @media(min-width: 768px) {
+            .cal-grid { grid-template-columns: 60px repeat(6, 1fr); }
         }
         .cal-cell {
             border-right: 1px solid #e5e7eb;
@@ -65,7 +68,7 @@
             border-bottom: 1px solid #e5e7eb;
         }
         .cal-time {
-            font-size: 0.75rem;
+            font-size: 0.70rem;
             color: #9ca3af;
             text-align: center;
             transform: translateY(-50%);
@@ -73,12 +76,12 @@
         }
         .event-pill {
             position: absolute;
-            left: 4px;
-            right: 4px;
+            left: 2px;
+            right: 2px;
             border-radius: 6px;
-            padding: 4px 8px;
+            padding: 4px;
             color: white;
-            font-size: 0.75rem;
+            font-size: 0.70rem;
             font-weight: 500;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             z-index: 10;
@@ -87,11 +90,14 @@
             flex-direction: column;
             justify-content: flex-start;
         }
+        @media(min-width: 768px) {
+            .event-pill { left: 4px; right: 4px; padding: 4px 8px; font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
 
-    <!-- ECRÃ DE LOGIN (Palavra-passe: jessica123) -->
+    <!-- ECRÃ DE LOGIN LIGADO AO APPS SCRIPT -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center border border-gray-200 w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4">
@@ -101,7 +107,9 @@
             <p class="text-gray-500 mb-6 text-sm">Introduza a palavra-passe para aceder ao sistema.</p>
             <form id="loginForm">
                 <input type="password" id="adminPwd" placeholder="Palavra-passe" required class="w-full p-4 rounded-xl border border-gray-200 mb-5 text-center text-lg outline-none focus:border-brand-active focus:ring-2 focus:ring-blue-100 transition">
-                <button type="submit" class="w-full bg-brand-active text-white font-bold p-4 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-blue-500/30">Entrar no Painel</button>
+                <button type="submit" id="btnLogin" class="w-full bg-brand-active text-white font-bold p-4 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">
+                    Entrar no Painel
+                </button>
             </form>
         </div>
     </div>
@@ -135,6 +143,10 @@
         <!-- TOP NAVBAR -->
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
+                <!-- Botão de Menu para Mobile -->
+                <button class="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
                 <h2 class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
                 <div id="sync-status" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Sincronizado
@@ -164,33 +176,31 @@
             <div id="tab-dashboard" class="tab-content active">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     
-                    <!-- COLUNA ESQUERDA (Calendário Dinâmico e Lista) -->
+                    <!-- COLUNA ESQUERDA (Calendário e Lista) -->
                     <div class="xl:col-span-8 flex flex-col gap-6">
                         
                         <!-- CALENDÁRIO CARD -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-5">
                             <div class="flex flex-wrap justify-between items-center mb-5 gap-4">
-                                <h3 id="calendar-month-title" class="text-xl font-bold text-gray-800">Carregando Mês...</h3>
+                                <h3 id="calendar-month-title" class="text-lg lg:text-xl font-bold text-gray-800">Carregando Mês...</h3>
                                 <div class="flex items-center gap-3">
-                                    <span class="bg-blue-50 text-brand-active text-sm font-semibold px-4 py-2 rounded-lg">Semana Atual</span>
-                                    <button onclick="fetchData()" class="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition" title="Atualizar Dados">
+                                    <span class="bg-blue-50 text-brand-active text-xs lg:text-sm font-semibold px-3 py-2 rounded-lg">Semana Atual</span>
+                                    <button onclick="fetchData()" class="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition">
                                         <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <div class="overflow-x-auto">
-                                <div class="min-w-[600px]">
-                                    <!-- Cabeçalho dos Dias (Gerado via JS) -->
+                                <div class="min-w-[500px] md:min-w-[600px]">
                                     <div class="cal-grid bg-gray-50 rounded-t-lg" id="cal-headers"></div>
-                                    <!-- Corpo do Calendário (Gerado via JS) -->
                                     <div class="cal-grid" id="cal-body"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- LISTA DE AGENDAMENTOS DO DIA/SEMANA -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex-1 flex flex-col">
+                        <!-- LISTA DE AGENDAMENTOS -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 lg:p-6 flex-1 flex flex-col">
                             <div class="flex flex-wrap justify-between items-center mb-4 border-b border-gray-100 pb-3">
                                 <h3 class="font-bold text-gray-800">Lista Completa de Agendamentos</h3>
                             </div>
@@ -206,14 +216,14 @@
                         
                         <!-- CARDS DE ESTATÍSTICAS -->
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-5">
                                 <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-active flex items-center justify-center mb-3">
                                     <i data-lucide="calendar-check" class="w-5 h-5"></i>
                                 </div>
                                 <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Marcações</span>
-                                <strong id="stat-agendamentos" class="block text-3xl font-black text-gray-800 mt-1">0</strong>
+                                <strong id="stat-agendamentos" class="block text-2xl lg:text-3xl font-black text-gray-800 mt-1">0</strong>
                             </div>
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-5">
                                 <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-3">
                                     <i data-lucide="trending-up" class="w-5 h-5"></i>
                                 </div>
@@ -223,7 +233,7 @@
                         </div>
 
                         <!-- GESTÃO DE CLIENTES ÚNICOS -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex-1">
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-6 flex-1">
                             <div class="flex justify-between items-center mb-5 border-b border-gray-100 pb-3">
                                 <h3 class="font-bold text-gray-800">Clientes Ativos</h3>
                                 <span id="stat-clientes" class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-md">0</span>
@@ -274,13 +284,16 @@
         </main>
     </div>
 
+    <!-- =========================================================
+         JAVASCRIPT & LÓGICA DO SISTEMA 
+         ========================================================= -->
     <script>lucide.createIcons();</script>
 
     <script>
-        // =========================================================================
-        // COLOQUE AQUI A SUA URL DO APPS SCRIPT
-        // =========================================================================
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
+        // ==========================================
+        // SUBSTITUA PELA SUA URL DO GOOGLE APPS SCRIPT
+        // ==========================================
+        const WEB_APP_URL = "SUA_URL_AQUI_DO_APPS_SCRIPT_TERMINADA_EM_EXEC";
         
         let lastTotalItems = -1;
 
@@ -300,45 +313,36 @@
             osc.stop(ctx.currentTime + 1.2);
         }
 
-        // 2. Lógica de Login (Validando no Google Sheets)
+        // 2. Login validado no Backend (Google Sheets)
         document.getElementById('loginForm').onsubmit = async function(e) {
             e.preventDefault();
-            const pwdInput = document.getElementById('adminPwd');
-            const btn = e.target.querySelector('button');
-            const pwd = pwdInput.value;
+            const pwd = document.getElementById('adminPwd').value;
+            const btn = document.getElementById('btnLogin');
             
-            btn.innerText = "A validar...";
-            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> A validar...`;
+            lucide.createIcons();
 
             try {
-                // Envia a senha para o Google Apps Script verificar
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ type: 'login', password: pwd })
-                });
-                
-                let result;
-                try { result = await response.json(); } catch(e) { result = {status: 'error'}; }
+                // Envia a senha para o Apps Script validar
+                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd));
+                const json = await res.json();
 
-                if (result.status === "success") {
+                if(json.status === "success") {
                     document.getElementById('login-screen').style.display = 'none';
-                    try { playLoudNotification(); } catch(e){} // Desbloqueia o som no navegador
+                    try { playLoudNotification(); } catch(e){} 
                     fetchData();
-                    setInterval(fetchData, 20000); // Começa a atualizar a cada 20s
+                    setInterval(fetchData, 20000); 
                 } else {
                     alert('Palavra-passe incorreta!');
-                    pwdInput.value = '';
+                    btn.innerHTML = `Entrar no Painel`;
                 }
-            } catch (error) {
-                // Se o modo no-cors bloquear o JSON, o login falha por segurança
-                alert('Erro de comunicação. Verifique se o Web App foi implantado corretamente.');
-            } finally {
-                btn.innerText = "Entrar no Painel";
-                btn.disabled = false;
+            } catch(e) {
+                alert('Erro ao ligar ao servidor. Verifique a sua URL do Apps Script.');
+                btn.innerHTML = `Entrar no Painel`;
             }
         };
 
-        // 3. Trocar Tabs
+        // 3. Navegação (Tabs)
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => {
                 n.classList.remove('bg-brand-active', 'text-white', 'shadow-md', 'shadow-blue-500/20');
@@ -351,18 +355,16 @@
         }
 
         // ==========================================
-        // LÓGICA DO CALENDÁRIO DINÂMICO
+        // CALENDÁRIO DINÂMICO
         // ==========================================
         const workHours = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
         const dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         
-        // Pega as datas da semana atual (Segunda a Sábado)
         function getWeekDates() {
             let curr = new Date();
-            let dayOfWeek = curr.getDay(); // 0 = Dom, 1 = Seg
+            let dayOfWeek = curr.getDay();
             let diff = curr.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
             let monday = new Date(curr.setDate(diff));
-            
             let week = [];
             for (let i = 0; i < 6; i++) {
                 let nextDay = new Date(monday);
@@ -372,16 +374,14 @@
             return week;
         }
 
-        // Converte Date para formato YYYY-MM-DD localmente sem fuso horário errar
         function toLocalISOString(date) {
             const d = new Date(date);
             d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             return d.toISOString().split('T')[0];
         }
 
-        // Atribui uma cor estilizada dependendo do serviço
         function getColorForService(service) {
-            const s = service.toLowerCase();
+            const s = String(service).toLowerCase();
             if(s.includes("alongamento")) return "bg-brand-purple";
             if(s.includes("banho")) return "bg-brand-blue";
             if(s.includes("blindagem")) return "bg-brand-red";
@@ -389,64 +389,49 @@
             return "bg-brand-yellow";
         }
 
-        // Renderiza o visual do calendário
         function renderDynamicCalendar(bookings) {
             const weekDates = getWeekDates();
-            
-            // Atualiza Título do Mês
             const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
             document.getElementById('calendar-month-title').innerText = `${monthNames[weekDates[0].getMonth()]} ${weekDates[0].getFullYear()}`;
 
-            // Renderiza Cabeçalho dos Dias
             let headersHTML = `<div class="cal-header border-t border-e border-gray-200"></div>`;
             const todayStr = toLocalISOString(new Date());
 
             weekDates.forEach((date, i) => {
                 const dateStr = toLocalISOString(date);
                 const dayNum = date.getDate().toString().padStart(2, '0');
-                const isToday = dateStr === todayStr;
-
-                if (isToday) {
-                    headersHTML += `<div class="cal-header border-t border-gray-200 bg-blue-50"><span class="text-brand-active text-xs uppercase block font-bold">${dayNames[i]}</span><span class="text-lg text-brand-active font-bold bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
+                if (dateStr === todayStr) {
+                    headersHTML += `<div class="cal-header border-t border-gray-200 bg-blue-50"><span class="text-brand-active text-[10px] uppercase block font-bold">${dayNames[i]}</span><span class="text-sm md:text-lg text-brand-active font-bold bg-blue-100 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
                 } else {
-                    headersHTML += `<div class="cal-header border-t border-gray-200"><span class="text-gray-400 text-xs uppercase block">${dayNames[i]}</span><span class="text-lg text-gray-800">${dayNum}</span></div>`;
+                    headersHTML += `<div class="cal-header border-t border-gray-200"><span class="text-gray-400 text-[10px] uppercase block">${dayNames[i]}</span><span class="text-sm md:text-lg text-gray-800">${dayNum}</span></div>`;
                 }
             });
             document.getElementById('cal-headers').innerHTML = headersHTML;
 
-            // Mapear Agendamentos: "YYYY-MM-DD_HH:00" -> Agendamento
             let bookingMap = {};
             if(bookings) {
                 bookings.forEach(b => {
-                    let dataStr = b['Data Agendamento'];
-                    // Ajuste para formato de data vindo do Google Apps Script
-                    if(dataStr.includes('T')) dataStr = dataStr.split('T')[0]; 
-                    const key = `${dataStr}_${b['Hora']}`;
+                    const key = `${b['Data Agendamento']}_${b['Hora']}`;
                     bookingMap[key] = b;
                 });
             }
 
-            // Renderiza Corpo (Linhas = Horas, Colunas = Dias)
             let bodyHTML = '';
             workHours.forEach(hour => {
                 bodyHTML += `<div class="cal-cell flex items-start justify-center pt-2"><span class="cal-time">${hour}</span></div>`;
-                
                 weekDates.forEach(date => {
                     const dateStr = toLocalISOString(date);
-                    const key = `${dateStr}_${hour}`;
-                    const b = bookingMap[key];
-                    const isToday = dateStr === todayStr;
-                    const bgClass = isToday ? 'bg-blue-50/20' : ''; // Suave destaque no dia de hoje
+                    const b = bookingMap[`${dateStr}_${hour}`];
+                    const bgClass = (dateStr === todayStr) ? 'bg-blue-50/20' : '';
 
                     if (b && b['Status'] !== 'Cancelado') {
-                        const initials = b['Cliente'].substring(0,2).toUpperCase();
+                        const initials = String(b['Cliente']).substring(0,2).toUpperCase();
                         const colorClass = getColorForService(b['Servico']);
-                        // O bloco tem height 75px (ocupa visualmente o espaço do serviço)
                         bodyHTML += `
                         <div class="cal-cell ${bgClass}">
                             <div class="event-pill ${colorClass} hover:opacity-90 transition cursor-pointer" style="top: 4px; height: 75px;" title="${b['Cliente']} - ${b['Servico']}">
-                                <div class="font-bold text-xs opacity-90">${initials}</div>
-                                <div class="truncate text-[11px] leading-tight mt-1">${b['Servico']}</div>
+                                <div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div>
+                                <div class="truncate text-[9px] md:text-[11px] leading-tight mt-1 hidden sm:block">${b['Servico']}</div>
                             </div>
                         </div>`;
                     } else {
@@ -457,8 +442,9 @@
             document.getElementById('cal-body').innerHTML = bodyHTML;
         }
 
-
-        // 4. MAIN FETCH LIGADO AO GOOGLE SHEETS
+        // ==========================================
+        // BUSCAR DADOS (FETCH MAIN)
+        // ==========================================
         async function fetchData() {
             const syncUI = document.getElementById('sync-status');
             syncUI.innerHTML = `<i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> A sincronizar...`;
@@ -468,7 +454,24 @@
             try {
                 const res = await fetch(WEB_APP_URL + "?action=get_all");
                 const data = await res.json();
+
+                // *** O SEGREDO ESTÁ AQUI: LIMPEZA DOS DADOS DO GOOGLE SHEETS ***
+                if (data.bookings) {
+                    data.bookings = data.bookings.map(b => {
+                        // Limpa a Data (Tira o T00:00:00.000Z)
+                        let dataStr = String(b['Data Agendamento']);
+                        if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0];
+                        
+                        // LIMPA A HORA! (Extrai apenas o HH:MM para não estragar o design)
+                        let horaStr = String(b['Hora']);
+                        let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
+                        if (timeMatch) b['Hora'] = timeMatch[0]; 
+                        
+                        return b;
+                    });
+                }
                 
+                // Disparo de Alarme se houver itens novos
                 const currentTotalItems = (data.bookings ? data.bookings.length : 0) + (data.courses ? data.courses.length : 0);
                 if (lastTotalItems !== -1 && currentTotalItems > lastTotalItems) {
                     playLoudNotification();
@@ -476,10 +479,10 @@
                 }
                 lastTotalItems = currentTotalItems;
 
-                // CHAMA A FUNÇÃO QUE DESENHA O CALENDÁRIO COM OS DADOS REAIS
+                // 1. Calendário
                 renderDynamicCalendar(data.bookings);
 
-                // ================= RENDERIZAR LISTA DE AGENDAMENTOS =================
+                // 2. Lista de Agendamentos (Agora a bolinha azul ficará perfeita!)
                 const bookingsList = document.getElementById('lista-agendamentos');
                 if(!data.bookings || data.bookings.length === 0) {
                     bookingsList.innerHTML = `<div class="text-center py-10 text-gray-400 font-medium bg-gray-50 rounded-xl border border-dashed border-gray-200">Nenhum agendamento registado.</div>`;
@@ -489,43 +492,37 @@
                         const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
                         const dotColor = isConfirmed ? 'bg-green-500' : 'bg-red-500';
                         
-                        let dataStr = b['Data Agendamento'];
-                        if(dataStr.includes('T')) {
-                           dataStr = new Date(dataStr).toLocaleDateString('pt-BR');
-                        }
-                        
                         return `
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white group gap-4">
                             <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-full bg-blue-50 text-brand-active flex flex-col items-center justify-center font-bold border border-blue-100 flex-shrink-0">
-                                    <span class="text-sm">${b['Hora']}</span>
+                                <!-- Bolinha da Hora que estava estragada -->
+                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-50 text-brand-active flex flex-col items-center justify-center font-bold border border-blue-100 flex-shrink-0">
+                                    <span class="text-xs md:text-sm">${b['Hora']}</span>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-gray-800 text-lg leading-tight group-hover:text-brand-active transition">${b['Cliente']}</h4>
-                                    <p class="text-sm text-gray-500 mt-1"><i data-lucide="sparkles" class="w-3 h-3 inline mr-1 text-brand-gold"></i>${b['Servico']}</p>
-                                    <p class="text-xs text-gray-400 mt-0.5"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i>${b['Telefone']} · Pagamento: ${b['Valor']||'Não info'}</p>
+                                    <h4 class="font-bold text-gray-800 text-sm md:text-lg leading-tight group-hover:text-brand-active transition">${b['Cliente']}</h4>
+                                    <p class="text-xs md:text-sm text-gray-500 mt-1 truncate max-w-[200px] md:max-w-none"><i data-lucide="sparkles" class="w-3 h-3 inline mr-1 text-brand-gold"></i>${b['Servico']}</p>
+                                    <p class="text-[10px] md:text-xs text-gray-400 mt-0.5"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i>${b['Telefone']} · Pgto: ${b['Valor']||'Não info'}</p>
                                 </div>
                             </div>
-                            <div class="flex sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold ${statusColor} flex items-center gap-1.5 border border-white shadow-sm">
+                            <div class="flex sm:flex-col items-center justify-between sm:items-end gap-2 sm:gap-1 w-full sm:w-auto mt-2 sm:mt-0 border-t sm:border-0 border-gray-50 pt-2 sm:pt-0">
+                                <span class="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-xs font-bold ${statusColor} flex items-center gap-1.5 border border-white shadow-sm">
                                     <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span> ${b['Status']}
                                 </span>
-                                <span class="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-md"><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>${dataStr}</span>
+                                <span class="text-[10px] md:text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-md"><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>${b['Data Agendamento']}</span>
                             </div>
                         </div>`;
                     }).join('');
                 }
 
-                // ================= RENDERIZAR ESTATÍSTICAS & CLIENTES ÚNICOS =================
+                // 3. Estatísticas e Clientes Únicos
                 document.getElementById('stat-agendamentos').innerText = data.bookings ? data.bookings.length : 0;
                 
                 let receita = 0;
                 const clientesMap = new Map();
                 if(data.bookings) {
                     data.bookings.forEach(b => {
-                        // Limpa "R$" ou converte caso o valor venha como string monetária do Sheets
-                        let valorLimpo = String(b['Valor']).replace(/[^\d.,]/g, '').replace(',', '.');
-                        if(b['Status'] === 'Confirmado' && valorLimpo) receita += Number(valorLimpo);
+                        if(b['Status'] === 'Confirmado' && b['Valor']) receita += Number(b['Valor']);
                         if(!clientesMap.has(b['Telefone'])) clientesMap.set(b['Telefone'], b['Cliente']);
                     });
                 }
@@ -541,12 +538,12 @@
                     clientesList.innerHTML = clientesArray.map(c => `
                         <div class="flex items-center justify-between group cursor-pointer p-2 hover:bg-gray-50 rounded-lg transition">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm border border-gray-300 shadow-inner">
-                                    ${c.name.substring(0,2).toUpperCase()}
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm border border-gray-300 shadow-inner flex-shrink-0">
+                                    ${String(c.name).substring(0,2).toUpperCase()}
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-800 leading-tight group-hover:text-brand-active transition">${c.name}</p>
-                                    <p class="text-xs text-gray-400">${c.phone}</p>
+                                    <p class="text-sm font-bold text-gray-800 leading-tight group-hover:text-brand-active transition truncate max-w-[150px]">${c.name}</p>
+                                    <p class="text-[10px] md:text-xs text-gray-400">${c.phone}</p>
                                 </div>
                             </div>
                             <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-brand-active transition"></i>
@@ -554,25 +551,55 @@
                     `).join('');
                 }
 
-                // ================= CURSOS E FINANCEIRO =================
-                document.getElementById('lista-cursos').innerHTML = data.courses && data.courses.length > 0 ? data.courses.map(x => `
-                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex justify-between items-center">
-                        <div><strong class="text-gray-800 block">${x['Nome']}</strong><span class="text-sm text-gray-500">Nível: ${x['Nivel']} · Whats: ${x['Telefone']}</span></div>
-                        <a href="https://wa.me/55${x['Telefone'].replace(/\D/g,'')}" target="_blank" class="px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-lg shadow-md hover:bg-green-600 transition">Contactar</a>
-                    </div>`).join('') : '<p class="text-gray-500 text-sm">Nenhuma inscrição.</p>';
+                // 4. Cursos e Financeiro
+                const cursosList = document.getElementById('lista-cursos');
+                if (data.courses && data.courses.length > 0) {
+                    cursosList.innerHTML = data.courses.map(x => {
+                        let nome = 'Sem nome';
+                        let telefone = '';
+                        let nivel = '';
+                        
+                        // Busca dinâmica (ignora maiúsculas/minúsculas no cabeçalho)
+                        for(let key in x) {
+                            const k = key.toLowerCase();
+                            if(k.includes('nome')) nome = x[key];
+                            if(k.includes('tel') || k.includes('whats') || k.includes('cel')) telefone = x[key];
+                            if(k.includes('nivel') || k.includes('nível')) nivel = x[key];
+                        }
+                        
+                        // Fallback absoluto pela posição da coluna caso os títulos falhem
+                        const vals = Object.values(x);
+                        if (nome === 'Sem nome' && vals.length > 1) nome = vals[1] || 'Sem nome';
+                        if (!telefone && vals.length > 2) telefone = vals[2] || '';
+                        if (!nivel && vals.length > 3) nivel = vals[3] || '';
+
+                        const linkWhats = telefone ? String(telefone).replace(/\D/g,'') : '';
+
+                        return `
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex justify-between items-center">
+                            <div>
+                                <strong class="text-gray-800 block">${nome}</strong>
+                                <span class="text-sm text-gray-500">Nível: ${nivel} · Whats: ${telefone}</span>
+                            </div>
+                            <a href="https://wa.me/55${linkWhats}" target="_blank" class="px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-lg shadow-md hover:bg-green-600 transition">Contactar</a>
+                        </div>`;
+                    }).join('');
+                } else {
+                    cursosList.innerHTML = '<p class="text-gray-500 text-sm">Nenhuma inscrição registada (ou os cabeçalhos estão ausentes na linha 1 do Excel).</p>';
+                }
 
                 document.getElementById('lista-financeiro').innerHTML = data.finance && data.finance.length > 0 ? data.finance.map(x => `
-                    <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm flex justify-between items-center">
+                    <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                         <div>
                             <strong class="text-gray-800 flex items-center gap-2">${x['Descricao']} 
                                 <span class="text-[10px] px-2 py-0.5 rounded uppercase font-bold ${x['Categoria']==='Saida'?'bg-red-100 text-red-700':'bg-green-100 text-green-700'}">${x['Categoria']}</span>
                             </strong>
-                            <span class="text-xs text-gray-400">${new Date(x['Data Transacao']).toLocaleDateString('pt-BR')}</span>
+                            <span class="text-[10px] md:text-xs text-gray-400">${x['Data Transacao']}</span>
                         </div>
                         <strong class="${x['Categoria']==='Saida'?'text-red-600':'text-green-600'}">R$ ${x['Valor']}</strong>
                     </div>`).join('') : '<p class="text-gray-500 text-sm">Nenhuma transação registada.</p>';
 
-                // Restaurar UI de Sincronização
+                // UI Status final
                 syncUI.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Sincronizado`;
                 syncUI.className = "flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100";
                 lucide.createIcons();
@@ -584,12 +611,11 @@
             }
         }
 
-        // Registar Transação Financeira
         document.getElementById('financeForm').onsubmit = async e => {
             e.preventDefault();
             const btn = document.getElementById('btnFin');
             btn.innerText = "A gravar...";
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
+            await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({
                 type: 'finance', date: document.getElementById('finDate').value,
                 category: document.getElementById('finCat').value, value: document.getElementById('finValue').value,
                 description: document.getElementById('finDesc').value
