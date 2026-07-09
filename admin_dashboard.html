@@ -4,69 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão - Jéssica Franco</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: { dark: '#262d3a', active: '#3b82f6', bg: '#f4f6f8', blue: '#4c8ee8', red: '#f66d6d', green: '#34b484', yellow: '#f4ad42', purple: '#9b66d9' }
-                    }
-                }
-            }
+            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: { dark: '#262d3a', active: '#3b82f6', bg: '#f4f6f8', blue: '#4c8ee8', red: '#f66d6d', green: '#34b484', yellow: '#f4ad42', purple: '#9b66d9' } } } }
         }
     </script>
     <style>
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        .cal-grid {
-            display: grid;
-            grid-template-columns: 50px repeat(6, 1fr);
-            border-top: 1px solid #e5e7eb;
-            border-left: 1px solid #e5e7eb;
-        }
+        .cal-grid { display: grid; grid-template-columns: 50px repeat(6, 1fr); border-top: 1px solid #e5e7eb; border-left: 1px solid #e5e7eb; }
         @media(min-width: 768px) { .cal-grid { grid-template-columns: 60px repeat(6, 1fr); } }
-        
-        .cal-cell {
-            border-right: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-            height: 70px; 
-            position: relative;
-        }
+        .cal-cell { border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; height: 70px; position: relative; }
         @media(min-width: 768px) { .cal-cell { height: 80px; } }
-        
-        .cal-header {
-            background-color: #ffffff;
-            text-align: center;
-            padding: 8px 0;
-            border-right: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-        }
+        .cal-header { background-color: #ffffff; text-align: center; padding: 8px 0; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
         .cal-time { font-size: 0.70rem; color: #9ca3af; text-align: center; transform: translateY(-50%); display: block; }
-        
-        .event-pill {
-            position: absolute;
-            left: 2px; right: 2px; top: 4px; bottom: 4px;
-            border-radius: 6px; padding: 4px;
-            color: white; font-size: 0.70rem; font-weight: 500;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 10;
-            overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start;
-        }
+        .event-pill { position: absolute; left: 2px; right: 2px; top: 4px; bottom: 4px; border-radius: 6px; padding: 4px; color: white; font-size: 0.70rem; font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 10; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; }
         @media(min-width: 768px) { .event-pill { left: 4px; right: 4px; padding: 6px 8px; font-size: 0.75rem; } }
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
-
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -77,7 +39,6 @@
             </form>
         </div>
     </div>
-
     <aside class="w-64 bg-brand-dark text-gray-300 flex flex-col hidden md:flex z-20 shadow-xl">
         <div class="h-16 flex items-center px-6 border-b border-gray-700/50 bg-gray-900/20">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
@@ -89,7 +50,6 @@
             <button onclick="switchTab('financeiro', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-800 transition text-sm text-left"><i data-lucide="dollar-sign" class="w-5 h-5"></i> Financeiro</button>
         </nav>
     </aside>
-
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
@@ -104,12 +64,10 @@
                 </div>
             </div>
         </header>
-
         <main class="flex-1 overflow-y-auto p-4 lg:p-8 bg-brand-bg">
             <div id="tab-dashboard" class="tab-content active">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     <div class="xl:col-span-8 flex flex-col gap-6">
-                        
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-5">
                             <div class="flex flex-wrap justify-between items-center mb-5 gap-4">
                                 <h3 id="calendar-month-title" class="text-lg lg:text-xl font-bold text-gray-800">Mês...</h3>
@@ -122,13 +80,11 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 lg:p-6 flex-1 flex flex-col">
                             <h3 class="font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3">Lista Completa</h3>
                             <div id="lista-agendamentos" class="space-y-3 overflow-y-auto max-h-[300px] pr-2"></div>
                         </div>
                     </div>
-
                     <div class="xl:col-span-4 flex flex-col gap-6">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-5">
@@ -147,10 +103,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- CURSOS -->
             <div id="tab-cursos" class="tab-content"><div class="bg-white rounded-2xl p-6"><h3 class="text-xl font-bold mb-6">Inscrições</h3><div id="lista-cursos" class="space-y-3"></div></div></div>
-            <!-- FINANCEIRO -->
             <div id="tab-financeiro" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 mb-6">
                     <h3 class="text-xl font-bold mb-6">Registo Financeiro</h3>
@@ -162,7 +115,6 @@
             </div>
         </main>
     </div>
-
     <script>lucide.createIcons();</script>
     <script>
         // ==========================================
@@ -189,9 +141,6 @@
             document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active')); document.getElementById('tab-' + tabId).classList.add('active');
         }
 
-        // ==========================================
-        // CALENDÁRIO COM 4 BLOCOS
-        // ==========================================
         const workHours = ['09:00','11:30','14:00','16:30'];
         const dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         
@@ -229,17 +178,8 @@
                 weekDates.forEach((date, index) => {
                     const dateStr = toLocalISOString(date); const b = bookingMap[`${dateStr}_${hour}`];
                     const bgClass = (dateStr === todayStr) ? 'bg-blue-50/20' : '';
-                    
-                    // Sábado à tarde: Bloqueado
-                    if (index === 5 && (hour === '14:00' || hour === '16:30')) {
-                        bodyHTML += `<div class="cal-cell bg-gray-100/50 flex items-center justify-center"><span class="text-[10px] text-gray-300">Fechado</span></div>`;
-                    }
-                    else if (b && b['Status'] !== 'Cancelado') {
-                        const initials = String(b['Cliente']).substring(0,2).toUpperCase();
-                        bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90" title="${b['Cliente']} - ${b['Servico']}"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${b['Servico']}</div></div></div>`;
-                    } else {
-                        bodyHTML += `<div class="cal-cell ${bgClass}"></div>`;
-                    }
+                    if (index === 5 && (hour === '14:00' || hour === '16:30')) { bodyHTML += `<div class="cal-cell bg-gray-100/50 flex items-center justify-center"><span class="text-[10px] text-gray-300">Fechado</span></div>`; }
+                    else if (b && b['Status'] !== 'Cancelado') { const initials = String(b['Cliente']).substring(0,2).toUpperCase(); bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90" title="${b['Cliente']} - ${b['Servico']}"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${b['Servico']}</div></div></div>`; } else { bodyHTML += `<div class="cal-cell ${bgClass}"></div>`; }
                 });
             });
             document.getElementById('cal-body').innerHTML = bodyHTML;
@@ -249,26 +189,19 @@
             const syncUI = document.getElementById('sync-status'); syncUI.innerText = "A atualizar...";
             try {
                 const res = await fetch(WEB_APP_URL + "?action=get_all"); const data = await res.json();
-                
-                if (data.bookings) {
-                    data.bookings = data.bookings.map(b => {
-                        let dataStr = String(b['Data Agendamento']); if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0];
-                        let horaStr = String(b['Hora']); let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); if (timeMatch) b['Hora'] = timeMatch[0]; 
-                        return b;
-                    });
-                }
-                
+                if (data.bookings) { data.bookings = data.bookings.map(b => { let dataStr = String(b['Data Agendamento']); if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0]; let horaStr = String(b['Hora']); let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); if (timeMatch) b['Hora'] = timeMatch[0]; return b; }); }
                 const currentTotalItems = (data.bookings ? data.bookings.length : 0) + (data.courses ? data.courses.length : 0);
                 if (lastTotalItems !== -1 && currentTotalItems > lastTotalItems) { playLoudNotification(); alert("🔔 NOVA MARCAÇÃO!"); }
                 lastTotalItems = currentTotalItems;
-
                 renderDynamicCalendar(data.bookings);
 
                 const bookingsList = document.getElementById('lista-agendamentos');
                 if(!data.bookings || data.bookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhum registo.</div>`;
                 else bookingsList.innerHTML = data.bookings.reverse().map(b => {
                     const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                    return `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-blue-50 text-brand-active flex items-center justify-center font-bold border border-blue-100"><span class="text-sm">${b['Hora']}</span></div><div><h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4><p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p></div></div><div class="flex flex-col items-end gap-1"><span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${statusColor}">${b['Status']}</span><span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span></div></div>`;
+                    const obs = b['Observações'] || b['Observacoes'] || '';
+                    const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
+                    return `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-blue-50 text-brand-active flex items-center justify-center font-bold border border-blue-100"><span class="text-sm">${b['Hora']}</span></div><div><h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4><p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p>${obsHtml}</div></div><div class="flex flex-col items-end gap-1"><span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${statusColor}">${b['Status']}</span><span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span></div></div>`;
                 }).join('');
 
                 document.getElementById('stat-agendamentos').innerText = data.bookings ? data.bookings.length : 0;
@@ -279,7 +212,6 @@
                 syncUI.innerText = "Sincronizado";
             } catch (error) { syncUI.innerText = "Erro de Ligação"; }
         }
-        
         document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
     </script>
 </body>
