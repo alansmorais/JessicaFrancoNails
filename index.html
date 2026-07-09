@@ -131,6 +131,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           </select>
         </div>
         
+        <div class="field" style="margin-top: 10px;">
+          <label>Observações (Opcional)</label>
+          <textarea id="notes" rows="2" placeholder="Alguma alergia ou preferência?"></textarea>
+        </div>
+        
         <button type="submit" class="primary" id="btnBooking" disabled>Preencha os dados para confirmar</button>
       </form>
 
@@ -154,7 +159,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 // ==========================================
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
 
-// Limites Mínimos (Hoje)
 const minDateObj = new Date();
 const MIN_DATE = minDateObj.toISOString().split('T')[0];
 document.getElementById('date').setAttribute('min', MIN_DATE);
@@ -199,12 +203,9 @@ async function fetchOccupiedTimes() {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
         let dataStr = String(b['Data Agendamento']);
         if(dataStr.includes('T')) dataStr = dataStr.split('T')[0];
-        
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
-        let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
-
-        return { date: dataStr, time: horaLimpa };
+        return { date: dataStr, time: timeMatch ? timeMatch[0] : horaStr };
       });
     }
     if($("#date").value) renderTimes();
@@ -218,34 +219,21 @@ function renderTimes() {
   
   selectedTime = null;
   updateSum();
-
   if (!dateVal) return;
 
-  // CORREÇÃO DO FUSO HORÁRIO PARA O DIA DA SEMANA
   const [year, month, day] = dateVal.split('-');
   const dateObj = new Date(year, month - 1, day);
   const dayOfWeek = dateObj.getDay();
 
-  // Validação: Domingos (0 = Domingo)
   if (dayOfWeek === 0) {
     errorMsg.textContent = "Não funcionamos aos domingos. Por favor, escolha outra data.";
     errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
   }
-
   errorMsg.style.display = "none";
 
-  // ========================================================
-  // REGRAS DE HORÁRIO: 2h30m de intervalo
-  // ========================================================
   let horariosDoDia = [];
-  
-  if (dayOfWeek === 6) { 
-    // SÁBADO (Meio Período)
-    horariosDoDia = ["09:00", "11:30"];
-  } else { 
-    // SEGUNDA A SEXTA
-    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"];
-  }
+  if (dayOfWeek === 6) { horariosDoDia = ["09:00", "11:30"]; } 
+  else { horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; }
 
   const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateVal).map(b => b.time);
   const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
@@ -255,9 +243,7 @@ function renderTimes() {
     return;
   }
 
-  timeGrid.innerHTML = horariosDisponiveis.map(t => 
-    `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`
-  ).join("");
+  timeGrid.innerHTML = horariosDisponiveis.map(t => `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`).join("");
 }
 
 function selectSvc(id, el) {
@@ -277,14 +263,10 @@ function selectTime(time, el) {
 function updateSum() {
   $("#sumService").textContent = selectedService.name;
   $("#sumPrice").textContent = BRL.format(selectedService.price);
-  
   if ($("#date").value) {
       const [y, m, d] = $("#date").value.split('-');
       $("#sumDate").textContent = `${d}/${m}/${y}`;
-  } else {
-      $("#sumDate").textContent = "Selecione";
-  }
-  
+  } else { $("#sumDate").textContent = "Selecione"; }
   $("#sumTime").textContent = selectedTime || "Selecione";
   
   const isReady = selectedService && selectedTime && $("#date").value;
@@ -307,7 +289,8 @@ $("#bookingForm").onsubmit = async e => {
     date: $("#date").value,
     time: selectedTime,
     price: selectedService.price,
-    paymentMethod: $("#paymentMethod").value
+    paymentMethod: $("#paymentMethod").value,
+    notes: $("#notes").value
   };
 
   try {
@@ -336,7 +319,6 @@ renderServices();
 updateSum();
 fetchOccupiedTimes(); 
 $("#date").onchange = renderTimes;
-
 </script>
 </body>
 </html>
