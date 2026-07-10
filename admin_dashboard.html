@@ -29,6 +29,7 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
+    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -39,6 +40,8 @@
             </form>
         </div>
     </div>
+
+    <!-- SIDEBAR LATERAL -->
     <aside class="w-64 bg-brand-dark text-gray-300 flex flex-col hidden md:flex z-20 shadow-xl">
         <div class="h-16 flex items-center px-6 border-b border-gray-700/50 bg-gray-900/20">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
@@ -48,8 +51,11 @@
             <button onclick="switchTab('dashboard', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-brand-active text-white transition text-sm font-medium shadow-md shadow-blue-500/20"><i data-lucide="calendar-days" class="w-5 h-5"></i> Agendamentos</button>
             <button onclick="switchTab('cursos', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-800 transition text-sm text-left"><i data-lucide="graduation-cap" class="w-5 h-5"></i> Cursos</button>
             <button onclick="switchTab('financeiro', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-800 transition text-sm text-left"><i data-lucide="dollar-sign" class="w-5 h-5"></i> Financeiro</button>
+            <button onclick="switchTab('ferias', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-800 transition text-sm text-left"><i data-lucide="calendar-off" class="w-5 h-5"></i> Bloquear Datas</button>
         </nav>
     </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
@@ -64,7 +70,9 @@
                 </div>
             </div>
         </header>
+
         <main class="flex-1 overflow-y-auto p-4 lg:p-8 bg-brand-bg">
+            <!-- TAB: AGENDAMENTOS -->
             <div id="tab-dashboard" class="tab-content active">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     <div class="xl:col-span-8 flex flex-col gap-6">
@@ -103,25 +111,68 @@
                     </div>
                 </div>
             </div>
-            <div id="tab-cursos" class="tab-content"><div class="bg-white rounded-2xl p-6"><h3 class="text-xl font-bold mb-6">Inscrições</h3><div id="lista-cursos" class="space-y-3"></div></div></div>
+
+            <!-- TAB: CURSOS -->
+            <div id="tab-cursos" class="tab-content">
+                <div class="bg-white rounded-2xl p-6">
+                    <h3 class="text-xl font-bold mb-6">Inscrições</h3>
+                    <div id="lista-cursos" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- TAB: FINANCEIRO -->
             <div id="tab-financeiro" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 mb-6">
                     <h3 class="text-xl font-bold mb-6">Registo Financeiro</h3>
                     <form id="financeForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <input type="date" id="finDate" required class="p-3 border rounded-xl"><select id="finCat" required class="p-3 border rounded-xl"><option value="Entrada">Entrada</option><option value="Saida">Saída (Custo)</option></select><input type="number" id="finValue" placeholder="Valor" required step="0.01" class="p-3 border rounded-xl"><input type="text" id="finDesc" placeholder="Descrição" required class="p-3 border rounded-xl md:col-span-2"><button type="submit" id="btnFin" class="md:col-span-5 bg-brand-active text-white font-bold p-3 rounded-xl">Registar Transação</button>
+                        <input type="date" id="finDate" required class="p-3 border rounded-xl">
+                        <select id="finCat" required class="p-3 border rounded-xl">
+                            <option value="Entrada">Entrada</option>
+                            <option value="Saida">Saída (Custo)</option>
+                        </select>
+                        <input type="number" id="finValue" placeholder="Valor" required step="0.01" class="p-3 border rounded-xl">
+                        <input type="text" id="finDesc" placeholder="Descrição" required class="p-3 border rounded-xl md:col-span-2">
+                        <button type="submit" id="btnFin" class="md:col-span-5 bg-brand-active text-white font-bold p-3 rounded-xl hover:bg-blue-600 transition shadow-md shadow-blue-500/20">Registar Transação</button>
                     </form>
                 </div>
                 <div class="bg-white rounded-2xl p-6"><h3 class="font-bold mb-4">Histórico</h3><div id="lista-financeiro" class="space-y-3"></div></div>
+            </div>
+
+            <!-- TAB: BLOQUEAR DATAS (FÉRIAS/FOLGAS) -->
+            <div id="tab-ferias" class="tab-content bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold mb-2 text-gray-800">Bloquear Intervalo (Férias/Folgas)</h3>
+                <p class="text-sm text-gray-500 mb-6">Selecione uma data de início e uma de fim. Nenhum horário estará disponível para marcação neste intervalo.</p>
+                <form id="blockDateForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-end">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-semibold text-gray-600">Data de Início</label>
+                        <input type="date" id="startDate" required class="p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-brand-active transition">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs font-semibold text-gray-600">Data de Fim</label>
+                        <input type="date" id="endDate" required class="p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-brand-active transition">
+                    </div>
+                    <div>
+                        <button type="submit" id="btnBlock" class="w-full bg-red-500 text-white font-bold p-3.5 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2 shadow-md shadow-red-500/10">
+                            <i data-lucide="calendar-off" class="w-5 h-5"></i> Bloquear Intervalo
+                        </button>
+                    </div>
+                </form>
+
+                <div class="border-t border-gray-100 pt-6">
+                    <h4 class="font-bold text-gray-700 mb-4 flex items-center gap-2">
+                        <i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i>
+                        Datas Bloqueadas Ativas
+                    </h4>
+                    <div id="lista-bloqueios" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
             </div>
         </main>
     </div>
     <script>lucide.createIcons();</script>
     <script>
-        // ==========================================
-        // URL JÁ CONFIGURADA
-        // ==========================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
-        
         let lastTotalItems = -1;
         function playLoudNotification() { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.5); gain.gain.setValueAtTime(1, ctx.currentTime); osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.2); osc.stop(ctx.currentTime + 1.2); }
 
@@ -135,6 +186,52 @@
             } catch(e) { alert('Erro na ligação.'); btn.innerHTML = `Entrar no Painel`; }
         };
 
+        // ENVIAR BLOQUEIO DE INTERVALO DE DATAS (POST)
+        document.getElementById('blockDateForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            const btn = document.getElementById('btnBlock');
+            
+            if (new Date(start) > new Date(end)) {
+                alert("A data de início deve ser anterior ou igual à data de fim.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "A processar...";
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'block_range', startDate: start, endDate: end })
+                });
+                alert("Período bloqueado com sucesso!");
+                document.getElementById('startDate').value = "";
+                document.getElementById('endDate').value = "";
+                fetchData();
+            } catch (err) { alert("Erro ao bloquear período."); }
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="calendar-off" class="w-5 h-5"></i> Bloquear Intervalo`;
+            lucide.createIcons();
+        };
+
+        // REMOVER BLOQUEIO DE DATA INDIVIDUAL (POST)
+        async function unblockDate(dateStr) {
+            if (!confirm(`Deseja desbloquear o dia ${dateStr.split('-').reverse().join('/')}?`)) return;
+            const syncUI = document.getElementById('sync-status');
+            syncUI.innerText = "A remover...";
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'unblock_date', date: dateStr })
+                });
+                fetchData();
+            } catch (err) {
+                alert("Erro ao remover bloqueio.");
+                fetchData();
+            }
+        }
+
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('bg-brand-active', 'text-white', 'shadow-md'); n.classList.add('hover:bg-gray-800', 'text-gray-300'); });
             el.classList.remove('hover:bg-gray-800', 'text-gray-300'); el.classList.add('bg-brand-active', 'text-white', 'shadow-md');
@@ -143,7 +240,6 @@
 
         const workHours = ['09:00','11:30','14:00','16:30'];
         const dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-        
         function getWeekDates() {
             let curr = new Date(); let dayOfWeek = curr.getDay(); let diff = curr.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
             let monday = new Date(curr.setDate(diff)); let week = [];
@@ -158,20 +254,16 @@
             const weekDates = getWeekDates();
             const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
             document.getElementById('calendar-month-title').innerText = `${monthNames[weekDates[0].getMonth()]} ${weekDates[0].getFullYear()}`;
-
             let headersHTML = `<div class="cal-header border-t border-e border-gray-200"></div>`;
             const todayStr = toLocalISOString(new Date());
-
             weekDates.forEach((date, i) => {
                 const dateStr = toLocalISOString(date); const dayNum = date.getDate().toString().padStart(2, '0');
                 if (dateStr === todayStr) headersHTML += `<div class="cal-header border-t border-gray-200 bg-blue-50"><span class="text-brand-active text-[10px] uppercase block font-bold">${dayNames[i]}</span><span class="text-sm md:text-lg text-brand-active font-bold bg-blue-100 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
                 else headersHTML += `<div class="cal-header border-t border-gray-200"><span class="text-gray-400 text-[10px] uppercase block">${dayNames[i]}</span><span class="text-sm md:text-lg text-gray-800">${dayNum}</span></div>`;
             });
             document.getElementById('cal-headers').innerHTML = headersHTML;
-
             let bookingMap = {};
             if(bookings) bookings.forEach(b => { bookingMap[`${b['Data Agendamento']}_${b['Hora']}`] = b; });
-
             let bodyHTML = '';
             workHours.forEach(hour => {
                 bodyHTML += `<div class="cal-cell flex items-start justify-center pt-2"><span class="cal-time">${hour}</span></div>`;
@@ -195,23 +287,99 @@
                 lastTotalItems = currentTotalItems;
                 renderDynamicCalendar(data.bookings);
 
+                // Renderiza Agendamentos
                 const bookingsList = document.getElementById('lista-agendamentos');
                 if(!data.bookings || data.bookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhum registo.</div>`;
                 else bookingsList.innerHTML = data.bookings.reverse().map(b => {
                     const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                    const obs = b['Observações'] || b['Observacoes'] || '';
+                    const obs = b['Observações'] || b['Observacoes'] || b['Observacao'] || '';
                     const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
                     return `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-blue-50 text-brand-active flex items-center justify-center font-bold border border-blue-100"><span class="text-sm">${b['Hora']}</span></div><div><h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4><p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p>${obsHtml}</div></div><div class="flex flex-col items-end gap-1"><span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${statusColor}">${b['Status']}</span><span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span></div></div>`;
                 }).join('');
 
+                // Renderiza Lista de Espera dos Cursos
+                const cursosList = document.getElementById('lista-cursos');
+                if(!data.courses || data.courses.length === 0) cursosList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhuma inscrição registada na lista de espera.</div>`;
+                else cursosList.innerHTML = data.courses.map(c => `
+                    <div class="p-4 rounded-xl border border-gray-100 bg-white shadow-sm flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-gray-800">${c['Cliente'] || c['Nome']}</h4>
+                            <p class="text-xs text-gray-500 mt-0.5">WhatsApp: ${c['Telefone']} · Nível: ${c['Nível'] || c['Nivel']}</p>
+                        </div>
+                        <span class="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-lg text-xs font-bold">Fila de Espera</span>
+                    </div>
+                `).join('');
+
+                // Renderiza Financeiro
+                const financeList = document.getElementById('lista-financeiro');
+                if(!data.finance || data.finance.length === 0) financeList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhum registo de caixa.</div>`;
+                else financeList.innerHTML = data.finance.reverse().map(f => `
+                    <div class="p-4 rounded-xl border border-gray-100 bg-white shadow-sm flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-gray-800">${f['Descrição'] || f['Descricao']}</h4>
+                            <p class="text-xs text-gray-500 mt-0.5">Data: ${f['Data Transacao'] || f['Data']}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold ${f['Categoria'] === 'Saida' ? 'text-red-500' : 'text-green-500'}">
+                                ${f['Categoria'] === 'Saida' ? '-' : '+'} R$ ${Number(f['Valor']).toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Renderiza Datas Bloqueadas
+                const listBloqueios = document.getElementById('lista-bloqueios');
+                if (!data.blocked || data.blocked.length === 0) {
+                    listBloqueios.innerHTML = `<div class="col-span-full text-center py-5 text-gray-400 italic">Nenhum dia bloqueado.</div>`;
+                } else {
+                    listBloqueios.innerHTML = data.blocked.map(b => {
+                        const dateVal = b['DataBloqueio'] || b['Data'];
+                        const formatted = dateVal.split('-').reverse().join('/');
+                        return `
+                            <div class="flex items-center justify-between p-2.5 rounded-xl border border-red-100 bg-red-50/50">
+                                <span class="text-xs font-semibold text-red-700">${formatted}</span>
+                                <button type="button" onclick="unblockDate('${dateVal}')" class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-100 transition">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Estatísticas e Clientes
                 document.getElementById('stat-agendamentos').innerText = data.bookings ? data.bookings.length : 0;
                 let receita = 0; const clientesMap = new Map();
                 if(data.bookings) data.bookings.forEach(b => { if(b['Status'] === 'Confirmado' && b['Valor']) receita += Number(b['Valor']); if(!clientesMap.has(b['Telefone'])) clientesMap.set(b['Telefone'], b['Cliente']); });
                 document.getElementById('stat-receita').innerText = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(receita);
                 document.getElementById('lista-clientes').innerHTML = Array.from(clientesMap, ([phone, name]) => ({phone, name})).slice(0,5).map(c => `<div class="flex items-center justify-between p-2"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">${String(c.name).substring(0,2).toUpperCase()}</div><div><p class="text-sm font-bold">${c.name}</p><p class="text-xs text-gray-400">${c.phone}</p></div></div></div>`).join('');
                 syncUI.innerText = "Sincronizado";
+                lucide.createIcons();
             } catch (error) { syncUI.innerText = "Erro de Ligação"; }
         }
+
+        // Formulário Financeiro (POST)
+        document.getElementById('financeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnFin');
+            btn.disabled = true;
+            btn.innerText = "A registar...";
+            const payload = {
+                type: 'finance',
+                date: document.getElementById('finDate').value,
+                category: document.getElementById('finCat').value,
+                value: document.getElementById('finValue').value,
+                description: document.getElementById('finDesc').value
+            };
+            try {
+                await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+                document.getElementById('financeForm').reset();
+                document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
+                fetchData();
+            } catch(e) { alert("Erro de conexão."); }
+            btn.disabled = false;
+            btn.innerText = "Registar Transação";
+        };
+
         document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
     </script>
 </body>
