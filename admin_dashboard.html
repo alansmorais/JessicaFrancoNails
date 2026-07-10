@@ -170,7 +170,7 @@
     
     <script>lucide.createIcons();</script>
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
         let lastTotalItems = -1;
         function playLoudNotification() { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.5); gain.gain.setValueAtTime(1, ctx.currentTime); osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.2); osc.stop(ctx.currentTime + 1.2); }
 
