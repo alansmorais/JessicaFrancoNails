@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="color-scheme" content="light">
-<title>Jéssica Franco Nails — Agendamento</title>
+<title>Jéssica Franco Nails — Especialista em Unhas</title>
 <style>
 :root {
   --bg: #FEFDFB; --card: #ffffff; --ink: #383027; --muted: #8b7d6b;
@@ -18,20 +18,45 @@ button { cursor: pointer; }
 a { text-decoration: none; color: inherit; }
 .app { max-width: 1180px; margin: auto; padding: 22px; }
 
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+/* NAVBAR & MENU */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 24px; flex-wrap: wrap;}
 .brand-logo { font-size: 22px; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; }
 .public-nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.public-nav a, .public-nav button { font-weight: 600; font-size: 14px; transition: 0.2s; background: transparent; border: none; color: var(--ink); }
+.public-nav a, .public-nav button { font-weight: 600; font-size: 14px; transition: 0.2s; background: transparent; border: none; color: var(--ink); cursor: pointer;}
 .public-nav a:hover, .public-nav button:hover { color: var(--gold); }
 .public-nav .highlight { color: var(--gold); background: var(--gold-soft); padding: 8px 16px; border-radius: 999px; }
+
+/* SECTIONS & TYPOGRAPHY */
+.section-title { font-size: 28px; font-weight: 900; margin-bottom: 24px; color: var(--ink); display: flex; align-items: center; gap: 10px;}
+.section-title::before { content: ""; display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); }
 
 .hero, .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 15px 40px rgba(196, 154, 61, 0.06); }
 .hero { text-align: center; padding: 50px 20px; margin: 20px 0 40px; }
 .eyebrow { color: var(--gold); font-weight: 900; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; margin-bottom: 10px; display: block;}
-h1 { font-size: clamp(32px, 4vw, 48px); margin: 0 0 20px; }
+h1 { font-size: clamp(32px, 4vw, 48px); margin: 0 0 20px; letter-spacing: -1px;}
 .lead { color: var(--muted); font-size: 16px; max-width: 750px; line-height: 1.6; margin: 0 auto; }
 
-.primary { border: 0; border-radius: 12px; padding: 16px 22px; font-weight: 800; font-size: 15px; background: var(--gold); color: white; transition: 0.2s; width: 100%; margin-top: 18px; }
+/* SOBRE MIM (BIO) */
+.bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px; }
+.bio-img { width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+.bio-text p { font-size: 16px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; }
+.bio-text strong { color: var(--ink); }
+
+/* SERVIÇOS SHOWCASE */
+.services-showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 60px; }
+.showcase-card { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; transition: 0.3s; }
+.showcase-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(196,154,61,0.1); }
+.showcase-icon { font-size: 32px; margin-bottom: 15px; width: 60px; height: 60px; background: var(--soft); display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line);}
+.showcase-card h3 { margin: 0 0 10px; font-size: 18px; }
+.showcase-card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* CURSOS BANNER */
+.course-banner { background: var(--soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 40px; text-align: center; margin-bottom: 60px; position: relative; overflow: hidden; }
+.course-banner h2 { font-size: 28px; margin: 0 0 15px; color: var(--gold); }
+.course-banner p { color: var(--muted); margin: 0 auto 24px; max-width: 600px; line-height: 1.6; }
+
+/* BOTÕES & FORMS */
+.primary { border: 0; border-radius: 12px; padding: 16px 22px; font-weight: 800; font-size: 15px; background: var(--gold); color: white; transition: 0.2s; width: 100%; margin-top: 18px; text-align: center; display: inline-block;}
 .primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(196,154,61,0.3); }
 .primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
@@ -70,29 +95,101 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 
 .toast { visibility: hidden; min-width: 250px; background-color: var(--ink); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 .toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 4.5s; }
+
+/* MODAL CURSOS */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; place-items: center; padding: 20px;}
+.modal-overlay.active { display: flex; }
+.modal-content { width: 100%; max-width: 400px; padding: 30px; animation: slideUp 0.3s ease; }
+
+/* BOTÃO FLUTUANTE (FAB) */
+.fab-button { position: fixed; bottom: -100px; right: 20px; background: var(--gold); color: white; padding: 16px 24px; border-radius: 99px; font-weight: 800; font-size: 15px; box-shadow: 0 10px 25px rgba(196,154,61,0.4); z-index: 999; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; align-items: center; gap: 8px; border: 2px solid white; }
+.fab-button.visible { bottom: 30px; }
+.fab-button:hover { transform: scale(1.05); background: #b08832; }
+
 @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
 @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-@media(max-width: 900px){ .booking-layout, .two-panels { grid-template-columns: 1fr; } .summary { position: static; } .hero { padding: 30px 15px; } h1 {font-size: 26px;} }
+@media(max-width: 900px){ 
+    .booking-layout, .two-panels, .bio-grid { grid-template-columns: 1fr; } 
+    .summary { position: static; } 
+    .hero { padding: 30px 15px; } 
+    h1 {font-size: 28px;} 
+    .public-nav { justify-content: center; gap: 10px; width: 100%; }
+    .fab-button { left: 50%; right: auto; transform: translateX(-50%); width: 90%; justify-content: center; bottom: -100px;}
+    .fab-button.visible { bottom: 20px; transform: translateX(-50%) scale(1); }
+    .fab-button:hover { transform: translateX(-50%) scale(1.02); }
+}
 </style>
 </head>
 <body>
 
 <main class="app">
+  <!-- MENU DE NAVEGAÇÃO -->
   <nav class="topbar">
     <div class="brand-logo">Jéssica Franco</div>
     <div class="public-nav">
-      <button class="highlight" onclick="alert('Inscrições para o curso em breve!')">Cursos (Inscreva-se)</button>
+      <a href="#sobre">Sobre Mim</a>
+      <a href="#servicos">Serviços</a>
+      <button onclick="document.getElementById('modalCursos').classList.add('active')">Cursos</button>
+      <a href="#agenda" class="highlight">Agendar Horário</a>
     </div>
   </nav>
 
-  <section class="hero">
+  <!-- HERO SECTION -->
+  <section class="hero" id="inicio">
     <span class="eyebrow">Nail Designer Premium</span>
     <h1>Beleza e Durabilidade</h1>
-    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas, naturalidade e extrema durabilidade.</p>
+    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas, naturalidade e extrema durabilidade. Sinta-se poderosa todos os dias.</p>
   </section>
 
-  <div id="agenda">
+  <!-- SOBRE MIM (BIO COMPLETA) -->
+  <section id="sobre" class="bio-grid">
+    <div>
+      <!-- Dica: Pode substituir este link por uma foto sua hospedada no Imgur ou Drive -->
+      <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800" alt="Jéssica Franco trabalhando" class="bio-img">
+    </div>
+    <div class="bio-text">
+      <h2 class="section-title">Sobre a Jéssica</h2>
+      <p>Olá! Sou a <strong>Jéssica Franco</strong>, especialista em Nail Design. O meu propósito vai muito além da estética; o meu objetivo é entregar-lhe confiança, conforto e unhas de excelência.</p>
+      <p>Trabalho exclusivamente com técnicas de ponta (Molde Russo e F1) que garantem não só uma aparência fina e natural, mas também uma resistência invejável para o seu dia-a-dia.</p>
+      <p>No meu estúdio, cada detalhe foi pensado para lhe proporcionar um momento de relaxamento e autocuidado. A sua saúde, segurança e satisfação são as minhas maiores prioridades.</p>
+      <a href="#agenda" class="primary" style="width: auto; margin-top: 10px;">Conhecer Horários</a>
+    </div>
+  </section>
+
+  <!-- VITRINE DE SERVIÇOS -->
+  <section id="servicos">
+    <h2 class="section-title">O que ofereço</h2>
+    <div class="services-showcase">
+        <div class="showcase-card">
+            <div class="showcase-icon">✨</div>
+            <h3>Alongamento em Fibra</h3>
+            <p>Alongamentos esculpidos com precisão em Molde Russo ou F1. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
+        </div>
+        <div class="showcase-card">
+            <div class="showcase-icon">💅</div>
+            <h3>Banho de Gel</h3>
+            <p>Ideal para quem já tem o comprimento desejado mas procura proteger as unhas naturais contra quebras, mantendo o brilho por semanas.</p>
+        </div>
+        <div class="showcase-card">
+            <div class="showcase-icon">🛡️</div>
+            <h3>Blindagem Mãos & Pés</h3>
+            <p>Uma camada protetora leve que fortalece a lâmina natural. Acompanha esmaltação em gel para um acabamento duradouro e impecável.</p>
+        </div>
+    </div>
+  </section>
+
+  <!-- BANNER DE CURSOS -->
+  <section id="cursos" class="course-banner">
+    <h2>Deseja aprender a minha técnica?</h2>
+    <p>As vagas para as minhas formações presenciais são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e seja a primeira a ser notificada quando abrir uma nova turma.</p>
+    <button onclick="document.getElementById('modalCursos').classList.add('active')" class="primary" style="width: auto; background: var(--ink);">Entrar na Lista de Espera</button>
+  </section>
+
+  <!-- SISTEMA DE AGENDAMENTO -->
+  <div id="agenda" style="scroll-margin-top: 40px;">
+    <h2 class="section-title">Agende o seu momento</h2>
     <div class="booking-layout">
       <form class="card" id="bookingForm">
         <div class="two-panels">
@@ -121,29 +218,33 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <div class="field"><label>Nome completo</label><input id="name" required placeholder="Seu nome"></div>
           <div class="field"><label>WhatsApp</label><input type="tel" id="phone" required placeholder="(11) 99999-9999"></div>
         </div>
-        <div class="field">
-          <label>Forma de Pagamento</label>
-          <select id="paymentMethod" required>
-            <option value="PIX">PIX</option>
-            <option value="Cartão de Crédito">Cartão de Crédito</option>
-            <option value="Cartão de Débito">Cartão de Débito</option>
-            <option value="Dinheiro">Dinheiro</option>
-          </select>
-        </div>
         
-        <div class="field" style="margin-top: 10px;">
-          <label>Observações (Opcional)</label>
-          <textarea id="notes" rows="2" placeholder="Alguma alergia ou preferência?"></textarea>
+        <div class="two">
+          <div class="field">
+            <label>Forma de Pagamento</label>
+            <select id="paymentMethod" required>
+              <option value="PIX">PIX</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Observações (Opcional)</label>
+            <input type="text" id="notes" placeholder="Ex: Unha quebrada, alergia...">
+          </div>
         </div>
         
         <button type="submit" class="primary" id="btnBooking" disabled>Preencha os dados para confirmar</button>
       </form>
 
+      <!-- RESUMO DA COMPRA -->
       <aside class="card summary">
         <h3>Resumo</h3>
         <div class="summary-row"><span>Serviço</span><b id="sumService">-</b></div>
         <div class="summary-row"><span>Data</span><b id="sumDate">Selecione</b></div>
         <div class="summary-row"><span>Horário</span><b id="sumTime">Selecione</b></div>
+        <div class="summary-row"><span>Notas</span><b id="sumNotes" style="font-weight:normal; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</b></div>
         <div class="summary-row" style="border: 0;"><span>Total</span><b id="sumPrice" style="font-size: 22px; color: var(--gold);">-</b></div>
         <div class="note">* No banho em gel e no alongamento já está incluso esmaltação em gel simples.</div>
       </aside>
@@ -151,23 +252,53 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   </div>
 </main>
 
+<!-- BOTÃO FLUTUANTE DE RESERVA (Aparece ao rolar) -->
+<a href="#agenda" class="fab-button" id="fabBtn">
+  📅 Agendar Agora
+</a>
+
+<!-- MODAL CURSOS (Lista de Espera) -->
+<div id="modalCursos" class="modal-overlay">
+  <div class="card modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="margin:0; font-size:20px;">Lista de Espera</h2>
+      <button type="button" onclick="document.getElementById('modalCursos').classList.remove('active')" style="border:none; background:transparent; font-size:24px; color:var(--muted);">&times;</button>
+    </div>
+    <p style="color:var(--muted); font-size:14px; margin-top:8px;">Garanta a sua vaga para a próxima turma. Entraremos em contacto.</p>
+    <form id="courseForm" style="margin-top:20px;">
+      <div class="field"><label>Nome Completo</label><input id="cName" required placeholder="Seu nome"></div>
+      <div class="field"><label>WhatsApp</label><input type="tel" id="cPhone" required placeholder="(11) 99999-9999"></div>
+      <div class="field">
+        <label>Seu Nível Atual</label>
+        <select id="cLevel" required>
+          <option value="Iniciante do zero">Iniciante do zero</option>
+          <option value="Já trabalho (Aperfeiçoamento)">Já trabalho (Aperfeiçoamento)</option>
+        </select>
+      </div>
+      <button type="submit" class="primary" id="btnCourse">Quero ser notificada</button>
+    </form>
+  </div>
+</div>
+
 <div id="toast" class="toast">Mensagem</div>
 
+<!-- LÓGICA JAVASCRIPT -->
 <script>
 // ==========================================
 // SUA URL DO GOOGLE APPS SCRIPT
 // ==========================================
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
 
+// Limites Mínimos de Data (Hoje)
 const minDateObj = new Date();
 const MIN_DATE = minDateObj.toISOString().split('T')[0];
 document.getElementById('date').setAttribute('min', MIN_DATE);
 
 const services = [
-  {id:"alongamento", icon:"✨", name:"Alongamento na fibra de vidro", desc:"Molde Russo ou Molde F1 (Esmaltação em gel inclusa)", price:160},
+  {id:"alongamento", icon:"✨", name:"Alongamento na fibra de vidro", desc:"Molde Russo ou Molde F1", price:160},
   {id:"banho", icon:"💅", name:"Banho em gel", desc:"Esmaltação em gel simples inclusa", price:130},
-  {id:"blindagem-maos", icon:"🛡️", name:"Blindagem + Esmaltação (Mãos)", desc:"Esmaltação em gel nas mãos", price:75},
-  {id:"blindagem-pes", icon:"👣", name:"Blindagem + Esmaltação (Pés)", desc:"Esmaltação em gel nos pés", price:80}
+  {id:"blindagem-maos", icon:"🛡️", name:"Blindagem (Mãos)", desc:"Esmaltação em gel nas mãos", price:75},
+  {id:"blindagem-pes", icon:"👣", name:"Blindagem (Pés)", desc:"Esmaltação em gel nos pés", price:80}
 ];
 
 const BRL = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
@@ -177,6 +308,20 @@ let selectedTime = null;
 let occupiedBookings = []; 
 
 const $ = q => document.querySelector(q);
+
+// Mostrar e ocultar o Botão Flutuante ao rolar a página
+window.addEventListener("scroll", () => {
+    const fab = document.getElementById("fabBtn");
+    const agendaSection = document.getElementById("agenda");
+    const agendaPos = agendaSection.getBoundingClientRect().top;
+    
+    // Se passou de 300px E a secção da agenda ainda não está muito visível
+    if (window.scrollY > 300 && agendaPos > window.innerHeight * 0.7) {
+        fab.classList.add("visible");
+    } else {
+        fab.classList.remove("visible");
+    }
+});
 
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
@@ -201,11 +346,14 @@ async function fetchOccupiedTimes() {
     const data = await res.json();
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
-        let dataStr = String(b['Data Agendamento']);
+        let dataStr = b['Data Agendamento'];
         if(dataStr.includes('T')) dataStr = dataStr.split('T')[0];
+        
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
-        return { date: dataStr, time: timeMatch ? timeMatch[0] : horaStr };
+        let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
+
+        return { date: dataStr, time: horaLimpa };
       });
     }
     if($("#date").value) renderTimes();
@@ -219,31 +367,53 @@ function renderTimes() {
   
   selectedTime = null;
   updateSum();
+
   if (!dateVal) return;
 
   const [year, month, day] = dateVal.split('-');
   const dateObj = new Date(year, month - 1, day);
   const dayOfWeek = dateObj.getDay();
 
+  // Bloqueio de Domingos
   if (dayOfWeek === 0) {
     errorMsg.textContent = "Não funcionamos aos domingos. Por favor, escolha outra data.";
     errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
   }
+
   errorMsg.style.display = "none";
 
+  // HORÁRIOS: 2h30 de intervalo
   let horariosDoDia = [];
-  if (dayOfWeek === 6) { horariosDoDia = ["09:00", "11:30"]; } 
-  else { horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; }
+  if (dayOfWeek === 6) { 
+    horariosDoDia = ["09:00", "11:30"]; // Sábado
+  } else { 
+    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; // Dias úteis
+  }
 
-  const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateVal).map(b => b.time);
+  // BLOQUEAR HORÁRIOS DO PASSADO (Hoje)
+  const hoje = new Date();
+  const dateValStr = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+  const hojeStr = hoje.toISOString().split('T')[0];
+
+  if (dateValStr === hojeStr) {
+    const horaAtualMinutos = hoje.getHours() * 60 + hoje.getMinutes();
+    horariosDoDia = horariosDoDia.filter(t => {
+        const [h, m] = t.split(':').map(Number);
+        return (h * 60 + m) > horaAtualMinutos; // Só mantém as horas futuras
+    });
+  }
+
+  const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateValStr).map(b => b.time);
   const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
 
   if (horariosDisponiveis.length === 0) {
-    timeGrid.innerHTML = "<p style='color:var(--muted);font-size:14px;'>Todos os horários esgotados neste dia.</p>";
+    timeGrid.innerHTML = "<p style='color:var(--muted);font-size:14px; padding:10px; background:var(--soft); border-radius:8px;'>Não há horários disponíveis ou já passaram. Escolha outra data.</p>";
     return;
   }
 
-  timeGrid.innerHTML = horariosDisponiveis.map(t => `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`).join("");
+  timeGrid.innerHTML = horariosDisponiveis.map(t => 
+    `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`
+  ).join("");
 }
 
 function selectSvc(id, el) {
@@ -263,17 +433,26 @@ function selectTime(time, el) {
 function updateSum() {
   $("#sumService").textContent = selectedService.name;
   $("#sumPrice").textContent = BRL.format(selectedService.price);
+  
   if ($("#date").value) {
       const [y, m, d] = $("#date").value.split('-');
       $("#sumDate").textContent = `${d}/${m}/${y}`;
-  } else { $("#sumDate").textContent = "Selecione"; }
+  } else {
+      $("#sumDate").textContent = "Selecione";
+  }
+  
   $("#sumTime").textContent = selectedTime || "Selecione";
+  $("#sumNotes").textContent = $("#notes").value || "-";
   
   const isReady = selectedService && selectedTime && $("#date").value;
   $("#btnBooking").disabled = !isReady;
   $("#btnBooking").textContent = isReady ? "Confirmar Reserva" : "Preencha os dados para confirmar";
 }
 
+// Atualizar resumo quando escreve na nota
+$("#notes").addEventListener("input", updateSum);
+
+// ENVIAR AGENDAMENTO
 $("#bookingForm").onsubmit = async e => {
   e.preventDefault();
   if(!selectedTime) return showToast("Por favor, selecione um horário.", true);
@@ -315,10 +494,36 @@ $("#bookingForm").onsubmit = async e => {
   $("#btnBooking").textContent = "Preencha os dados para confirmar";
 };
 
+// ENVIAR CURSO
+$("#courseForm").onsubmit = async e => {
+  e.preventDefault();
+  $("#btnCourse").textContent = "A registar...";
+  $("#btnCourse").disabled = true;
+  
+  const payload = {
+    type: 'course',
+    client: $("#cName").value,
+    phone: $("#cPhone").value,
+    level: $("#cLevel").value
+  };
+
+  try {
+    await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+    showToast("Inscrição registada! Entraremos em contacto.");
+    e.target.reset();
+    document.getElementById('modalCursos').classList.remove('active');
+  } catch(err) {
+    showToast("Erro na ligação. Tente novamente.", true);
+  }
+  $("#btnCourse").textContent = "Quero ser notificada";
+  $("#btnCourse").disabled = false;
+};
+
 renderServices();
 updateSum();
 fetchOccupiedTimes(); 
 $("#date").onchange = renderTimes;
+
 </script>
 </body>
 </html>
