@@ -29,7 +29,6 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -41,7 +40,6 @@
         </div>
     </div>
 
-    <!-- SIDEBAR LATERAL -->
     <aside class="w-64 bg-brand-dark text-gray-300 flex flex-col hidden md:flex z-20 shadow-xl">
         <div class="h-16 flex items-center px-6 border-b border-gray-700/50 bg-gray-900/20">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
@@ -55,7 +53,6 @@
         </nav>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
@@ -170,6 +167,7 @@
             </div>
         </main>
     </div>
+    
     <script>lucide.createIcons();</script>
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
@@ -186,7 +184,7 @@
             } catch(e) { alert('Erro na ligação.'); btn.innerHTML = `Entrar no Painel`; }
         };
 
-        // ENVIAR BLOQUEIO DE INTERVALO DE DATAS (POST)
+        // ENVIAR BLOQUEIO DE INTERVALO DE DATAS (POST) - CORRECAO DE CORS DEFINITIVA
         document.getElementById('blockDateForm').onsubmit = async (e) => {
             e.preventDefault();
             const start = document.getElementById('startDate').value;
@@ -201,31 +199,43 @@
             btn.disabled = true;
             btn.innerText = "A processar...";
             try {
-                await fetch(WEB_APP_URL, {
+                const res = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: 'block_range', startDate: start, endDate: end })
                 });
-                alert("Período bloqueado com sucesso!");
-                document.getElementById('startDate').value = "";
-                document.getElementById('endDate').value = "";
-                fetchData();
-            } catch (err) { alert("Erro ao bloquear período."); }
+                const json = await res.json();
+                if (json.status === "success") {
+                    alert("Período bloqueado com sucesso!");
+                    document.getElementById('startDate').value = "";
+                    document.getElementById('endDate').value = "";
+                    fetchData();
+                } else {
+                    alert("Ocorreu um erro no servidor.");
+                }
+            } catch (err) { alert("Erro ao ligar ao servidor."); }
             btn.disabled = false;
             btn.innerHTML = `<i data-lucide="calendar-off" class="w-5 h-5"></i> Bloquear Intervalo`;
             lucide.createIcons();
         };
 
-        // REMOVER BLOQUEIO DE DATA INDIVIDUAL (POST)
+        // REMOVER BLOQUEIO DE DATA INDIVIDUAL (POST) - CORRECAO DE CORS DEFINITIVA
         async function unblockDate(dateStr) {
-            if (!confirm(`Deseja desbloquear o dia ${dateStr.split('-').reverse().join('/')}?`)) return;
+            const displayDate = dateStr.split('-').reverse().join('/');
+            if (!confirm(`Deseja desbloquear o dia ${displayDate}?`)) return;
             const syncUI = document.getElementById('sync-status');
             syncUI.innerText = "A remover...";
             try {
-                await fetch(WEB_APP_URL, {
+                const res = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify({ action: 'unblock_date', date: dateStr })
                 });
-                fetchData();
+                const json = await res.json();
+                if (json.status === "success") {
+                    fetchData();
+                } else {
+                    alert("Erro ao remover o dia.");
+                    fetchData();
+                }
             } catch (err) {
                 alert("Erro ao remover bloqueio.");
                 fetchData();
@@ -258,8 +268,8 @@
             const todayStr = toLocalISOString(new Date());
             weekDates.forEach((date, i) => {
                 const dateStr = toLocalISOString(date); const dayNum = date.getDate().toString().padStart(2, '0');
-                if (dateStr === todayStr) headersHTML += `<div class="cal-header border-t border-gray-200 bg-blue-50"><span class="text-brand-active text-[10px] uppercase block font-bold">${dayNames[i]}</span><span class="text-sm md:text-lg text-brand-active font-bold bg-blue-100 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
-                else headersHTML += `<div class="cal-header border-t border-gray-200"><span class="text-gray-400 text-[10px] uppercase block">${dayNames[i]}</span><span class="text-sm md:text-lg text-gray-800">${dayNum}</span></div>`;
+                if (dateStr === todayStr) headersHTML += `<div class="cal-header border-t border-e border-gray-200 bg-blue-50"><span class="text-brand-active text-[10px] uppercase block font-bold">${dayNames[i]}</span><span class="text-sm md:text-lg text-brand-active font-bold bg-blue-100 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
+                else headersHTML += `<div class="cal-header border-t border-e border-gray-200"><span class="text-gray-400 text-[10px] uppercase block">${dayNames[i]}</span><span class="text-sm md:text-lg text-gray-800">${dayNum}</span></div>`;
             });
             document.getElementById('cal-headers').innerHTML = headersHTML;
             let bookingMap = {};
@@ -336,7 +346,7 @@
                         const dateVal = b['DataBloqueio'] || b['Data'];
                         const formatted = dateVal.split('-').reverse().join('/');
                         return `
-                            <div class="flex items-center justify-between p-2.5 rounded-xl border border-red-100 bg-red-50/50">
+                            <div class="flex items-center justify-between p-2.5 rounded-xl border border-red-100 bg-red-50/50 animate-fade-in">
                                 <span class="text-xs font-semibold text-red-700">${formatted}</span>
                                 <button type="button" onclick="unblockDate('${dateVal}')" class="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-100 transition">
                                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -357,7 +367,7 @@
             } catch (error) { syncUI.innerText = "Erro de Ligação"; }
         }
 
-        // Formulário Financeiro (POST)
+        // Formulário Financeiro (POST) - CORRIGIDO CORS
         document.getElementById('financeForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnFin');
@@ -371,10 +381,18 @@
                 description: document.getElementById('finDesc').value
             };
             try {
-                await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
-                document.getElementById('financeForm').reset();
-                document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
-                fetchData();
+                const res = await fetch(WEB_APP_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify(payload) 
+                });
+                const json = await res.json();
+                if(json.status === "success") {
+                    document.getElementById('financeForm').reset();
+                    document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
+                    fetchData();
+                } else {
+                    alert("Erro ao gravar lançamento.");
+                }
             } catch(e) { alert("Erro de conexão."); }
             btn.disabled = false;
             btn.innerText = "Registar Transação";
