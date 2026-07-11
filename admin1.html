@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
@@ -33,7 +32,6 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
-    <!-- Ecrã de Login -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -45,7 +43,6 @@
         </div>
     </div>
 
-    <!-- Barra Lateral de Navegação -->
     <aside class="w-64 bg-brand-dark text-gray-300 flex flex-col hidden md:flex z-20 shadow-xl">
         <div class="h-16 flex items-center px-6 border-b border-gray-700/50 bg-gray-900/20">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
@@ -60,7 +57,6 @@
         </nav>
     </aside>
 
-    <!-- Conteúdo Principal -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
@@ -82,7 +78,6 @@
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 lg:p-8 bg-brand-bg">
-            <!-- TAB: DASHBOARD / AGENDAMENTOS -->
             <div id="tab-dashboard" class="tab-content active">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     <div class="xl:col-span-8 flex flex-col gap-6">
@@ -122,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- TAB: LISTA DE CONTACTOS -->
             <div id="tab-contactos" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full flex flex-col">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
@@ -152,10 +146,8 @@
                 </div>
             </div>
 
-            <!-- TAB: CURSOS -->
             <div id="tab-cursos" class="tab-content"><div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="text-xl font-bold mb-6">Inscrições na Lista do Curso</h3><div id="lista-cursos" class="space-y-3"></div></div></div>
             
-            <!-- TAB: FINANCEIRO -->
             <div id="tab-financeiro" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
                     <h3 class="text-xl font-bold mb-6">Registo Financeiro</h3>
@@ -166,7 +158,6 @@
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="font-bold mb-4">Histórico Transacional</h3><div id="lista-financeiro" class="space-y-3"></div></div>
             </div>
 
-            <!-- TAB: BLOQUEIO DE FERIAS -->
             <div id="tab-ferias" class="tab-content bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <h3 class="text-xl font-bold mb-6">Bloquear Datas (Férias/Folgas)</h3>
                 <form id="blockDateForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -188,7 +179,6 @@
         </main>
     </div>
 
-    <!-- MODAL: AGENDAMENTO MANUAL POR ADMIN -->
     <div id="modalAdminBooking" class="fixed inset-0 bg-black/50 z-50 hidden place-items-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp">
             <button onclick="closeAdminBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
@@ -275,73 +265,56 @@
         let allContacts = [];
         let allBookings = [];
 
+        // O SEU LINK DO GOOGLE SCRIPT MANTIDO INTACTO
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
-        // GERAR PDF NO PRÓPRIO NAVEGADOR
         function downloadPDF(client, phone, service, date, time, price, payment, notes) {
-            let displayDate = date;
-            if(date.includes('-')) {
-                const [y, m, d] = date.split('-');
-                displayDate = `${d}/${m}/${y}`;
-            }
+            let displayDate = date.includes('-') ? date.split('-').reverse().join('/') : date;
 
             const element = document.createElement('div');
             element.innerHTML = `
-                <div style="padding: 30px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; max-width: 500px; margin: auto; background: white;">
+                <div style="padding: 30px; font-family: sans-serif; color: #333; background: white;">
                     <div style="text-align: center; border-bottom: 2px solid #C49A3D; padding-bottom: 15px; margin-bottom: 20px;">
                         <h2 style="color: #C49A3D; margin: 0; font-size: 24px;">Jéssica Franco Nails</h2>
                         <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Confirmação de Agendamento</p>
                     </div>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Cliente:</td><td style="padding: 8px 0; text-align: right;">${client}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">WhatsApp:</td><td style="padding: 8px 0; text-align: right;">${phone}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Serviço:</td><td style="padding: 8px 0; text-align: right; color: #3b82f6; font-weight: bold;">${service}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Data:</td><td style="padding: 8px 0; text-align: right;">${displayDate}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Horário:</td><td style="padding: 8px 0; text-align: right; font-weight: bold;">${time}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Valor:</td><td style="padding: 8px 0; text-align: right; font-weight: bold; color: #34b484;">R$ ${Number(price || 0).toFixed(2)}</td></tr>
-                        <tr><td style="padding: 8px 0; font-weight: bold; color: #555;">Pagamento:</td><td style="padding: 8px 0; text-align: right;">${payment || 'A combinar'}</td></tr>
-                        <tr><td style="padding: 12px 0 0 0; font-weight: bold; color: #555;" colspan="2">Observações:</td></tr>
-                        <tr><td style="padding: 8px; background: #f9fafb; border-radius: 6px; font-size: 13px; color: #666; border: 1px solid #f3f4f6;" colspan="2">${notes || 'Nenhuma'}</td></tr>
-                    </table>
-                    <div style="margin-top: 30px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 15px;">
-                        Obrigado pela preferência! Por favor, avise com antecedência em caso de imprevistos.
-                    </div>
+                    <p><strong>Cliente:</strong> ${client}</p>
+                    <p><strong>WhatsApp:</strong> ${phone}</p>
+                    <p><strong>Serviço:</strong> ${service}</p>
+                    <p><strong>Data:</strong> ${displayDate} às ${time}</p>
+                    <p><strong>Valor:</strong> R$ ${Number(price || 0).toFixed(2)}</p>
+                    <p><strong>Pagamento:</strong> ${payment || 'A combinar'}</p>
+                    <p><strong>Notas:</strong> ${notes || 'Nenhuma'}</p>
                 </div>
             `;
 
-            var opt = {
-                margin:       0,
-                filename:     `Confirmacao_${client.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a5', orientation: 'portrait' }
-            };
+            var opt = { margin: 0, filename: `Recibo_${client.replace(/\\s+/g, '_')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a5', orientation: 'portrait' } };
 
-            // Partilha direta para telemóveis ou download para PC
-            if (navigator.canShare && navigator.canShare({ files: [] })) {
-                html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
-                    var file = new File([pdfBlob], opt.filename, { type: 'application/pdf' });
-                    navigator.share({
-                        title: 'Confirmação de Agendamento',
-                        files: [file]
-                    }).catch(function(error){
-                        html2pdf().set(opt).from(element).save(); // fallback
+            html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
+                var file = new File([pdfBlob], opt.filename, { type: 'application/pdf' });
+                var shareData = { title: 'Recibo', files: [file] };
+
+                if (navigator.canShare && navigator.canShare(shareData)) {
+                    navigator.share(shareData).catch(function(err) {
+                        html2pdf().set(opt).from(element).save();
+                        alert("PDF guardado no seu telemóvel! Pode anexá-lo agora na conversa do WhatsApp.");
                     });
-                });
-            } else {
-                html2pdf().set(opt).from(element).save();
-            }
+                } else {
+                    html2pdf().set(opt).from(element).save();
+                    alert("PDF transferido com sucesso! Anexe o arquivo na sua conversa com a cliente.");
+                }
+            });
         }
 
         function executeSmartPaste(val) {
             if (!val || val.trim() === "") return;
-            let phoneMatch = val.replace(/\s+/g, '').match(/\+?\d{8,15}/) || val.match(/\d[\d\s\-\(\)]{7,}\d/);
-            let extractedPhone = phoneMatch ? phoneMatch[0].replace(/\D/g, '') : '';
+            let phoneMatch = val.replace(/\\s+/g, '').match(/\\+?\\d{8,15}/) || val.match(/\\d[\\d\\s\\-\\(\\)]{7,}\\d/);
+            let extractedPhone = phoneMatch ? phoneMatch[0].replace(/\\D/g, '') : '';
             let extractedName = val;
             if (phoneMatch) {
                 extractedName = val.replace(phoneMatch[0], '');
             }
-            extractedName = extractedName.replace(/[\-\:\,\;\n\r\t\*\_]/g, ' ').replace(/\s+/g, ' ').trim();
+            extractedName = extractedName.replace(/[\\-\\:\\,\\;\\n\\r\\t\\*\\_]/g, ' ').replace(/\\s+/g, ' ').trim();
             if (extractedName.length > 1) {
                 document.getElementById('admClient').value = extractedName;
             }
@@ -384,16 +357,13 @@
                 displayDate = `${d}/${m}/${y}`;
             }
 
-            const message = `Olá *${client}*! \nO seu agendamento na *Jéssica Franco Nails* foi confirmado com sucesso! ✨\n\n💅 *Serviço:* ${service}\n📅 *Data:* ${displayDate}\n⏰ *Hora:* ${time}\n\nAgradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor contacte-nos com antecedência. Até breve! ❤️`;
+            const message = `Olá *${client}*! \\nO seu agendamento na *Jéssica Franco Nails* foi confirmado com sucesso! ✨\\n\\n💅 *Serviço:* ${service}\\n📅 *Data:* ${displayDate}\\n⏰ *Hora:* ${time}\\n\\nAgradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor contacte-nos com antecedência. Até breve! ❤️`;
             
             copyToClipboard(message);
             
-            let cleanPhone = String(phone).replace(/\D/g, '');
-            if(cleanPhone.length === 9) {
-                cleanPhone = "351" + cleanPhone;
-            } else if (cleanPhone.length === 11) {
-                cleanPhone = "55" + cleanPhone;
-            }
+            let cleanPhone = String(phone).replace(/\\D/g, '');
+            if(cleanPhone.length === 9) { cleanPhone = "351" + cleanPhone; } 
+            else if (cleanPhone.length === 11) { cleanPhone = "55" + cleanPhone; }
 
             const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
@@ -413,7 +383,7 @@
                     alert("Agendamento eliminado com sucesso!");
                     fetchData();
                 } else {
-                    alert("Erro ao eliminar agendamento: " + (json.message || "Erro desconhecido"));
+                    alert("Erro ao eliminar agendamento (lembre-se que tem de atualizar o Code.gs para esta função trabalhar).");
                 }
             } catch(e) {
                 alert("Erro de ligação ao tentar eliminar o agendamento.");
@@ -446,12 +416,8 @@
                 const phone = String(b['Telefone']).trim();
                 const name = String(b['Cliente']).trim();
                 if(!phone) return;
-                if(!contactsMap[phone]) {
-                    contactsMap[phone] = { name: name, phone: phone, visits: 0 };
-                }
-                if (b['Status'] === 'Confirmado') {
-                    contactsMap[phone].visits += 1;
-                }
+                if(!contactsMap[phone]) { contactsMap[phone] = { name: name, phone: phone, visits: 0 }; }
+                if (b['Status'] === 'Confirmado') { contactsMap[phone].visits += 1; }
             });
             allContacts = Object.values(contactsMap).sort((a,b) => a.name.localeCompare(b.name));
             renderContactsTable(allContacts);
@@ -476,9 +442,6 @@
                     <td class="px-6 py-4 text-right flex justify-end gap-2">
                         <button onclick="openAdminBookingModal('${c.name}', '${c.phone}')" class="p-2 text-brand-active hover:bg-blue-50 rounded-lg transition" title="Agendar Novo">
                             <i data-lucide="calendar-plus" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="shareBooking('${c.name}', '${c.phone}', 'Manutenção', '${new Date().toISOString().split('T')[0]}', '09:00')" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition" title="Enviar Mensagem Texto">
-                            <i data-lucide="message-square" class="w-4 h-4"></i>
                         </button>
                     </td>
                 </tr>
@@ -532,10 +495,9 @@
                     closeAdminBookingModal();
                     fetchData(); 
                     
-                    // PERGUNTA INTELIGENTE APÓS AGENDAR
-                    if(confirm("Agendamento efetuado! Deseja gerar e partilhar a confirmação em PDF agora?")) {
+                    if(confirm("Agendamento guardado! Deseja gerar o PDF do recibo para partilhar agora?")) {
                         downloadPDF(client, phone, service, date, time, price, paymentMethod, notes);
-                    } else if(confirm("Deseja partilhar apenas a mensagem de texto no WhatsApp?")) {
+                    } else if(confirm("Deseja enviar apenas a confirmação por mensagem de texto?")) {
                         shareBooking(client, phone, service, date, time);
                     }
                 }
@@ -660,68 +622,4 @@
                 const bookingsList = document.getElementById('lista-agendamentos');
                 if(!data.bookings || data.bookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhum registo.</div>`;
                 else bookingsList.innerHTML = data.bookings.reverse().map(b => {
-                    const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                    const obs = b['Observações'] || b['Observacoes'] || '';
-                    const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
-                    
-                    // Protege notas com aspas
-                    const safeObs = obs.replace(/'/g, "\\'");
-                    
-                    return `
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-blue-50 text-brand-active flex items-center justify-center font-bold border border-blue-100"><span class="text-sm">${b['Hora']}</span></div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4>
-                                    <p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p>
-                                    ${obsHtml}
-                                </div>
-                            </div>
-                            <div class="flex sm:flex-col items-end justify-between sm:justify-start gap-1">
-                                <span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${statusColor}">${b['Status']}</span>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span>
-                                    
-                                    <!-- NOVO BOTÃO DE GERAR PDF -->
-                                    <button onclick="downloadPDF('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}', '${b['Valor']}', '${b['Tipo Pagamento']}', '${safeObs}')" class="p-1 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Gerar PDF do Recibo">
-                                        <i data-lucide="file-text" class="w-4 h-4"></i>
-                                    </button>
-                                    
-                                    <!-- Botão Partilha Normal Texto -->
-                                    <button onclick="shareBooking('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-green-600 hover:bg-green-50 rounded-lg transition" title="Partilhar Texto">
-                                        <i data-lucide="share-2" class="w-4 h-4"></i>
-                                    </button>
-                                    
-                                    <button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar Agendamento">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
-                }).join('');
-
-                const bloqueiosList = document.getElementById('lista-bloqueios');
-                if(!data.blocked || data.blocked.length === 0) {
-                    bloqueiosList.innerHTML = `<p class="text-gray-400 italic text-sm col-span-full">Nenhum dia bloqueado atualmente.</p>`;
-                } else {
-                    bloqueiosList.innerHTML = data.blocked.map(b => `
-                        <div class="flex items-center justify-between p-2.5 bg-red-50 text-red-800 rounded-xl border border-red-100 text-xs">
-                            <span class="font-bold">${b['DataBloqueio']}</span>
-                            <button onclick="unblockDate('${b['DataBloqueio']}')" class="text-red-600 hover:text-red-800 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    `).join('');
-                }
-
-                document.getElementById('stat-agendamentos').innerText = data.bookings ? data.bookings.length : 0;
-                let receita = 0; const clientesMap = new Map();
-                if(data.bookings) data.bookings.forEach(b => { if(b['Status'] === 'Confirmado' && b['Valor']) receita += Number(b['Valor']); if(!clientesMap.has(b['Telefone'])) clientesMap.set(b['Telefone'], b['Cliente']); });
-                document.getElementById('stat-receita').innerText = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(receita);
-                document.getElementById('lista-clientes').innerHTML = Array.from(clientesMap, ([phone, name]) => ({phone, name})).slice(0,5).map(c => `<div class="flex items-center justify-between p-2"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600">${String(c.name).substring(0,2).toUpperCase()}</div><div><p class="text-sm font-bold">${c.name}</p><p class="text-xs text-gray-400">${c.phone}</p></div></div></div>`).join('');
-                syncUI.innerText = "Sincronizado";
-                lucide.createIcons();
-            } catch (error) { syncUI.innerText = "Erro de Ligação"; }
-        }
-        document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
-    </script>
-</body>
-</html>
+                    const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text
