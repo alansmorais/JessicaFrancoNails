@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -260,6 +259,9 @@
         let allContacts = [];
         let allBookings = [];
 
+        // NOVO WEB APP URL AQUI
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
+
         // Força o sistema a copiar texto com segurança mesmo dentro de iFrame
         function copyToClipboard(text) {
             const textArea = document.createElement("textarea");
@@ -465,6 +467,21 @@
             } catch(e) { alert("Erro ao ligar ao servidor."); }
         }
 
+        document.getElementById('loginForm').onsubmit = async function(e) {
+            e.preventDefault(); const pwd = document.getElementById('adminPwd').value; const btn = document.getElementById('btnLogin');
+            btn.innerHTML = `A validar...`;
+            try {
+                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd)); const json = await res.json();
+                if(json.status === "success") { 
+                    document.getElementById('login-screen').style.display = 'none'; 
+                    try{playLoudNotification();}catch(e){} 
+                    fetchData(); 
+                    setInterval(fetchData, 20000); 
+                } 
+                else { alert('Palavra-passe incorreta!'); btn.innerHTML = `Entrar no Painel`; }
+            } catch(e) { alert('Erro na ligação.'); btn.innerHTML = `Entrar no Painel`; }
+        };
+
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('bg-brand-active', 'text-white', 'shadow-md'); n.classList.add('hover:bg-gray-800', 'text-gray-300'); });
             el.classList.remove('hover:bg-gray-800', 'text-gray-300'); el.classList.add('bg-brand-active', 'text-white', 'shadow-md');
@@ -509,6 +526,9 @@
             });
             document.getElementById('cal-body').innerHTML = bodyHTML;
         }
+
+        let lastTotalItems = -1;
+        function playLoudNotification() { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.5); gain.gain.setValueAtTime(1, ctx.currentTime); osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.2); osc.stop(ctx.currentTime + 1.2); }
 
         async function fetchData() {
             const syncUI = document.getElementById('sync-status'); syncUI.innerText = "A atualizar...";
