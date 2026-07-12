@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
@@ -32,6 +33,7 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
+    <!-- Ecrã de Login -->
     <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
         <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
             <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -43,10 +45,15 @@
         </div>
     </div>
 
-    <aside class="w-64 bg-brand-dark text-gray-300 flex flex-col hidden md:flex z-20 shadow-xl">
-        <div class="h-16 flex items-center px-6 border-b border-gray-700/50 bg-gray-900/20">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
-            <div><h1 class="text-white font-semibold text-sm">Painel de Gestão</h1><span class="text-xs text-gray-400">Jéssica Franco</span></div>
+    <!-- Barra Lateral de Navegação Corrigida -->
+    <aside id="sidebar" class="w-64 bg-brand-dark text-gray-300 flex-col hidden md:flex z-[200] shadow-2xl fixed md:relative h-full inset-y-0 left-0 transition-all">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-700/50 bg-gray-900/20">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
+                <div><h1 class="text-white font-semibold text-sm">Painel de Gestão</h1><span class="text-xs text-gray-400">Jéssica Franco</span></div>
+            </div>
+            <!-- Botão de Fechar Menu no Mobile -->
+            <button onclick="toggleMenu()" class="md:hidden text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
             <button onclick="switchTab('dashboard', this)" class="nav-item w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-brand-active text-white transition text-sm font-medium shadow-md shadow-blue-500/20"><i data-lucide="calendar-days" class="w-5 h-5"></i> Agendamentos</button>
@@ -57,10 +64,12 @@
         </nav>
     </aside>
 
+    <!-- Conteúdo Principal -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
-                <button class="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg"><i data-lucide="menu" class="w-5 h-5"></i></button>
+                <!-- Botão de Abrir Menu no Mobile -->
+                <button onclick="toggleMenu()" class="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
                 <h2 class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
                 <div id="sync-status" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100">Sincronizado</div>
             </div>
@@ -78,6 +87,7 @@
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 lg:p-8 bg-brand-bg">
+            <!-- TAB: DASHBOARD / AGENDAMENTOS -->
             <div id="tab-dashboard" class="tab-content active">
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                     <div class="xl:col-span-8 flex flex-col gap-6">
@@ -117,6 +127,7 @@
                 </div>
             </div>
 
+            <!-- TAB: LISTA DE CONTACTOS -->
             <div id="tab-contactos" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full flex flex-col">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
@@ -146,8 +157,10 @@
                 </div>
             </div>
 
+            <!-- TAB: CURSOS -->
             <div id="tab-cursos" class="tab-content"><div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="text-xl font-bold mb-6">Inscrições na Lista do Curso</h3><div id="lista-cursos" class="space-y-3"></div></div></div>
             
+            <!-- TAB: FINANCEIRO -->
             <div id="tab-financeiro" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
                     <h3 class="text-xl font-bold mb-6">Registo Financeiro</h3>
@@ -158,6 +171,7 @@
                 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="font-bold mb-4">Histórico Transacional</h3><div id="lista-financeiro" class="space-y-3"></div></div>
             </div>
 
+            <!-- TAB: BLOQUEIO DE FERIAS -->
             <div id="tab-ferias" class="tab-content bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <h3 class="text-xl font-bold mb-6">Bloquear Datas (Férias/Folgas)</h3>
                 <form id="blockDateForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -179,6 +193,7 @@
         </main>
     </div>
 
+    <!-- MODAL: AGENDAMENTO MANUAL POR ADMIN -->
     <div id="modalAdminBooking" class="fixed inset-0 bg-black/50 z-50 hidden place-items-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp">
             <button onclick="closeAdminBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
@@ -261,7 +276,8 @@
         </div>
     </div>
 
-    <div id="modalPDFPreview" class="fixed inset-0 bg-black/80 z-[200] hidden place-items-center p-2 sm:p-4">
+    <!-- MODAL: VISUALIZADOR DE RECIBO (SEM IFRAME PARA FUNCIONAR EM MOBILE) -->
+    <div id="modalPDFPreview" class="fixed inset-0 bg-black/80 z-[300] hidden place-items-center p-2 sm:p-4">
         <div class="bg-gray-100 rounded-2xl w-full max-w-md h-[90vh] shadow-2xl relative flex flex-col overflow-hidden animate-slideUp">
             
             <div class="bg-white p-3 border-b border-gray-200 flex justify-between items-center z-10 shrink-0">
@@ -281,7 +297,8 @@
             
             <div class="flex-1 relative overflow-y-auto bg-gray-200 p-4 sm:p-8 flex justify-center items-start w-full">
                 <div id="receiptHTML" class="bg-white shadow-xl w-full max-w-[400px] relative overflow-hidden" style="min-height: 500px;">
-                    </div>
+                    <!-- O Recibo HTML é injetado aqui pelo JS -->
+                </div>
             </div>
         </div>
     </div>
@@ -290,19 +307,23 @@
         let allContacts = [];
         let allBookings = [];
 
-        // O SEU LINK DO GOOGLE SCRIPT MANTIDO INTACTO
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
         let currentPdfFilename = "";
 
-        // GERAR RECIBO E ABRIR PRÉ-VISUALIZAÇÃO IMEDIATA (ESPELHO HTML)
+        // FUNÇÃO NOVA: TOGGLE DO MENU MOBILE
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('flex');
+        }
+
         function openPDFPreview(client, phone, service, date, time, price, payment, notes) {
             document.getElementById('modalPDFPreview').classList.remove('hidden');
             document.getElementById('modalPDFPreview').classList.add('flex');
             
             let displayDate = date.includes('-') ? date.split('-').reverse().join('/') : date;
 
-            // HTML PERSONALIZADO COM MARCA JÉSSICA FRANCO NAILS (Este é o visual do PDF final)
             const htmlContent = `
                 <div style="padding: 30px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; background: #fff; position: relative; width: 100%; box-sizing: border-box;">
                     <div style="position: absolute; top: 0; left: 0; right: 0; height: 10px; background: #C49A3D;"></div>
@@ -344,7 +365,6 @@
                 </div>
             `;
 
-            // Mostra o visual no ecrã para o telemóvel renderizar perfeitamente
             document.getElementById('receiptHTML').innerHTML = htmlContent;
             currentPdfFilename = `Recibo_${client.replace(/\s+/g, '_')}.pdf`;
         }
@@ -354,7 +374,6 @@
             document.getElementById('modalPDFPreview').classList.add('hidden');
         }
 
-        // Função para Converter o HTML em PDF e Partilhar
         function shareCurrentPDF() {
             const btn = document.getElementById('btnSharePDF');
             const originalHTML = btn.innerHTML;
@@ -371,15 +390,13 @@
                 jsPDF: { unit: 'in', format: 'a5', orientation: 'portrait' } 
             };
 
-            // Gera o PDF no background
             html2pdf().set(opt).from(elementToConvert).outputPdf('blob').then(function(pdfBlob) {
-                btn.innerHTML = originalHTML; // Volta o botão ao normal
+                btn.innerHTML = originalHTML;
                 lucide.createIcons();
 
                 var file = new File([pdfBlob], currentPdfFilename, { type: 'application/pdf' });
                 var shareData = { title: 'Recibo Jéssica Franco', files: [file] };
 
-                // Invoca a partilha nativa do telemóvel
                 if (navigator.canShare && navigator.canShare(shareData)) {
                     navigator.share(shareData).catch(function(err) {
                         forceDownloadPDF(pdfBlob);
@@ -479,7 +496,7 @@
                     alert("Agendamento eliminado com sucesso!");
                     fetchData();
                 } else {
-                    alert("Erro ao eliminar agendamento (lembre-se que tem de atualizar o Code.gs para esta função trabalhar).");
+                    alert("Erro ao eliminar agendamento.");
                 }
             } catch(e) {
                 alert("Erro de ligação ao tentar eliminar o agendamento.");
@@ -657,6 +674,15 @@
             document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('bg-brand-active', 'text-white', 'shadow-md'); n.classList.add('hover:bg-gray-800', 'text-gray-300'); });
             el.classList.remove('hover:bg-gray-800', 'text-gray-300'); el.classList.add('bg-brand-active', 'text-white', 'shadow-md');
             document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active')); document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // NOVO: Fecha o menu automaticamente no telemóvel ao clicar numa aba
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar.classList.contains('hidden')) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('flex');
+                }
+            }
         }
 
         const workHours = ['09:00','11:30','14:00','16:30'];
@@ -739,14 +765,17 @@
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span>
                                     
+                                    <!-- BOTÃO ROXO DE PDF -->
                                     <button onclick="openPDFPreview('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}', '${b['Valor']}', '${b['Tipo Pagamento']}', '${safeObs}')" class="p-1 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Ver Recibo em PDF">
                                         <i data-lucide="file-text" class="w-5 h-5"></i>
                                     </button>
                                     
+                                    <!-- BOTÃO VERDE DE TEXTO -->
                                     <button onclick="shareBooking('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-green-600 hover:bg-green-50 rounded-lg transition" title="Partilhar Texto">
                                         <i data-lucide="share-2" class="w-5 h-5"></i>
                                     </button>
                                     
+                                    <!-- BOTÃO VERMELHO DE APAGAR -->
                                     <button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar Agendamento">
                                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
