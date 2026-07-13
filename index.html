@@ -18,8 +18,8 @@
 }
 
 .logo-img { 
-    max-height: 100px; /* Ajuste este número para ficar perfeito no seu menu */
-    width: auto;      /* Mantém a proporção correta */
+    max-height: 100px; 
+    width: auto;      
     display: block;
 }
   
@@ -62,10 +62,37 @@ h1 { font-size: clamp(32px, 4vw, 48px); margin: 0 0 20px; letter-spacing: -1px;}
 .showcase-card h3 { margin: 0 0 10px; font-size: 18px; }
 .showcase-card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
 
+/* MODAL ADDONS (NOVO) */
+.addon-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.addon-item:last-child { border-bottom: none; padding-bottom: 5px; }
+.addon-info { display: flex; flex-direction: column; gap: 4px; }
+.addon-name { font-weight: 700; font-size: 14px; color: var(--ink); max-width: 220px; line-height: 1.4; }
+.addon-price { color: var(--gold); font-weight: 900; font-size: 14px; }
+.addon-ctrl { display: flex; align-items: center; gap: 8px; }
+.addon-chk { width: 22px; height: 22px; accent-color: var(--gold); cursor: pointer; }
+.qty-ctrl { display: flex; align-items: center; background: var(--soft); border-radius: 8px; border: 1px solid var(--line); overflow: hidden;}
+.qty-btn { width: 32px; height: 32px; display: grid; place-items: center; background: transparent; border: none; font-weight: bold; color: var(--ink); font-size: 18px; transition: 0.2s;}
+.qty-btn:hover { background: var(--gold-soft); color: var(--gold); }
+.qty-input { width: 30px; text-align: center; border: none; font-weight: bold; background: transparent; font-size: 14px; color: var(--ink); pointer-events: none; padding: 0;}
+
 /* CURSOS BANNER */
 .course-banner { background: var(--soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 40px; text-align: center; margin-bottom: 60px; position: relative; overflow: hidden; }
 .course-banner h2 { font-size: 28px; margin: 0 0 15px; color: var(--gold); }
 .course-banner p { color: var(--muted); margin: 0 auto 24px; max-width: 600px; line-height: 1.6; }
+
+/* CALENDARIO INLINE (NOVO) */
+.cal-wrapper { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; margin-bottom: 10px;}
+.cal-header-inline { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--soft); font-weight: 800; color: var(--gold); border-bottom: 1px solid var(--line);}
+.cal-header-inline button { background: transparent; border: none; font-size: 24px; color: var(--gold); cursor: pointer; transition: 0.2s; padding: 0 10px; line-height: 1;}
+.cal-header-inline button:hover { transform: scale(1.2); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; font-weight: 800; color: var(--muted); padding: 10px 0; border-bottom: 1px solid var(--line); background: #fafafa;}
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); padding: 10px; gap: 5px; }
+.cal-num { aspect-ratio: 1; display: grid; place-items: center; font-size: 14px; font-weight: 600; border-radius: 8px; transition: 0.2s; }
+.cal-num.empty { visibility: hidden; }
+.cal-num.disabled { color: #ccc; text-decoration: line-through; cursor: not-allowed; background: #f9f9f9; }
+.cal-num.available { cursor: pointer; color: var(--ink); border: 1px solid transparent; }
+.cal-num.available:hover { background: var(--gold-soft); color: var(--gold); }
+.cal-num.selected { background: var(--gold); color: white; border-color: var(--gold); font-weight: 800; box-shadow: 0 4px 10px rgba(196,154,61,0.3);}
 
 /* BOTÕES & FORMS */
 .primary { border: 0; border-radius: 12px; padding: 16px 22px; font-weight: 800; font-size: 15px; background: var(--gold); color: white; transition: 0.2s; width: 100%; margin-top: 18px; text-align: center; display: inline-block;}
@@ -108,10 +135,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 .toast { visibility: hidden; min-width: 250px; background-color: var(--ink); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 .toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 4.5s; }
 
-/* MODAL CURSOS */
+/* MODAL GERAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; place-items: center; padding: 20px;}
 .modal-overlay.active { display: flex; }
-.modal-content { width: 100%; max-width: 400px; padding: 30px; animation: slideUp 0.3s ease; }
+.modal-content { width: 100%; max-width: 400px; padding: 30px; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
 
 /* BOTÃO FLUTUANTE (FAB) */
 .fab-button { position: fixed; bottom: -100px; right: 20px; background: var(--gold); color: white; padding: 16px 24px; border-radius: 99px; font-weight: 800; font-size: 15px; box-shadow: 0 10px 25px rgba(196,154,61,0.4); z-index: 999; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; align-items: center; gap: 8px; border: 2px solid white; }
@@ -158,7 +185,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   <!-- SOBRE MIM (BIO COMPLETA) -->
   <section id="sobre" class="bio-grid">
     <div>
-      <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800" alt="Jéssica Franco trabalhando" class="bio-img">
+      <img src="/images/jessica_franco_nail_designer_perfil.jpg" alt="Jéssica Franco trabalhando" class="bio-img">
     </div>
     <div class="bio-text">
       <h2 class="section-title">Sobre a Jéssica</h2>
@@ -174,19 +201,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     <h2 class="section-title">O que ofereço</h2>
     <div class="services-showcase">
         <div class="showcase-card">
-            <div class="showcase-icon">✨</div>
-            <h3>Alongamento em Fibra</h3>
-            <p>Alongamentos esculpidos com precisão em Molde Russo ou F1. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
+          <div class="showcase-icon">✨</div>
+          <h3>Alongamento em Fibra</h3>
+          <p>Alongamentos esculpidos com precisão em Molde Russo ou F1. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
         </div>
         <div class="showcase-card">
-            <div class="showcase-icon">💅</div>
-            <h3>Banho de Gel</h3>
-            <p>Ideal para quem já tem o comprimento desejado mas procura proteger as unhas naturais contra quebras, mantendo o brilho por semanas.</p>
+          <div class="showcase-icon">💅</div>
+          <h3>Banho de Gel</h3>
+          <p>Ideal para quem já tem o comprimento desejado mas procura proteger as unhas naturais contra quebras, mantendo o brilho por semanas.</p>
         </div>
         <div class="showcase-card">
-            <div class="showcase-icon">🛡️</div>
-            <h3>Blindagem Mãos & Pés</h3>
-            <p>Uma camada protetora leve que fortalece a lâmina natural. Acompanha esmaltação em gel para um acabamento duradouro e impecável.</p>
+          <div class="showcase-icon">🛡️</div>
+          <h3>Blindagem Mãos & Pés</h3>
+          <p>Uma camada protetora leve que fortalece a lâmina natural. Acompanha esmaltação em gel para um acabamento duradouro e impecável.</p>
         </div>
     </div>
   </section>
@@ -207,18 +234,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <div>
             <div class="step" style="margin-top:0;"><span>01</span><h2>Selecione o serviço</h2></div>
             <div class="service-grid" id="serviceGrid"></div>
+            <!-- NOVO BOTÃO PARA REABRIR O MENU DE EXTRAS -->
+            <button type="button" onclick="abrirAddons()" style="width:100%; margin-top:12px; background:var(--gold-soft); color:var(--gold); border:1px dashed var(--gold); border-radius:12px; padding:12px; font-weight:800; transition:0.2s; font-size: 14px;">+ Adicionar Nail Art ou Extras</button>
           </div>
           <div>
             <div class="step" style="margin-top:0;"><span>02</span><h2>Data e horário</h2></div>
             <div class="field">
-              <label>Data</label>
-              <input id="date" type="date" required>
+              <label>Escolha o dia no calendário</label>
+              
+              <!-- CALENDÁRIO INLINE NOVO -->
+              <div class="cal-wrapper">
+                <div class="cal-header-inline">
+                  <button type="button" onclick="changeMonth(-1)">&lsaquo;</button>
+                  <span id="calTitle">Mês Ano</span>
+                  <button type="button" onclick="changeMonth(1)">&rsaquo;</button>
+                </div>
+                <div class="cal-weekdays">
+                  <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span>
+                </div>
+                <div class="cal-days" id="calDays"></div>
+              </div>
+              <!-- O input fica escondido apenas para guardar a data -->
+              <input type="hidden" id="date" required>
               <div id="dateError" class="error-msg"></div>
             </div>
+            
             <div class="field" style="margin-top: 16px;">
               <label>Horários Livres</label>
               <div class="times" id="timeGrid">
-                <span style="color:var(--muted); font-size:14px;">Selecione uma data para ver os horários.</span>
+                <span style="color:var(--muted); font-size:14px;">Selecione uma data disponível acima.</span>
               </div>
             </div>
           </div>
@@ -242,7 +286,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           </div>
           <div class="field">
             <label>Observações (Opcional)</label>
-            <input type="text" id="notes" placeholder="Ex: Unha quebrada, alergia...">
+            <input type="text" id="notes" placeholder="Ex: Alergia a algum produto...">
           </div>
         </div>
         
@@ -256,8 +300,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         <div class="summary-row"><span>Data</span><b id="sumDate">Selecione</b></div>
         <div class="summary-row"><span>Horário</span><b id="sumTime">Selecione</b></div>
         <div class="summary-row"><span>Notas</span><b id="sumNotes" style="font-weight:normal; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</b></div>
-        <div class="summary-row" style="border: 0;"><span>Total</span><b id="sumPrice" style="font-size: 22px; color: var(--gold);">-</b></div>
-        <div class="note">* No banho em gel e no alongamento já está incluso esmaltação em gel simples.</div>
+        <div class="summary-row" style="border: 0;"><span>Total Estimado</span><b id="sumPrice" style="font-size: 22px; color: var(--gold);">-</b></div>
+        <div class="note">* No banho em gel e no alongamento já está incluso esmaltação em gel simples. O total a pagar pode ser ajustado presencialmente dependendo da avaliação final da unha.</div>
       </aside>
     </div>
   </div>
@@ -267,6 +311,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 <a href="#agenda" class="fab-button" id="fabBtn">
   📅 Agendar Agora
 </a>
+
+<!-- MODAL ADDONS / NAIL ART (O "CARRINHO" DE SEGUNDA LINHA) -->
+<div id="modalAddons" class="modal-overlay">
+  <div class="card modal-content" style="max-width: 420px; padding: 25px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5px;">
+      <h2 style="margin:0; font-size:20px;">Deseja adicionar Extras?</h2>
+      <button type="button" onclick="fecharAddons()" style="border:none; background:transparent; font-size:24px; color:var(--muted);">&times;</button>
+    </div>
+    <p style="color:var(--muted); font-size:13px; margin-bottom:20px; line-height: 1.4;">Turbine as suas unhas com as nossas opções especiais de Nail Art e reconstrução (Opcional).</p>
+    
+    <div id="addonsGrid">
+      <!-- Opções geradas via Javascript -->
+    </div>
+    
+    <button type="button" class="primary" onclick="confirmarAddons()" style="margin-top: 25px;">Confirmar e Continuar</button>
+  </div>
+</div>
 
 <!-- MODAL CURSOS (Lista de Espera) -->
 <div id="modalCursos" class="modal-overlay">
@@ -300,11 +361,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 // ==========================================
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
-// Limites Mínimos de Data (Hoje)
-const minDateObj = new Date();
-const MIN_DATE = minDateObj.toISOString().split('T')[0];
-document.getElementById('date').setAttribute('min', MIN_DATE);
-
 const services = [
   {id:"alongamento", icon:"✨", name:"Alongamento na fibra de vidro", desc:"Molde Russo ou Molde F1", price:160},
   {id:"banho", icon:"💅", name:"Banho em gel", desc:"Esmaltação em gel simples inclusa", price:130},
@@ -317,49 +373,103 @@ const BRL = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
 let selectedService = services[0];
 let selectedTime = null;
 let occupiedBookings = []; 
-let blockedDates = []; // Guarda as datas que estão de férias ou bloqueadas
+let blockedDates = []; 
+
+// LÓGICA DE ADDONS (CARRINHO DE EXTRAS)
+const addonsList = [
+  { id: "encap-par", name: "Encapsulada / Baby Boomer (Par)", price: 15, type: 'check' },
+  { id: "encap-mao", name: "Encapsulada / Baby Boomer (Mão Completa)", price: 60, type: 'check' },
+  { id: "art-cartoon", name: "Nail Art Cartoon Simples (Mão Completa)", price: 25, type: 'check' },
+  { id: "art-3d", name: "Nail Art 3D com Pó Cromado (Mão Completa)", price: 35, type: 'check' },
+  { id: "unha-quebra", name: "Reconstrução de Unha Quebrada", price: 5, type: 'qty' }
+];
+
+let selectedAddons = [];
+let tempAddons = {};
+let currentTotalPrice = 0;
+
+function abrirAddons() {
+  tempAddons = {};
+  selectedAddons.forEach(a => tempAddons[a.id] = a.qty);
+  
+  let html = '';
+  addonsList.forEach(a => {
+      let val = tempAddons[a.id] || 0;
+      html += `<div class="addon-item">
+          <div class="addon-info">
+              <span class="addon-name">${a.name}</span>
+              <span class="addon-price">+ ${BRL.format(a.price)}${a.type === 'qty' ? ' /cada' : ''}</span>
+          </div>`;
+      
+      if (a.type === 'check') {
+          html += `<div class="addon-ctrl"><input type="checkbox" class="addon-chk" id="chk-${a.id}" ${val ? 'checked' : ''} onchange="toggleTempAddon('${a.id}', this.checked)"></div>`;
+      } else {
+          html += `<div class="addon-ctrl qty-ctrl">
+              <button type="button" class="qty-btn" onclick="changeTempQty('${a.id}', -1)">-</button>
+              <input type="text" id="qty-${a.id}" class="qty-input" value="${val}" readonly>
+              <button type="button" class="qty-btn" onclick="changeTempQty('${a.id}', 1)">+</button>
+          </div>`;
+      }
+      html += `</div>`;
+  });
+  $("#addonsGrid").innerHTML = html;
+  document.getElementById('modalAddons').classList.add('active');
+}
+
+function toggleTempAddon(id, isChecked) { tempAddons[id] = isChecked ? 1 : 0; }
+function changeTempQty(id, delta) {
+  let current = tempAddons[id] || 0;
+  let newVal = current + delta;
+  if(newVal < 0) newVal = 0;
+  if(newVal > 10) newVal = 10;
+  tempAddons[id] = newVal;
+  document.getElementById(`qty-${id}`).value = newVal;
+}
+function fecharAddons() { document.getElementById('modalAddons').classList.remove('active'); }
+function confirmarAddons() {
+  selectedAddons = [];
+  addonsList.forEach(a => {
+      let qty = tempAddons[a.id] || 0;
+      if(qty > 0) selectedAddons.push({ ...a, qty: qty });
+  });
+  fecharAddons();
+  updateSum();
+}
 
 const $ = q => document.querySelector(q);
 
-// Normalização inteligente de datas para evitar conflitos de fuso horário e formatação
+// Normalização inteligente de datas
+function toLocalISOString(date) { 
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+
 function normalizeDateString(dStr) {
   if (!dStr) return "";
   dStr = String(dStr).trim();
   if (dStr.includes('T')) dStr = dStr.split('T')[0];
   
-  // Tratamento do formato DD/MM/YYYY (comum no Google Sheets local)
   const dmyMatch = dStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (dmyMatch) {
-    return `${dmyMatch[3]}-${dmyMatch[2].padStart(2, '0')}-${dmyMatch[1].padStart(2, '0')}`;
-  }
+  if (dmyMatch) return `${dmyMatch[3]}-${dmyMatch[2].padStart(2, '0')}-${dmyMatch[1].padStart(2, '0')}`;
   
-  // Tratamento do formato YYYY-MM-DD (comum no input date do navegador)
   const ymdMatch = dStr.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-  if (ymdMatch) {
-    return `${ymdMatch[1]}-${ymdMatch[2].padStart(2, '0')}-${ymdMatch[3].padStart(2, '0')}`;
-  }
+  if (ymdMatch) return `${ymdMatch[1]}-${ymdMatch[2].padStart(2, '0')}-${ymdMatch[3].padStart(2, '0')}`;
   
-  // Fallback caso venha como Objeto de Data em formato de texto genérico
   try {
     const parsed = new Date(dStr);
-    if (!isNaN(parsed.getTime())) {
-      const y = parsed.getFullYear();
-      const m = String(parsed.getMonth() + 1).padStart(2, '0');
-      const d = String(parsed.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
+    if (!isNaN(parsed.getTime())) return toLocalISOString(parsed);
   } catch(e) {}
   
   return dStr;
 }
 
-// Mostrar e ocultar o Botão Flutuante ao rolar a página
 window.addEventListener("scroll", () => {
     const fab = document.getElementById("fabBtn");
     const agendaSection = document.getElementById("agenda");
     const agendaPos = agendaSection.getBoundingClientRect().top;
     
-    // Se passou de 300px E a secção da agenda ainda não está muito visível
     if (window.scrollY > 300 && agendaPos > window.innerHeight * 0.7) {
         fab.classList.add("visible");
     } else {
@@ -384,12 +494,84 @@ function renderServices() {
     </div>`).join("");
 }
 
+// LOGICA DO CALENDARIO INLINE
+let currentCalDate = new Date();
+let selectedDateStr = "";
+
+function changeMonth(delta) {
+    currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+    renderCalendarUI();
+}
+
+function checkFullyBooked(dateStr, dateObj) {
+    let horariosDoDia = dateObj.getDay() === 6 ? ["09:00", "11:30"] : ["09:00", "11:30", "14:00", "16:30"];
+    const hoje = new Date();
+    const hojeStr = toLocalISOString(hoje);
+    
+    if (dateStr === hojeStr) {
+        const horaAtualMinutos = hoje.getHours() * 60 + hoje.getMinutes();
+        horariosDoDia = horariosDoDia.filter(t => {
+            const [h, m] = t.split(':').map(Number);
+            return (h * 60 + m) > horaAtualMinutos;
+        });
+    }
+
+    const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateStr).map(b => b.time);
+    const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
+    return horariosDisponiveis.length === 0;
+}
+
+function renderCalendarUI() {
+    const y = currentCalDate.getFullYear();
+    const m = currentCalDate.getMonth();
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    $("#calTitle").textContent = `${monthNames[m]} ${y}`;
+
+    let html = "";
+    for (let i = 0; i < firstDay; i++) { html += `<div class="cal-num empty"></div>`; }
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const cellDate = new Date(y, m, d);
+        const cellDateStr = toLocalISOString(cellDate);
+
+        let isPast = cellDate < today;
+        let isSunday = cellDate.getDay() === 0;
+        let isBlocked = blockedDates.includes(cellDateStr);
+        let isFullyBooked = checkFullyBooked(cellDateStr, cellDate);
+
+        let isDisabled = isPast || isSunday || isBlocked || isFullyBooked;
+        let classes = "cal-num";
+
+        if (isDisabled) {
+            classes += " disabled";
+            html += `<div class="${classes}">${d}</div>`;
+        } else {
+            classes += " available";
+            if (selectedDateStr === cellDateStr) classes += " selected";
+            html += `<div class="${classes}" onclick="pickDate('${cellDateStr}')">${d}</div>`;
+        }
+    }
+    $("#calDays").innerHTML = html;
+}
+
+function pickDate(dateStr) {
+    selectedDateStr = dateStr;
+    $("#date").value = dateStr;
+    renderCalendarUI(); 
+    renderTimes(); 
+}
+
 async function fetchOccupiedTimes() {
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_all");
     const data = await res.json();
     
-    // Captura e formata as datas de férias/folgas bloqueadas de forma 100% segura
     if (data && data.blocked) {
       blockedDates = data.blocked.map(b => {
         let dStr = b['DataBloqueio'] || b['Data'];
@@ -400,21 +582,19 @@ async function fetchOccupiedTimes() {
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
         let dataStr = b['Data Agendamento'];
-        
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
         let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
-
         return { date: normalizeDateString(dataStr), time: horaLimpa };
       });
     }
+    renderCalendarUI(); 
     if($("#date").value) renderTimes();
   } catch(e) { console.error("Erro a ler os horários.", e); }
 }
 
 function renderTimes() {
   const dateVal = $("#date").value;
-  const errorMsg = $("#dateError");
   const timeGrid = $("#timeGrid");
   const btnBooking = $("#btnBooking");
   
@@ -428,37 +608,17 @@ function renderTimes() {
   const dayOfWeek = dateObj.getDay();
   const dateValStr = normalizeDateString(dateVal);
 
-  // 1. VERIFICAÇÃO SE É DOMINGO
-  if (dayOfWeek === 0) {
-    errorMsg.textContent = "Não funcionamos aos domingos. Por favor, escolha outra data.";
-    errorMsg.style.display = "block"; 
-    timeGrid.innerHTML = ""; 
-    btnBooking.disabled = true; // Bloqueia imediatamente
-    return;
-  }
+  $("#dateError").style.display = "none";
 
-  // 2. VERIFICAÇÃO DE DATAS BLOQUEADAS (Férias/Folgas)
-  if (blockedDates.includes(dateValStr)) {
-    errorMsg.textContent = "Não temos horários disponíveis nesta data (Férias ou Folga).";
-    errorMsg.style.display = "block"; 
-    timeGrid.innerHTML = ""; 
-    btnBooking.disabled = true; // Bloqueia imediatamente
-    return;
-  }
-
-  errorMsg.style.display = "none";
-
-  // HORÁRIOS BASE
   let horariosDoDia = [];
   if (dayOfWeek === 6) { 
-    horariosDoDia = ["09:00", "11:30"]; // Sábado
+    horariosDoDia = ["09:00", "11:30"]; 
   } else { 
-    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; // Dias úteis
+    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; 
   }
 
-  // BLOQUEAR HORÁRIOS DO PASSADO (Hoje)
   const hoje = new Date();
-  const hojeStr = hoje.toISOString().split('T')[0];
+  const hojeStr = toLocalISOString(hoje);
 
   if (dateValStr === hojeStr) {
     const horaAtualMinutos = hoje.getHours() * 60 + hoje.getMinutes();
@@ -468,20 +628,9 @@ function renderTimes() {
     });
   }
 
-  // FILTRA OS HORÁRIOS JÁ OCUPADOS
   const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateValStr).map(b => b.time);
   const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
 
-  // 3. VERIFICAÇÃO SE O DIA ESTÁ COMPLETAMENTE CHEIO
-  if (horariosDisponiveis.length === 0) {
-    errorMsg.textContent = "Todos os horários desta data já estão preenchidos ou já passaram.";
-    errorMsg.style.display = "block";
-    timeGrid.innerHTML = "";
-    btnBooking.disabled = true; // Bloqueia imediatamente
-    return;
-  }
-
-  // SE TUDO ESTIVER BEM, MOSTRA OS BOTÕES
   timeGrid.innerHTML = horariosDisponiveis.map(t => 
     `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`
   ).join("");
@@ -491,6 +640,9 @@ function selectSvc(id, el) {
   document.querySelectorAll(".service").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
   selectedService = services.find(s => s.id === id);
+  
+  // Abre o menu de addons sempre que escolhe um serviço principal
+  abrirAddons();
   updateSum();
 }
 
@@ -502,8 +654,13 @@ function selectTime(time, el) {
 }
 
 function updateSum() {
-  $("#sumService").textContent = selectedService.name;
-  $("#sumPrice").textContent = BRL.format(selectedService.price);
+  let addonsTotal = selectedAddons.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  currentTotalPrice = selectedService.price + addonsTotal;
+  
+  let addonsText = selectedAddons.map(a => `${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`).join('<br>+ ');
+
+  $("#sumService").innerHTML = `${selectedService.name} ${addonsText ? `<div style="color:var(--gold); font-size:12px; margin-top:6px; line-height:1.4;">+ ${addonsText}</div>` : ''}`;
+  $("#sumPrice").textContent = BRL.format(currentTotalPrice);
   
   if ($("#date").value) {
       const [y, m, d] = $("#date").value.split('-');
@@ -520,10 +677,8 @@ function updateSum() {
   $("#btnBooking").textContent = isReady ? "Confirmar Reserva" : "Preencha os dados para confirmar";
 }
 
-// Atualizar resumo quando escreve na nota
 $("#notes").addEventListener("input", updateSum);
 
-// ENVIAR AGENDAMENTO
 $("#bookingForm").onsubmit = async e => {
   e.preventDefault();
   if(!selectedTime) return showToast("Por favor, selecione um horário.", true);
@@ -531,14 +686,17 @@ $("#bookingForm").onsubmit = async e => {
   $("#btnBooking").textContent = "A registar...";
   $("#btnBooking").disabled = true;
   
+  const addonsTextStr = selectedAddons.map(a => `${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`).join(', ');
+  const serviceNameFinal = selectedService.name + (addonsTextStr ? ` (+ ${addonsTextStr})` : '');
+
   const payload = {
     type: 'booking',
     client: $("#name").value,
     phone: $("#phone").value,
-    service: selectedService.name,
+    service: serviceNameFinal,
     date: $("#date").value,
     time: selectedTime,
-    price: selectedService.price,
+    price: currentTotalPrice,
     paymentMethod: $("#paymentMethod").value,
     notes: $("#notes").value
   };
@@ -554,7 +712,13 @@ $("#bookingForm").onsubmit = async e => {
       showToast("Reserva confirmada com sucesso!");
       e.target.reset();
       selectedTime = null;
+      selectedDateStr = ""; // Limpa visualmente o calendário
       $("#date").value = "";
+      
+      // Limpa os Addons após reserva feita
+      selectedAddons = [];
+      tempAddons = {};
+      
       fetchOccupiedTimes(); 
       updateSum();
     }
@@ -590,10 +754,10 @@ $("#courseForm").onsubmit = async e => {
   $("#btnCourse").disabled = false;
 };
 
+// Inicialização
 renderServices();
 updateSum();
 fetchOccupiedTimes(); 
-$("#date").onchange = renderTimes;
 
 </script>
 </body>
