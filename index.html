@@ -158,7 +158,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   <!-- SOBRE MIM (BIO COMPLETA) -->
   <section id="sobre" class="bio-grid">
     <div>
-      <!-- Dica: Pode substituir este link por uma foto sua hospedada no Imgur ou Drive -->
       <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800" alt="Jéssica Franco trabalhando" class="bio-img">
     </div>
     <div class="bio-text">
@@ -195,7 +194,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   <!-- BANNER DE CURSOS -->
   <section id="cursos" class="course-banner">
     <h2>Deseja aprender a minha técnica?</h2>
-    <p>As vagas para as minhas formações presenciais são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e seja a primeira a ser notificada quando abrir uma nova turma.</p>
+    <p>As vagas para as minhas formações próximas são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e seja a primeira a ser notificada quando abrir uma nova turma.</p>
     <button onclick="document.getElementById('modalCursos').classList.add('active')" class="primary" style="width: auto; background: var(--ink);">Entrar na Lista de Espera</button>
   </section>
 
@@ -299,7 +298,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 // ==========================================
 // SUA URL DO GOOGLE APPS SCRIPT
 // ==========================================
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjfkPPxDEr469YEcJQ2121sFDULAszG9_7NzyYcFsNNTiqtiTSFkpKh42gvtcFGsLS1w/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
 // Limites Mínimos de Data (Hoje)
 const minDateObj = new Date();
@@ -318,8 +317,41 @@ const BRL = new Intl.NumberFormat("pt-BR", {style:"currency", currency:"BRL"});
 let selectedService = services[0];
 let selectedTime = null;
 let occupiedBookings = []; 
+let blockedDates = []; // Guarda as datas que estão de férias ou bloqueadas
 
 const $ = q => document.querySelector(q);
+
+// Normalização inteligente de datas para evitar conflitos de fuso horário e formatação
+function normalizeDateString(dStr) {
+  if (!dStr) return "";
+  dStr = String(dStr).trim();
+  if (dStr.includes('T')) dStr = dStr.split('T')[0];
+  
+  // Tratamento do formato DD/MM/YYYY (comum no Google Sheets local)
+  const dmyMatch = dStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (dmyMatch) {
+    return `${dmyMatch[3]}-${dmyMatch[2].padStart(2, '0')}-${dmyMatch[1].padStart(2, '0')}`;
+  }
+  
+  // Tratamento do formato YYYY-MM-DD (comum no input date do navegador)
+  const ymdMatch = dStr.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (ymdMatch) {
+    return `${ymdMatch[1]}-${ymdMatch[2].padStart(2, '0')}-${ymdMatch[3].padStart(2, '0')}`;
+  }
+  
+  // Fallback caso venha como Objeto de Data em formato de texto genérico
+  try {
+    const parsed = new Date(dStr);
+    if (!isNaN(parsed.getTime())) {
+      const y = parsed.getFullYear();
+      const m = String(parsed.getMonth() + 1).padStart(2, '0');
+      const d = String(parsed.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+  } catch(e) {}
+  
+  return dStr;
+}
 
 // Mostrar e ocultar o Botão Flutuante ao rolar a página
 window.addEventListener("scroll", () => {
@@ -356,16 +388,24 @@ async function fetchOccupiedTimes() {
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_all");
     const data = await res.json();
+    
+    // Captura e formata as datas de férias/folgas bloqueadas de forma 100% segura
+    if (data && data.blocked) {
+      blockedDates = data.blocked.map(b => {
+        let dStr = b['DataBloqueio'] || b['Data'];
+        return normalizeDateString(dStr);
+      });
+    }
+
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
         let dataStr = b['Data Agendamento'];
-        if(dataStr.includes('T')) dataStr = dataStr.split('T')[0];
         
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
         let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
 
-        return { date: dataStr, time: horaLimpa };
+        return { date: normalizeDateString(dataStr), time: horaLimpa };
       });
     }
     if($("#date").value) renderTimes();
@@ -376,6 +416,7 @@ function renderTimes() {
   const dateVal = $("#date").value;
   const errorMsg = $("#dateError");
   const timeGrid = $("#timeGrid");
+  const btnBooking = $("#btnBooking");
   
   selectedTime = null;
   updateSum();
@@ -385,16 +426,29 @@ function renderTimes() {
   const [year, month, day] = dateVal.split('-');
   const dateObj = new Date(year, month - 1, day);
   const dayOfWeek = dateObj.getDay();
+  const dateValStr = normalizeDateString(dateVal);
 
-  // Bloqueio de Domingos
+  // 1. VERIFICAÇÃO SE É DOMINGO
   if (dayOfWeek === 0) {
     errorMsg.textContent = "Não funcionamos aos domingos. Por favor, escolha outra data.";
-    errorMsg.style.display = "block"; timeGrid.innerHTML = ""; return;
+    errorMsg.style.display = "block"; 
+    timeGrid.innerHTML = ""; 
+    btnBooking.disabled = true; // Bloqueia imediatamente
+    return;
+  }
+
+  // 2. VERIFICAÇÃO DE DATAS BLOQUEADAS (Férias/Folgas)
+  if (blockedDates.includes(dateValStr)) {
+    errorMsg.textContent = "Não temos horários disponíveis nesta data (Férias ou Folga).";
+    errorMsg.style.display = "block"; 
+    timeGrid.innerHTML = ""; 
+    btnBooking.disabled = true; // Bloqueia imediatamente
+    return;
   }
 
   errorMsg.style.display = "none";
 
-  // HORÁRIOS: 2h30 de intervalo
+  // HORÁRIOS BASE
   let horariosDoDia = [];
   if (dayOfWeek === 6) { 
     horariosDoDia = ["09:00", "11:30"]; // Sábado
@@ -404,25 +458,30 @@ function renderTimes() {
 
   // BLOQUEAR HORÁRIOS DO PASSADO (Hoje)
   const hoje = new Date();
-  const dateValStr = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
   const hojeStr = hoje.toISOString().split('T')[0];
 
   if (dateValStr === hojeStr) {
     const horaAtualMinutos = hoje.getHours() * 60 + hoje.getMinutes();
     horariosDoDia = horariosDoDia.filter(t => {
         const [h, m] = t.split(':').map(Number);
-        return (h * 60 + m) > horaAtualMinutos; // Só mantém as horas futuras
+        return (h * 60 + m) > horaAtualMinutos;
     });
   }
 
+  // FILTRA OS HORÁRIOS JÁ OCUPADOS
   const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateValStr).map(b => b.time);
   const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
 
+  // 3. VERIFICAÇÃO SE O DIA ESTÁ COMPLETAMENTE CHEIO
   if (horariosDisponiveis.length === 0) {
-    timeGrid.innerHTML = "<p style='color:var(--muted);font-size:14px; padding:10px; background:var(--soft); border-radius:8px;'>Não há horários disponíveis ou já passaram. Escolha outra data.</p>";
+    errorMsg.textContent = "Todos os horários desta data já estão preenchidos ou já passaram.";
+    errorMsg.style.display = "block";
+    timeGrid.innerHTML = "";
+    btnBooking.disabled = true; // Bloqueia imediatamente
     return;
   }
 
+  // SE TUDO ESTIVER BEM, MOSTRA OS BOTÕES
   timeGrid.innerHTML = horariosDisponiveis.map(t => 
     `<button type="button" class="time" onclick="selectTime('${t}', this)">${t}</button>`
   ).join("");
