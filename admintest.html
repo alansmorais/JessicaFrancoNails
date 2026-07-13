@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: { dark: '#262d3a', active: '#3b82f6', bg: '#f4f6f8', blue: '#4c8ee8', red: '#f66d6d', green: '#34b484', yellow: '#f4ad42', purple: '#9b66d9' } } } }
@@ -45,14 +43,13 @@
         </div>
     </div>
 
-    <!-- Barra Lateral de Navegação Corrigida -->
+    <!-- Barra Lateral de Navegação -->
     <aside id="sidebar" class="w-64 bg-brand-dark text-gray-300 flex-col hidden md:flex z-[200] shadow-2xl fixed md:relative h-full inset-y-0 left-0 transition-all">
         <div class="h-16 flex items-center justify-between px-6 border-b border-gray-700/50 bg-gray-900/20">
             <div class="flex items-center">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-active to-blue-400 text-white flex items-center justify-center font-bold text-lg mr-3 shadow-lg">JF</div>
                 <div><h1 class="text-white font-semibold text-sm">Painel de Gestão</h1><span class="text-xs text-gray-400">Jéssica Franco</span></div>
             </div>
-            <!-- Botão de Fechar Menu no Mobile -->
             <button onclick="toggleMenu()" class="md:hidden text-gray-400 hover:text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
@@ -68,7 +65,6 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header class="h-16 bg-white flex items-center justify-between px-4 lg:px-8 border-b border-gray-200 z-10 shadow-sm">
             <div class="flex items-center gap-4">
-                <!-- Botão de Abrir Menu no Mobile -->
                 <button onclick="toggleMenu()" class="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
                 <h2 class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
                 <div id="sync-status" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold border border-green-100">Sincronizado</div>
@@ -195,7 +191,7 @@
 
     <!-- MODAL: AGENDAMENTO MANUAL POR ADMIN -->
     <div id="modalAdminBooking" class="fixed inset-0 bg-black/50 z-50 hidden place-items-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp max-h-[95vh] overflow-y-auto">
             <button onclick="closeAdminBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-10 h-10 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center"><i data-lucide="calendar-plus" class="w-5 h-5"></i></div>
@@ -229,7 +225,7 @@
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Serviço</label>
                         <select id="admService" onchange="updateAdminPrice()" required class="w-full p-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-brand-active transition text-sm">
-                            <option value="Alongamento na fibra de vidro" data-price="160">Alongamento na fibra (R$ 160)</option>
+                            <option value="Alongamento de unhas" data-price="160">Alongamento de unhas (R$ 160)</option>
                             <option value="Banho em gel" data-price="130">Banho em gel (R$ 130)</option>
                             <option value="Blindagem (Mãos)" data-price="75">Blindagem Mãos (R$ 75)</option>
                             <option value="Blindagem (Pés)" data-price="80">Blindagem Pés (R$ 80)</option>
@@ -276,7 +272,7 @@
         </div>
     </div>
 
-    <!-- MODAL: VISUALIZADOR DE RECIBO (SEM IFRAME PARA FUNCIONAR EM MOBILE) -->
+    <!-- MODAL: VISUALIZADOR DE RECIBO -->
     <div id="modalPDFPreview" class="fixed inset-0 bg-black/80 z-[300] hidden place-items-center p-2 sm:p-4">
         <div class="bg-gray-100 rounded-2xl w-full max-w-md h-[90vh] shadow-2xl relative flex flex-col overflow-hidden animate-slideUp">
             
@@ -303,15 +299,18 @@
         </div>
     </div>
 
+    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND CARREGADA NO FIM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <script>
         let allContacts = [];
         let allBookings = [];
+        let globalBlockedDates = []; 
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
         let currentPdfFilename = "";
 
-        // FUNÇÃO NOVA: TOGGLE DO MENU MOBILE
         function toggleMenu() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('hidden');
@@ -496,7 +495,7 @@
                     alert("Agendamento eliminado com sucesso!");
                     fetchData();
                 } else {
-                    alert("Erro ao eliminar agendamento.");
+                    alert("Erro ao eliminar agendamento (lembre-se que tem de atualizar o Code.gs para esta função trabalhar).");
                 }
             } catch(e) {
                 alert("Erro de ligação ao tentar eliminar o agendamento.");
@@ -603,7 +602,7 @@
                 });
                 const json = await res.json();
                 if(json.status === "error") {
-                    alert("Ops! O horário selecionado já se encontra reservado.");
+                    alert("Ops! O horário selecionado já se encontra reservado, ou a data está bloqueada.");
                 } else {
                     closeAdminBookingModal();
                     fetchData(); 
@@ -655,19 +654,35 @@
             } catch(e) { alert("Erro ao ligar ao servidor."); }
         }
 
+        // --- LÓGICA DE LOGIN COM BACKEND SEGURA ---
         document.getElementById('loginForm').onsubmit = async function(e) {
-            e.preventDefault(); const pwd = document.getElementById('adminPwd').value; const btn = document.getElementById('btnLogin');
-            btn.innerHTML = `A validar...`;
+            e.preventDefault(); 
+            const pwd = document.getElementById('adminPwd').value; 
+            const btn = document.getElementById('btnLogin');
+            
+            // Estado de carregamento
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin mx-auto"></i>`;
+            lucide.createIcons();
+
             try {
-                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd)); const json = await res.json();
+                // Pergunta ao seu Apps Script (Code.gs) se a password é válida
+                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd));
+                const json = await res.json();
+                
                 if(json.status === "success") { 
                     document.getElementById('login-screen').style.display = 'none'; 
-                    try{playLoudNotification();}catch(e){} 
+                    try{playLoudNotification();}catch(err){} 
                     fetchData(); 
                     setInterval(fetchData, 20000); 
-                } 
-                else { alert('Palavra-passe incorreta!'); btn.innerHTML = `Entrar no Painel`; }
-            } catch(e) { alert('Erro na ligação.'); btn.innerHTML = `Entrar no Painel`; }
+                } else { 
+                    alert('Palavra-passe incorreta!'); 
+                    btn.innerHTML = originalText; 
+                }
+            } catch (error) {
+                alert('Erro de ligação. Certifique-se de que publicou o script para "Qualquer Pessoa".');
+                btn.innerHTML = originalText;
+            }
         };
 
         function switchTab(tabId, el) {
@@ -675,7 +690,6 @@
             el.classList.remove('hover:bg-gray-800', 'text-gray-300'); el.classList.add('bg-brand-active', 'text-white', 'shadow-md');
             document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active')); document.getElementById('tab-' + tabId).classList.add('active');
             
-            // NOVO: Fecha o menu automaticamente no telemóvel ao clicar numa aba
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebar');
                 if (!sidebar.classList.contains('hidden')) {
@@ -694,31 +708,55 @@
             return week;
         }
 
-        function toLocalISOString(date) { const d = new Date(date); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().split('T')[0]; }
+        function toLocalISOString(date) { 
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+        
         function getColorForService(service) { const s = String(service).toLowerCase(); if(s.includes("alongamento")) return "bg-brand-purple"; if(s.includes("banho")) return "bg-brand-blue"; if(s.includes("blindagem")) return "bg-brand-red"; return "bg-brand-green"; }
 
         function renderDynamicCalendar(bookings) {
             const weekDates = getWeekDates();
             const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
             document.getElementById('calendar-month-title').innerText = `${monthNames[weekDates[0].getMonth()]} ${weekDates[0].getFullYear()}`;
+            
             let headersHTML = `<div class="cal-header border-t border-e border-gray-200"></div>`;
             const todayStr = toLocalISOString(new Date());
+            
             weekDates.forEach((date, i) => {
-                const dateStr = toLocalISOString(date); const dayNum = date.getDate().toString().padStart(2, '0');
+                const dateStr = toLocalISOString(date); 
+                const dayNum = String(date.getDate()).padStart(2, '0');
                 if (dateStr === todayStr) headersHTML += `<div class="cal-header border-t border-gray-200 bg-blue-50"><span class="text-brand-active text-[10px] uppercase block font-bold">${dayNames[i]}</span><span class="text-sm md:text-lg text-brand-active font-bold bg-blue-100 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mx-auto mt-0.5">${dayNum}</span></div>`;
                 else headersHTML += `<div class="cal-header border-t border-gray-200"><span class="text-gray-400 text-[10px] uppercase block">${dayNames[i]}</span><span class="text-sm md:text-lg text-gray-800">${dayNum}</span></div>`;
             });
             document.getElementById('cal-headers').innerHTML = headersHTML;
+            
             let bookingMap = {};
             if(bookings) bookings.forEach(b => { bookingMap[`${b['Data Agendamento']}_${b['Hora']}`] = b; });
+            
             let bodyHTML = '';
             workHours.forEach(hour => {
                 bodyHTML += `<div class="cal-cell flex items-start justify-center pt-2"><span class="cal-time">${hour}</span></div>`;
                 weekDates.forEach((date, index) => {
-                    const dateStr = toLocalISOString(date); const b = bookingMap[`${dateStr}_${hour}`];
+                    const dateStr = toLocalISOString(date); 
+                    const b = bookingMap[`${dateStr}_${hour}`];
                     const bgClass = (dateStr === todayStr) ? 'bg-blue-50/20' : '';
-                    if (index === 5 && (hour === '14:00' || hour === '16:30')) { bodyHTML += `<div class="cal-cell bg-gray-100/50 flex items-center justify-center"><span class="text-[10px] text-gray-300">Fechado</span></div>`; }
-                    else if (b && b['Status'] !== 'Cancelado') { const initials = String(b['Cliente']).substring(0,2).toUpperCase(); bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90" title="${b['Cliente']} - ${b['Servico']}"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${b['Servico']}</div></div></div>`; } else { bodyHTML += `<div class="cal-cell ${bgClass}"></div>`; }
+                    
+                    const isBlockedDate = globalBlockedDates.includes(dateStr);
+                    const isSaturdayAfternoon = (index === 5 && (hour === '14:00' || hour === '16:30'));
+
+                    if (isBlockedDate) {
+                        bodyHTML += `<div class="cal-cell bg-gray-100/80 flex items-center justify-center"><span class="text-[10px] text-gray-400 font-bold">Folga/Férias</span></div>`;
+                    } else if (isSaturdayAfternoon) {
+                        bodyHTML += `<div class="cal-cell bg-gray-100/50 flex items-center justify-center"><span class="text-[10px] text-gray-300">Fechado</span></div>`; 
+                    } else if (b && b['Status'] !== 'Cancelado') { 
+                        const initials = String(b['Cliente']).substring(0,2).toUpperCase(); 
+                        bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90" title="${b['Cliente']} - ${b['Servico']}"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${b['Servico']}</div></div></div>`; 
+                    } else { 
+                        bodyHTML += `<div class="cal-cell ${bgClass}"></div>`; 
+                    }
                 });
             });
             document.getElementById('cal-body').innerHTML = bodyHTML;
@@ -735,10 +773,15 @@
 
                 buildContactsList(allBookings);
 
+                if (data.blocked) {
+                    globalBlockedDates = data.blocked.map(b => String(b['DataBloqueio']).trim());
+                }
+
                 if (data.bookings) { data.bookings = data.bookings.map(b => { let dataStr = String(b['Data Agendamento']); if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0]; let horaStr = String(b['Hora']); let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); if (timeMatch) b['Hora'] = timeMatch[0]; return b; }); }
                 const currentTotalItems = (data.bookings ? data.bookings.length : 0) + (data.courses ? data.courses.length : 0);
                 if (lastTotalItems !== -1 && currentTotalItems > lastTotalItems) { playLoudNotification(); alert("🔔 NOVA MARCAÇÃO!"); }
                 lastTotalItems = currentTotalItems;
+                
                 renderDynamicCalendar(data.bookings);
                 
                 const bookingsList = document.getElementById('lista-agendamentos');
@@ -765,17 +808,14 @@
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span>
                                     
-                                    <!-- BOTÃO ROXO DE PDF -->
                                     <button onclick="openPDFPreview('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}', '${b['Valor']}', '${b['Tipo Pagamento']}', '${safeObs}')" class="p-1 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Ver Recibo em PDF">
                                         <i data-lucide="file-text" class="w-5 h-5"></i>
                                     </button>
                                     
-                                    <!-- BOTÃO VERDE DE TEXTO -->
                                     <button onclick="shareBooking('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-green-600 hover:bg-green-50 rounded-lg transition" title="Partilhar Texto">
                                         <i data-lucide="share-2" class="w-5 h-5"></i>
                                     </button>
                                     
-                                    <!-- BOTÃO VERMELHO DE APAGAR -->
                                     <button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar Agendamento">
                                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
