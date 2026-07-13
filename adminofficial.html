@@ -191,7 +191,7 @@
 
     <!-- MODAL: AGENDAMENTO MANUAL POR ADMIN -->
     <div id="modalAdminBooking" class="fixed inset-0 bg-black/50 z-50 hidden place-items-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative animate-slideUp max-h-[95vh] overflow-y-auto">
             <button onclick="closeAdminBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-10 h-10 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center"><i data-lucide="calendar-plus" class="w-5 h-5"></i></div>
@@ -225,7 +225,7 @@
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Serviço</label>
                         <select id="admService" onchange="updateAdminPrice()" required class="w-full p-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-brand-active transition text-sm">
-                            <option value="Alongamento na fibra de vidro" data-price="160">Alongamento na fibra (R$ 160)</option>
+                            <option value="Alongamento de unhas" data-price="160">Alongamento de unhas (R$ 160)</option>
                             <option value="Banho em gel" data-price="130">Banho em gel (R$ 130)</option>
                             <option value="Blindagem (Mãos)" data-price="75">Blindagem Mãos (R$ 75)</option>
                             <option value="Blindagem (Pés)" data-price="80">Blindagem Pés (R$ 80)</option>
