@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: { dark: '#262d3a', active: '#3b82f6', bg: '#f4f6f8', blue: '#4c8ee8', red: '#f66d6d', green: '#34b484', yellow: '#f4ad42', purple: '#9b66d9' } } } }
@@ -301,6 +299,9 @@
         </div>
     </div>
 
+    <!-- BIBLIOTECA PARA GERAR PDF NO FRONTEND CARREGADA NO FIM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <script>
         let allContacts = [];
         let allBookings = [];
@@ -425,9 +426,7 @@
             if (phoneMatch) {
                 extractedName = val.replace(phoneMatch[0], '');
             }
-            extractedName = extractedName.replace(/[\-\:\,\;
-
-	\*\_]/g, ' ').replace(/\s+/g, ' ').trim();
+            extractedName = extractedName.replace(/[\-\:\,\;\n\r\t\*\_]/g, ' ').replace(/\s+/g, ' ').trim();
             if (extractedName.length > 1) {
                 document.getElementById('admClient').value = extractedName;
             }
@@ -470,14 +469,7 @@
                 displayDate = `${d}/${m}/${y}`;
             }
 
-            const message = `Olá *${client}*! 
-O seu agendamento na *Jéssica Franco Nails* foi confirmado com sucesso! ✨
-
-💅 *Serviço:* ${service}
-📅 *Data:* ${displayDate}
-⏰ *Hora:* ${time}
-
-Agradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor contacte-nos com antecedência. Até breve! ❤️`;
+            const message = `Olá *${client}*! \nO seu agendamento na *Jéssica Franco Nails* foi confirmado com sucesso! ✨\n\n💅 *Serviço:* ${service}\n📅 *Data:* ${displayDate}\n⏰ *Hora:* ${time}\n\nAgradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor contacte-nos com antecedência. Até breve! ❤️`;
             
             copyToClipboard(message);
             
@@ -662,19 +654,35 @@ Agradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor c
             } catch(e) { alert("Erro ao ligar ao servidor."); }
         }
 
+        // --- LÓGICA DE LOGIN COM BACKEND SEGURA ---
         document.getElementById('loginForm').onsubmit = async function(e) {
-            e.preventDefault(); const pwd = document.getElementById('adminPwd').value; const btn = document.getElementById('btnLogin');
-            btn.innerHTML = `A validar...`;
+            e.preventDefault(); 
+            const pwd = document.getElementById('adminPwd').value; 
+            const btn = document.getElementById('btnLogin');
+            
+            // Estado de carregamento
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin mx-auto"></i>`;
+            lucide.createIcons();
+
             try {
-                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd)); const json = await res.json();
+                // Pergunta ao seu Apps Script (Code.gs) se a password é válida
+                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd));
+                const json = await res.json();
+                
                 if(json.status === "success") { 
                     document.getElementById('login-screen').style.display = 'none'; 
-                    try{playLoudNotification();}catch(e){} 
+                    try{playLoudNotification();}catch(err){} 
                     fetchData(); 
                     setInterval(fetchData, 20000); 
-                } 
-                else { alert('Palavra-passe incorreta!'); btn.innerHTML = `Entrar no Painel`; }
-            } catch(e) { alert('Erro na ligação.'); btn.innerHTML = `Entrar no Painel`; }
+                } else { 
+                    alert('Palavra-passe incorreta!'); 
+                    btn.innerHTML = originalText; 
+                }
+            } catch (error) {
+                alert('Erro de ligação. Certifique-se de que publicou o script para "Qualquer Pessoa".');
+                btn.innerHTML = originalText;
+            }
         };
 
         function switchTab(tabId, el) {
@@ -700,7 +708,6 @@ Agradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor c
             return week;
         }
 
-        // FUNÇÃO DE FORMATAÇÃO DE DATA CORRIGIDA
         function toLocalISOString(date) { 
             const y = date.getFullYear();
             const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -767,7 +774,6 @@ Agradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor c
                 buildContactsList(allBookings);
 
                 if (data.blocked) {
-                    // Limpa espaços vazios que possam vir do Google Sheets
                     globalBlockedDates = data.blocked.map(b => String(b['DataBloqueio']).trim());
                 }
 
@@ -776,7 +782,6 @@ Agradecemos a preferência! Se necessitar de reagendar ou desmarcar, por favor c
                 if (lastTotalItems !== -1 && currentTotalItems > lastTotalItems) { playLoudNotification(); alert("🔔 NOVA MARCAÇÃO!"); }
                 lastTotalItems = currentTotalItems;
                 
-                // Agora o renderDynamicCalendar vai usar as datas corretas
                 renderDynamicCalendar(data.bookings);
                 
                 const bookingsList = document.getElementById('lista-agendamentos');
