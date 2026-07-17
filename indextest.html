@@ -138,7 +138,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 /* MODAL GERAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; place-items: center; padding: 20px;}
 .modal-overlay.active { display: flex; }
-.modal-content { width: 100%; max-width: 400px; padding: 30px; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
+.modal-content { width: 100%; max-width: 440px; padding: 30px; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
 
 /* BOTÃO FLUTUANTE (FAB) */
 .fab-button { position: fixed; bottom: -100px; right: 20px; background: var(--gold); color: white; padding: 16px 24px; border-radius: 99px; font-weight: 800; font-size: 15px; box-shadow: 0 10px 25px rgba(196,154,61,0.4); z-index: 999; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; align-items: center; gap: 8px; border: 2px solid white; }
@@ -164,7 +164,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 <body>
 
 <main class="app">
-  <!-- MENU DE NAVEGAÇÃO -->
   <nav class="topbar">
     <div class="brand-logo"><img src="/images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco trabalhando" class="logo-img"></div>
     <div class="public-nav">
@@ -175,17 +174,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
   <section class="hero" id="inicio">
     <span class="eyebrow">Nail Designer Premium</span>
     <h1>Beleza e Durabilidade</h1>
     <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas, naturalidade e extrema durabilidade. Sinta-se poderosa todos os dias.</p>
   </section>
 
-  <!-- SOBRE MIM (BIO COMPLETA) -->
   <section id="sobre" class="bio-grid">
     <div>
-      <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800" alt="Jéssica Franco trabalhando" class="bio-img">
+      <img src="/images/jessica_franco_nail_designer_perfil.jpg" alt="Jéssica Franco trabalhando" class="bio-img">
     </div>
     <div class="bio-text">
       <h2 class="section-title">Sobre a Jéssica</h2>
@@ -196,14 +193,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </section>
 
-  <!-- VITRINE DE SERVIÇOS -->
   <section id="servicos">
     <h2 class="section-title">O que ofereço</h2>
     <div class="services-showcase">
         <div class="showcase-card">
           <div class="showcase-icon">✨</div>
-          <h3>Alongamento de unhas</h3>
-          <p>Alongamentos esculpidos com precisão em Molde Russo, F1 ou Fibra. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
+          <h3>Alongamento de Unhas</h3>
+          <p>Alongamentos esculpidos com precisão em Molde Russo ou F1. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
         </div>
         <div class="showcase-card">
           <div class="showcase-icon">💅</div>
@@ -218,14 +214,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </section>
 
-  <!-- BANNER DE CURSOS -->
   <section id="cursos" class="course-banner">
     <h2>Deseja aprender a minha técnica?</h2>
     <p>As vagas para as minhas formações próximas são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e seja a primeira a ser notificada quando abrir uma nova turma.</p>
     <button onclick="document.getElementById('modalCursos').classList.add('active')" class="primary" style="width: auto; background: var(--ink);">Entrar na Lista de Espera</button>
   </section>
 
-  <!-- SISTEMA DE AGENDAMENTO -->
   <div id="agenda" style="scroll-margin-top: 40px;">
     <h2 class="section-title">Agende o seu momento</h2>
     <div class="booking-layout">
@@ -234,15 +228,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <div>
             <div class="step" style="margin-top:0;"><span>01</span><h2>Selecione o serviço</h2></div>
             <div class="service-grid" id="serviceGrid"></div>
-            <!-- NOVO BOTÃO PARA REABRIR O MENU DE EXTRAS -->
-            <button type="button" onclick="abrirAddons()" style="width:100%; margin-top:12px; background:var(--gold-soft); color:var(--gold); border:1px dashed var(--gold); border-radius:12px; padding:12px; font-weight:800; transition:0.2s; font-size: 14px;">+ Adicionar Nail Art ou Extras</button>
+            <button type="button" onclick="abrirAddons()" style="width:100%; margin-top:12px; background:var(--gold-soft); color:var(--gold); border:1px dashed var(--gold); border-radius:12px; padding:12px; font-weight:800; transition:0.2s; font-size: 14px;">+ Adicionar mais procedimentos ou Extras</button>
           </div>
           <div>
             <div class="step" style="margin-top:0;"><span>02</span><h2>Data e horário</h2></div>
             <div class="field">
               <label>Escolha o dia no calendário</label>
               
-              <!-- CALENDÁRIO INLINE NOVO -->
               <div class="cal-wrapper">
                 <div class="cal-header-inline">
                   <button type="button" onclick="changeMonth(-1)">&lsaquo;</button>
@@ -254,7 +246,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
                 </div>
                 <div class="cal-days" id="calDays"></div>
               </div>
-              <!-- O input fica escondido apenas para guardar a data -->
               <input type="hidden" id="date" required>
               <div id="dateError" class="error-msg"></div>
             </div>
@@ -293,7 +284,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         <button type="submit" class="primary" id="btnBooking" disabled>Preencha os dados para confirmar</button>
       </form>
 
-      <!-- RESUMO DA COMPRA -->
       <aside class="card summary">
         <h3>Resumo</h3>
         <div class="summary-row"><span>Serviço</span><b id="sumService">-</b></div>
@@ -305,36 +295,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
       </aside>
     </div>
   </div>
-
-  <!-- FOOTER -->
   <footer style="text-align: center; margin-top: 60px; padding-top: 25px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted);">
     Copyright &copy; and designed by <a href="https://www.alansmsolutions.com" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-weight: 700; text-decoration: none;">ASM Solutions</a>
   </footer>
 </main>
 
-<!-- BOTÃO FLUTUANTE DE RESERVA (Aparece ao rolar) -->
 <a href="#agenda" class="fab-button" id="fabBtn">
   📅 Agendar Agora
 </a>
 
-<!-- MODAL ADDONS / NAIL ART (O "CARRINHO" DE SEGUNDA LINHA) -->
 <div id="modalAddons" class="modal-overlay">
-  <div class="card modal-content" style="max-width: 420px; padding: 25px;">
+  <div class="card modal-content" style="max-width: 440px; padding: 25px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5px;">
-      <h2 style="margin:0; font-size:20px;">Deseja adicionar Extras?</h2>
+      <h2 style="margin:0; font-size:20px;">Personalize o seu Momento</h2>
       <button type="button" onclick="fecharAddons()" style="border:none; background:transparent; font-size:24px; color:var(--muted);">&times;</button>
     </div>
-    <p style="color:var(--muted); font-size:13px; margin-bottom:20px; line-height: 1.4;">Turbine as suas unhas com as nossas opções especiais de Nail Art e reconstrução (Opcional).</p>
+    <p style="color:var(--muted); font-size:13px; margin-bottom:20px; line-height: 1.4;">Aproveite para realizar mais de um procedimento no mesmo dia e adicione extras como Nail Art.</p>
     
+    <div id="additionalServicesGrid" style="margin-bottom: 20px;">
+      </div>
+
+    <hr style="border: 0; border-top: 1px dashed var(--line); margin: 20px 0;">
+
     <div id="addonsGrid">
-      <!-- Opções geradas via Javascript -->
-    </div>
+      </div>
     
-    <button type="button" class="primary" onclick="confirmarAddons()" style="margin-top: 25px;">Confirmar e Continuar</button>
+    <button type="button" class="primary" onclick="confirmarAddons()" style="margin-top: 25px;">Confirmar Seleção</button>
   </div>
 </div>
 
-<!-- MODAL CURSOS (Lista de Espera) -->
 <div id="modalCursos" class="modal-overlay">
   <div class="card modal-content">
     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -359,7 +348,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 
 <div id="toast" class="toast">Mensagem</div>
 
-<!-- LÓGICA JAVASCRIPT -->
 <script>
 // ==========================================
 // SUA URL DO GOOGLE APPS SCRIPT
@@ -367,7 +355,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
 const services = [
-  {id:"alongamento", icon:"✨", name:"Alongamento de unhas", desc:"Molde Russo, F1 ou Fibra", price:160},
+  {id:"alongamento", icon:"✨", name:"Alongamento de Unhas", desc:"Molde Russo ou Molde F1", price:160},
   {id:"banho", icon:"💅", name:"Banho em gel", desc:"Esmaltação em gel simples inclusa", price:130},
   {id:"blindagem-maos", icon:"🛡️", name:"Blindagem (Mãos)", desc:"Esmaltação em gel nas mãos", price:75},
   {id:"blindagem-pes", icon:"👣", name:"Blindagem (Pés)", desc:"Esmaltação em gel nos pés", price:80}
@@ -380,7 +368,7 @@ let selectedTime = null;
 let occupiedBookings = []; 
 let blockedDates = []; 
 
-// LÓGICA DE ADDONS (CARRINHO DE EXTRAS)
+// LÓGICA DE MULTI-SERVIÇOS E EXTRAS
 const addonsList = [
   { id: "encap-par", name: "Encapsulada / Baby Boomer (Par)", price: 15, type: 'check' },
   { id: "encap-mao", name: "Encapsulada / Baby Boomer (Mão Completa)", price: 60, type: 'check' },
@@ -389,38 +377,71 @@ const addonsList = [
   { id: "unha-quebra", name: "Reconstrução de Unha Quebrada", price: 5, type: 'qty' }
 ];
 
+let selectedAdditionalServices = [];
+let tempAdditionalServices = {};
+
 let selectedAddons = [];
 let tempAddons = {};
+
 let currentTotalPrice = 0;
 
 function abrirAddons() {
+  // Prepara o estado temporário do modal (para caso ela cancele antes de confirmar)
   tempAddons = {};
   selectedAddons.forEach(a => tempAddons[a.id] = a.qty);
+
+  tempAdditionalServices = {};
+  selectedAdditionalServices.forEach(s => tempAdditionalServices[s.id] = true);
   
-  let html = '';
+  // 1. Renderiza "Outros Procedimentos" (todos os serviços exceto o que já clicou como base)
+  let extraSvcHtml = '<h3 style="font-size: 16px; margin-bottom: 10px; color: var(--ink);">Adicionar outro procedimento?</h3>';
+  let hasOther = false;
+  
+  services.forEach(s => {
+      if (s.id !== selectedService.id) {
+          hasOther = true;
+          let isChecked = tempAdditionalServices[s.id] ? 'checked' : '';
+          extraSvcHtml += `<div class="addon-item">
+              <div class="addon-info">
+                  <span class="addon-name">${s.name}</span>
+                  <span class="addon-price">+ ${BRL.format(s.price)}</span>
+              </div>
+              <div class="addon-ctrl">
+                  <input type="checkbox" class="addon-chk" ${isChecked} onchange="toggleTempSvc('${s.id}', this.checked)">
+              </div>
+          </div>`;
+      }
+  });
+  $("#additionalServicesGrid").innerHTML = hasOther ? extraSvcHtml : '';
+
+  // 2. Renderiza "Nail Art e Extras"
+  let htmlAddons = '<h3 style="font-size: 16px; margin-bottom: 10px; color: var(--ink);">Nail Art & Extras</h3>';
   addonsList.forEach(a => {
       let val = tempAddons[a.id] || 0;
-      html += `<div class="addon-item">
+      htmlAddons += `<div class="addon-item">
           <div class="addon-info">
               <span class="addon-name">${a.name}</span>
               <span class="addon-price">+ ${BRL.format(a.price)}${a.type === 'qty' ? ' /cada' : ''}</span>
           </div>`;
       
       if (a.type === 'check') {
-          html += `<div class="addon-ctrl"><input type="checkbox" class="addon-chk" id="chk-${a.id}" ${val ? 'checked' : ''} onchange="toggleTempAddon('${a.id}', this.checked)"></div>`;
+          htmlAddons += `<div class="addon-ctrl"><input type="checkbox" class="addon-chk" ${val ? 'checked' : ''} onchange="toggleTempAddon('${a.id}', this.checked)"></div>`;
       } else {
-          html += `<div class="addon-ctrl qty-ctrl">
+          htmlAddons += `<div class="addon-ctrl qty-ctrl">
               <button type="button" class="qty-btn" onclick="changeTempQty('${a.id}', -1)">-</button>
               <input type="text" id="qty-${a.id}" class="qty-input" value="${val}" readonly>
               <button type="button" class="qty-btn" onclick="changeTempQty('${a.id}', 1)">+</button>
           </div>`;
       }
-      html += `</div>`;
+      htmlAddons += `</div>`;
   });
-  $("#addonsGrid").innerHTML = html;
+  $("#addonsGrid").innerHTML = htmlAddons;
+  
+  // Exibe o Modal
   document.getElementById('modalAddons').classList.add('active');
 }
 
+function toggleTempSvc(id, isChecked) { tempAdditionalServices[id] = isChecked; }
 function toggleTempAddon(id, isChecked) { tempAddons[id] = isChecked ? 1 : 0; }
 function changeTempQty(id, delta) {
   let current = tempAddons[id] || 0;
@@ -430,13 +451,25 @@ function changeTempQty(id, delta) {
   tempAddons[id] = newVal;
   document.getElementById(`qty-${id}`).value = newVal;
 }
+
 function fecharAddons() { document.getElementById('modalAddons').classList.remove('active'); }
+
 function confirmarAddons() {
+  // Salva os extras selecionados
   selectedAddons = [];
   addonsList.forEach(a => {
       let qty = tempAddons[a.id] || 0;
       if(qty > 0) selectedAddons.push({ ...a, qty: qty });
   });
+
+  // Salva os serviços adicionais selecionados
+  selectedAdditionalServices = [];
+  services.forEach(s => {
+      if (tempAdditionalServices[s.id] && s.id !== selectedService.id) {
+          selectedAdditionalServices.push(s);
+      }
+  });
+
   fecharAddons();
   updateSum();
 }
@@ -644,9 +677,13 @@ function renderTimes() {
 function selectSvc(id, el) {
   document.querySelectorAll(".service").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
+  
   selectedService = services.find(s => s.id === id);
   
-  // Abre o menu de addons sempre que escolhe um serviço principal
+  // Se ela mudar de serviço principal, garantimos que ele não fica duplicado nos serviços adicionais
+  selectedAdditionalServices = selectedAdditionalServices.filter(s => s.id !== id);
+  
+  // Abre o menu de addons e múltiplos serviços
   abrirAddons();
   updateSum();
 }
@@ -659,10 +696,18 @@ function selectTime(time, el) {
 }
 
 function updateSum() {
+  // Somatório Base + Serviços Adicionais + Addons
+  let extraSvcTotal = selectedAdditionalServices.reduce((sum, item) => sum + item.price, 0);
   let addonsTotal = selectedAddons.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  currentTotalPrice = selectedService.price + addonsTotal;
   
-  let addonsText = selectedAddons.map(a => `${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`).join('<br>+ ');
+  currentTotalPrice = selectedService.price + extraSvcTotal + addonsTotal;
+  
+  // Constrói o texto do carrinho visual
+  let extraTextArray = [];
+  selectedAdditionalServices.forEach(s => extraTextArray.push(s.name));
+  selectedAddons.forEach(a => extraTextArray.push(`${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`));
+
+  let addonsText = extraTextArray.join('<br>+ ');
 
   $("#sumService").innerHTML = `${selectedService.name} ${addonsText ? `<div style="color:var(--gold); font-size:12px; margin-top:6px; line-height:1.4;">+ ${addonsText}</div>` : ''}`;
   $("#sumPrice").textContent = BRL.format(currentTotalPrice);
@@ -691,17 +736,22 @@ $("#bookingForm").onsubmit = async e => {
   $("#btnBooking").textContent = "A registar...";
   $("#btnBooking").disabled = true;
   
-  const addonsTextStr = selectedAddons.map(a => `${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`).join(', ');
+  // Concatena tudo numa string limpa para enviar para o seu Excel / Painel
+  let extraTextArray = [];
+  selectedAdditionalServices.forEach(s => extraTextArray.push(s.name));
+  selectedAddons.forEach(a => extraTextArray.push(`${a.qty > 1 ? a.qty+'x ' : ''}${a.name}`));
+
+  const addonsTextStr = extraTextArray.join(', ');
   const serviceNameFinal = selectedService.name + (addonsTextStr ? ` (+ ${addonsTextStr})` : '');
 
   const payload = {
     type: 'booking',
     client: $("#name").value,
     phone: $("#phone").value,
-    service: serviceNameFinal,
+    service: serviceNameFinal, // Aqui vai tudo junto: Ex: "Banho em gel (+ Blindagem (Pés), Nail Art Cartoon Simples)"
     date: $("#date").value,
     time: selectedTime,
-    price: currentTotalPrice,
+    price: currentTotalPrice, // Aqui vai a soma de tudo corretamente
     paymentMethod: $("#paymentMethod").value,
     notes: $("#notes").value
   };
@@ -717,12 +767,14 @@ $("#bookingForm").onsubmit = async e => {
       showToast("Reserva confirmada com sucesso!");
       e.target.reset();
       selectedTime = null;
-      selectedDateStr = ""; // Limpa visualmente o calendário
+      selectedDateStr = ""; 
       $("#date").value = "";
       
-      // Limpa os Addons após reserva feita
+      // Limpa o carrinho
       selectedAddons = [];
+      selectedAdditionalServices = [];
       tempAddons = {};
+      tempAdditionalServices = {};
       
       fetchOccupiedTimes(); 
       updateSum();
