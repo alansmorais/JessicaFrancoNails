@@ -44,18 +44,6 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
-    <!-- Ecrã de Login -->
-    <div id="login-screen" class="fixed inset-0 bg-brand-dark flex flex-col items-center justify-center z-[100]">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
-            <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
-            <h2 class="text-brand-dark font-bold text-2xl mb-2">Acesso Restrito</h2>
-            <form id="loginForm">
-                <input type="password" id="adminPwd" placeholder="Palavra-passe" required class="w-full p-4 rounded-xl border border-gray-200 mb-5 text-center text-lg outline-none focus:border-brand-active focus:ring-2 focus:ring-blue-100 transition">
-                <button type="submit" id="btnLogin" class="w-full bg-brand-active text-white font-bold p-4 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-blue-500/30">Entrar no Painel</button>
-            </form>
-        </div>
-    </div>
-
     <!-- Barra Lateral de Navegação -->
     <aside id="sidebar" class="w-64 bg-brand-dark text-gray-300 flex-col hidden md:flex z-[200] shadow-2xl fixed md:relative h-full inset-y-0 left-0 transition-all">
         <div class="h-16 flex items-center justify-between px-6 border-b border-gray-700/50 bg-gray-900/20">
@@ -857,37 +845,6 @@
             } catch(e) { alert("Erro ao ligar ao servidor."); }
         }
 
-        // --- LÓGICA DE LOGIN COM BACKEND SEGURA ---
-        document.getElementById('loginForm').onsubmit = async function(e) {
-            e.preventDefault(); 
-            const pwd = document.getElementById('adminPwd').value; 
-            const btn = document.getElementById('btnLogin');
-            
-            // Estado de carregamento
-            const originalText = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin mx-auto"></i>`;
-            lucide.createIcons();
-
-            try {
-                // Pergunta ao seu Apps Script (Code.gs) se a password é válida
-                const res = await fetch(WEB_APP_URL + "?action=login&pwd=" + encodeURIComponent(pwd));
-                const json = await res.json();
-                
-                if(json.status === "success") { 
-                    document.getElementById('login-screen').style.display = 'none'; 
-                    try{playLoudNotification();}catch(err){} 
-                    fetchData(); 
-                    setInterval(fetchData, 20000); 
-                } else { 
-                    alert('Palavra-passe incorreta!'); 
-                    btn.innerHTML = originalText; 
-                }
-            } catch (error) {
-                alert('Erro de ligação. Certifique-se de que publicou o script para "Qualquer Pessoa".');
-                btn.innerHTML = originalText;
-            }
-        };
-
         function switchTab(tabId, el) {
             document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('bg-brand-active', 'text-white', 'shadow-md'); n.classList.add('hover:bg-gray-800', 'text-gray-300'); });
             el.classList.remove('hover:bg-gray-800', 'text-gray-300'); el.classList.add('bg-brand-active', 'text-white', 'shadow-md');
@@ -1067,6 +1024,13 @@
             } catch (error) { syncUI.innerText = "Erro de Ligação"; }
         }
         document.getElementById('finDate').value = new Date().toISOString().slice(0,10);
+        
+        // --- INICIALIZAÇÃO DIRETA (LOGIN REMOVIDO PARA TESTE) ---
+        window.addEventListener('DOMContentLoaded', (event) => {
+            fetchData();
+            setInterval(fetchData, 20000);
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
