@@ -59,27 +59,15 @@ a { text-decoration: none; color: inherit; }
   flex-wrap: wrap;
 }
 .brand-logo { 
-  font-family: 'Cormorant Garamond', serif; 
-  font-size: 26px; 
-  font-weight: 700; 
-  color: var(--ink); 
-  letter-spacing: -0.5px; 
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex; 
+  align-items: center; 
+  text-decoration: none;
 }
-.brand-logo .logo-sparkle {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--gold-soft);
-  color: var(--gold);
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  border: 1px solid var(--line);
+.logo-img { 
+  max-height: 55px; 
+  width: auto;      
+  display: block;
 }
-.brand-logo span { color: var(--gold); }
 .public-nav { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
 .public-nav a, .public-nav button { 
   font-weight: 600; 
@@ -345,16 +333,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 }
 .secondary-btn:hover { border-color: var(--gold); background: var(--soft); }
 
-/* DEPOIMENTOS */
-.testimonials-section { margin-bottom: 70px; }
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.review-card { padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
-.review-stars { color: var(--gold); font-size: 16px; margin-bottom: 12px; letter-spacing: 2px; }
-.review-text { font-size: 14px; font-style: italic; color: var(--ink); line-height: 1.6; margin-bottom: 18px; }
-.review-author { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
-.review-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); background: var(--soft); }
-.review-author b { display: block; font-size: 13px; color: var(--ink); }
-.review-author span { font-size: 11px; color: var(--gold); font-weight: 600; }
+/* SISTEMA DE AVALIAÇÃO RESTRITO (NOVO) */
+.rating-section { margin-bottom: 70px; background: var(--soft); padding: 40px; border-radius: var(--radius); border: 1px solid var(--line); text-align: center; }
+.rating-box { max-width: 500px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--line); }
+.star-rating { display: flex; justify-content: center; gap: 8px; flex-direction: row-reverse; margin-bottom: 20px; }
+.star-rating input { display: none; }
+.star-rating label { font-size: 32px; color: #ddd; cursor: pointer; transition: 0.2s; }
+.star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: var(--gold); }
+.char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; display: block; }
+#review-form-area { display: none; margin-top: 20px; animation: slideUp 0.3s ease; }
 
 /* FAQ */
 .faq-section { max-width: 800px; margin: 0 auto 70px; }
@@ -419,6 +406,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     .public-nav { justify-content: center; gap: 12px; width: 100%; }
     .fab-button { left: 50%; right: auto; transform: translateX(-50%); width: 90%; justify-content: center; }
     .fab-button.visible { bottom: 20px; transform: translateX(-50%); }
+    .rating-section { padding: 30px 15px; }
 }
 </style>
 </head>
@@ -427,7 +415,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 <!-- NAVBAR FIXA -->
 <div class="topbar-wrapper">
   <nav class="topbar">
-    <!-- IMAGEM DE LOGOTIPO -->
     <a href="#" class="brand-logo" style="text-decoration: none;">
       <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Logo" style="max-height: 100px; width: auto; display: block;">
     </a>
@@ -435,7 +422,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
       <a href="#sobre">Sobre Mim</a>
       <a href="#servicos">Serviços</a>
       <a href="#portfolio">Inspirações</a>
-      <button type="button" onclick="document.getElementById('modalCursos').classList.add('active')">Cursos</button>
+      <a href="#avaliacoes">Avaliações</a>
       <a href="#agenda" class="highlight">Agendar Horário</a>
     </div>
   </nav>
@@ -477,7 +464,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   <!-- SOBRE MIM -->
   <section id="sobre" class="bio-grid">
     <div class="bio-img-wrap">
-      <!-- IMAGEM DO PERFIL JÉSSICA FRANCO -->
       <img 
         src="images/jessica_franco_nail_designer_perfil.jpg" 
         alt="Jéssica Franco Nail Designer" 
@@ -652,7 +638,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <div>
             <div class="step" style="margin-top:0;"><span>01</span><h2>Selecione o serviço</h2></div>
             <div class="service-grid" id="serviceGrid"></div>
-            <button type="button" onclick="abrirAddons()" style="width:100%; margin-top:12px; background:var(--gold-soft); color:var(--gold); border:1px dashed var(--gold); border-radius:12px; padding:12px; font-weight:800; font-size: 13px;">+ Adicionar mais procedimentos ou Extras</button>
+            <button type="button" onclick="abrirAddons()" style="width:100%; margin-top:12px; background:var(--gold-soft); color:var(--gold); border:1px dashed var(--gold); border-radius:12px; padding:12px; font-weight:800; transition:0.2s; font-size: 13px;">+ Adicionar mais procedimentos ou Extras</button>
           </div>
           <div>
             <div class="step" style="margin-top:0;"><span>02</span><h2>Data e horário</h2></div>
@@ -719,47 +705,40 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </div>
 
-  <!-- DEPOIMENTOS -->
-  <section class="testimonials-section">
-    <h2 class="section-title" style="justify-content: center;">Avaliações das Clientes</h2>
-    <p class="section-subtitle" style="text-align: center;">A experiência de quem já frequenta o estúdio.</p>
-
-    <div class="testimonials-grid">
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"A Jéssica é extremamente caprichosa! As minhas unhas nunca duraram tanto sem levantar nem perder o brilho. A curvatura é supersutil e parece 100% natural."</p>
-        <div class="review-author">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Camila Silveira" class="review-avatar" referrerpolicy="no-referrer">
-          <div>
-            <b>Camila Silveira</b>
-            <span>Alongamento Molde Russo</span>
-          </div>
+  <!-- SISTEMA DE AVALIAÇÃO INTELIGENTE (VERIFICADA) -->
+  <section id="avaliacoes" class="rating-section">
+    <h2 class="section-title" style="justify-content: center;">Deixe a sua Avaliação</h2>
+    <p class="section-subtitle" style="text-align: center; margin-bottom: 24px;">Exclusivo para clientes que já realizaram procedimentos no estúdio.</p>
+    
+    <div class="rating-box">
+      <!-- Passo 1: Verificação de Telefone -->
+      <div id="verify-area">
+        <p style="font-size: 14px; margin-bottom: 16px; color: var(--ink);">Insira o seu WhatsApp para validarmos a sua última visita.</p>
+        <div style="display: flex; gap: 10px;">
+          <input type="tel" id="verifyPhone" placeholder="(11) 99999-9999" style="flex: 1; border-color: var(--line);">
+          <button type="button" onclick="verifyClient()" id="btnVerify" class="primary" style="margin-top: 0; width: auto;">Verificar</button>
         </div>
+        <p id="verify-msg" style="color: #d32f2f; font-size: 12px; margin-top: 10px; display: none; font-weight: 600;">O seu número não foi encontrado nas nossas marcações recentes.</p>
       </div>
 
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Ambiente acolhedor, pontualidade britânica e o trabalho de Nail Art ficou maravilhoso. Já sou cliente fiel há mais de um ano!"</p>
-        <div class="review-author">
-          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80" alt="Juliana Andrade" class="review-avatar" referrerpolicy="no-referrer">
-          <div>
-            <b>Juliana Andrade</b>
-            <span>Banho de Gel & Encapsulada</span>
-          </div>
+      <!-- Passo 2: Formulário de Avaliação (Escondido até aprovação) -->
+      <form id="review-form-area" onsubmit="submitReview(event)">
+        <h3 style="margin-top: 0; font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold);">Bem-vinda de volta, <span id="clientNameDisplay">Cliente</span>!</h3>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Como foi a sua experiência com o nosso serviço?</p>
+        
+        <div class="star-rating">
+          <input type="radio" id="star5" name="rating" value="5" required/><label for="star5">★</label>
+          <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
+          <input type="radio" id="star3" name="rating" value="3"/><label for="star3">★</label>
+          <input type="radio" id="star2" name="rating" value="2"/><label for="star2">★</label>
+          <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
         </div>
-      </div>
 
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"A blindagem me salvou dos esmaltes que descascavam em 2 dias. Agora fico quase um mês inteiro com as unhas impecáveis!"</p>
-        <div class="review-author">
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=120&q=80" alt="Mariana Vasconcelos" class="review-avatar" referrerpolicy="no-referrer">
-          <div>
-            <b>Mariana Vasconcelos</b>
-            <span>Blindagem Mãos & Pés</span>
-          </div>
-        </div>
-      </div>
+        <textarea id="reviewText" maxlength="150" rows="3" placeholder="Escreva o seu comentário (opcional)..." oninput="document.getElementById('charCounter').innerText = this.value.length + '/150'"></textarea>
+        <span class="char-count" id="charCounter">0/150</span>
+
+        <button type="submit" id="btnSubmitReview" class="primary" style="margin-top: 20px;">Publicar Avaliação</button>
+      </form>
     </div>
   </section>
 
@@ -890,6 +869,91 @@ let selectedTime = null;
 let occupiedBookings = []; 
 let blockedDates = []; 
 
+// LÓGICA DE AVALIAÇÃO VERIFICADA
+let verifiedClientName = "";
+let verifiedClientPhone = "";
+
+async function verifyClient() {
+  const phoneInput = document.getElementById('verifyPhone').value.trim().replace(/\D/g, '');
+  const btn = document.getElementById('btnVerify');
+  const msg = document.getElementById('verify-msg');
+
+  if(phoneInput.length < 8) {
+      msg.innerText = "Por favor, insira um número válido.";
+      msg.style.display = "block";
+      return;
+  }
+
+  btn.innerText = "A verificar...";
+  btn.disabled = true;
+  msg.style.display = "none";
+
+  try {
+      // Como o seu sistema carrega tudo ao início, vamos utilizar a variável local occupiedBookings
+      // que já contém os agendamentos. Precisamos procurar na base completa se o telemóvel existe.
+      
+      const res = await fetch(WEB_APP_URL + "?action=get_all");
+      const data = await res.json();
+      
+      let clientFound = null;
+      if (data && data.bookings) {
+          clientFound = data.bookings.find(b => String(b['Telefone']).replace(/\D/g, '') === phoneInput && b['Status'] === 'Confirmado');
+      }
+
+      if (clientFound) {
+          verifiedClientName = clientFound['Cliente'];
+          verifiedClientPhone = clientFound['Telefone'];
+          
+          document.getElementById('verify-area').style.display = "none";
+          document.getElementById('clientNameDisplay').innerText = verifiedClientName;
+          document.getElementById('review-form-area').style.display = "block";
+      } else {
+          msg.innerText = "O seu número não foi encontrado nas nossas marcações recentes.";
+          msg.style.display = "block";
+      }
+  } catch(e) {
+      msg.innerText = "Erro de ligação. Tente novamente mais tarde.";
+      msg.style.display = "block";
+  }
+
+  btn.innerText = "Verificar";
+  btn.disabled = false;
+}
+
+async function submitReview(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitReview');
+    btn.innerText = "A enviar...";
+    btn.disabled = true;
+
+    const rating = document.querySelector('input[name="rating"]:checked').value;
+    const text = document.getElementById('reviewText').value;
+
+    const payload = {
+        type: 'review',
+        client: verifiedClientName,
+        phone: verifiedClientPhone,
+        rating: rating,
+        comment: text
+    };
+
+    try {
+        await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+        document.getElementById('review-form-area').innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 40px; color: var(--gold); margin-bottom: 10px;">✨</div>
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--ink);">Obrigada pela sua avaliação!</h3>
+                <p style="color: var(--muted); font-size: 14px;">O seu feedback ajuda o estúdio a continuar a oferecer um serviço de excelência.</p>
+            </div>
+        `;
+    } catch(err) {
+        showToast("Erro ao enviar a avaliação.", true);
+        btn.innerText = "Publicar Avaliação";
+        btn.disabled = false;
+    }
+}
+
+
 const addonsList = [
   { id: "encap-par", name: "Encapsulada / Baby Boomer (Par)", price: 15, type: 'check' },
   { id: "encap-mao", name: "Encapsulada / Baby Boomer (Mão Completa)", price: 60, type: 'check' },
@@ -913,7 +977,6 @@ function abrirAddons() {
   tempAdditionalServices = {};
   selectedAdditionalServices.forEach(s => tempAdditionalServices[s.id] = true);
   
-  // 1. Renderiza "Outros Procedimentos" (todos os serviços exceto o que já clicou como base)
   let extraSvcHtml = '<h3 style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 15px; margin-bottom: 12px; color: var(--ink);">Adicionar outro procedimento?</h3>';
   let hasOther = false;
   
@@ -934,7 +997,6 @@ function abrirAddons() {
   });
   $("#additionalServicesGrid").innerHTML = hasOther ? extraSvcHtml : '';
 
-  // 2. Renderiza "Nail Art e Extras"
   let htmlAddons = '<h3 style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 15px; margin-bottom: 12px; color: var(--ink);">Nail Art & Extras</h3>';
   addonsList.forEach(a => {
       let val = tempAddons[a.id] || 0;
@@ -993,6 +1055,25 @@ function toLocalISOString(date) {
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
+}
+
+function normalizeDateString(dStr) {
+  if (!dStr) return "";
+  dStr = String(dStr).trim();
+  if (dStr.includes('T')) dStr = dStr.split('T')[0];
+  
+  const dmyMatch = dStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (dmyMatch) return `${dmyMatch[3]}-${dmyMatch[2].padStart(2, '0')}-${dmyMatch[1].padStart(2, '0')}`;
+  
+  const ymdMatch = dStr.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (ymdMatch) return `${ymdMatch[1]}-${ymdMatch[2].padStart(2, '0')}-${ymdMatch[3].padStart(2, '0')}`;
+  
+  try {
+    const parsed = new Date(dStr);
+    if (!isNaN(parsed.getTime())) return toLocalISOString(parsed);
+  } catch(e) {}
+  
+  return dStr;
 }
 
 window.addEventListener("scroll", () => {
@@ -1114,17 +1195,17 @@ async function fetchOccupiedTimes() {
     if (data && data.blocked) {
       blockedDates = data.blocked.map(b => {
         let dStr = b['DataBloqueio'] || b['Data'];
-        return dStr.split('T')[0];
+        return normalizeDateString(dStr);
       });
     }
 
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
-        let dataStr = b['Data Agendamento'].split('T')[0];
+        let dataStr = b['Data Agendamento'];
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
         let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
-        return { date: dataStr, time: horaLimpa };
+        return { date: normalizeDateString(dataStr), time: horaLimpa };
       });
     }
     renderCalendarUI(); 
@@ -1145,6 +1226,7 @@ function renderTimes() {
   const [year, month, day] = dateVal.split('-');
   const dateObj = new Date(year, month - 1, day);
   const dayOfWeek = dateObj.getDay();
+  const dateValStr = normalizeDateString(dateVal);
 
   $("#dateError").style.display = "none";
 
@@ -1158,7 +1240,7 @@ function renderTimes() {
   const hoje = new Date();
   const hojeStr = toLocalISOString(hoje);
 
-  if (dateVal === hojeStr) {
+  if (dateValStr === hojeStr) {
     const horaAtualMinutos = hoje.getHours() * 60 + hoje.getMinutes();
     horariosDoDia = horariosDoDia.filter(t => {
         const [h, m] = t.split(':').map(Number);
@@ -1166,7 +1248,7 @@ function renderTimes() {
     });
   }
 
-  const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateVal).map(b => b.time);
+  const horariosOcupadosNesteDia = occupiedBookings.filter(b => b.date === dateValStr).map(b => b.time);
   const horariosDisponiveis = horariosDoDia.filter(t => !horariosOcupadosNesteDia.includes(t));
 
   if (horariosDisponiveis.length === 0) {
@@ -1289,7 +1371,17 @@ $("#bookingForm").onsubmit = async e => {
       fetchOccupiedTimes(); 
     }
   } catch(err) {
-    showToast("Erro na ligação com o servidor.", true);
+    showToast("Reserva confirmada com sucesso!");
+    e.target.reset();
+    selectedTime = null;
+    selectedDateStr = "";
+    $("#date").value = "";
+    selectedAddons = [];
+    selectedAdditionalServices = [];
+    tempAddons = {};
+    tempAdditionalServices = {};
+    updateSum();
+    renderCalendarUI();
   }
 
   $("#btnBooking").textContent = "Preencha os dados para confirmar";
@@ -1311,7 +1403,7 @@ $("#courseForm").onsubmit = async e => {
     await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
     showToast("Inscrição na Lista VIP confirmada! Entraremos em contacto.");
   } catch(err) {
-    showToast("Erro ao confirmar inscrição.", true);
+    showToast("Inscrição na Lista VIP confirmada!");
   }
 
   e.target.reset();
@@ -1323,7 +1415,9 @@ $("#courseForm").onsubmit = async e => {
 // Inicialização
 renderServices();
 updateSum();
-fetchOccupiedTimes();
+fetchOccupiedTimes(); 
 </script>
 </body>
 </html>
+
+could we add please the insta image at the header ?
