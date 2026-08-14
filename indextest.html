@@ -44,14 +44,14 @@ a { text-decoration: none; color: inherit; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(254, 253, 251, 0.92);
+  background: rgba(254, 253, 251, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
 .topbar { 
   max-width: 1180px; 
   margin: auto; 
-  padding: 16px 20px; 
+  padding: 12px 20px; 
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
@@ -64,18 +64,12 @@ a { text-decoration: none; color: inherit; }
   text-decoration: none;
 }
 .logo-img { 
-  max-height: 55px; 
+  max-height: 100px; 
   width: auto;      
   display: block;
 }
-.middle-nav {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  flex: 1;
-  justify-content: center;
-}
-.middle-nav a, .middle-nav button {
+.public-nav { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.public-nav a, .public-nav button { 
   font-weight: 600; 
   font-size: 14px; 
   transition: 0.2s; 
@@ -84,42 +78,20 @@ a { text-decoration: none; color: inherit; }
   color: var(--ink); 
   cursor: pointer;
 }
-.middle-nav a:hover, .middle-nav button:hover { color: var(--gold); }
-
-.action-nav {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.social-icon {
-  color: var(--ink);
-  transition: color 0.2s;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--soft);
-  border: 1px solid var(--line);
-}
-.social-icon:hover {
-  color: #fff;
-  background: var(--gold);
-  border-color: var(--gold);
-}
-
-.action-nav .highlight { 
+.public-nav a:hover, .public-nav button:hover { color: var(--gold); }
+.public-nav .highlight { 
   color: #fff !important; 
   background: var(--gold); 
   padding: 10px 22px; 
   border-radius: 999px; 
   font-weight: 700; 
-  font-size: 14px;
   box-shadow: 0 4px 14px rgba(196,154,61,0.25); 
   transition: 0.2s;
 }
-.action-nav .highlight:hover { background: var(--gold-hover); transform: translateY(-1px); }
+.public-nav .highlight:hover { background: var(--gold-hover); transform: translateY(-1px); }
+.social-icons { display: flex; gap: 12px; border-left: 1px solid var(--line); padding-left: 20px; align-items: center;}
+.social-icons a { color: var(--muted); transition: 0.2s; display: flex;}
+.social-icons a:hover { color: var(--gold); transform: translateY(-2px);}
 
 /* SECTIONS & TYPOGRAPHY */
 .section-title { 
@@ -175,12 +147,9 @@ h1 {
 .lead { color: var(--muted); font-size: 16px; max-width: 700px; line-height: 1.7; margin: 0 auto 30px; }
 
 .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
-
 .hero-badges { 
-  display: flex; 
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
   gap: 14px; 
   max-width: 850px; 
   margin: 0 auto; 
@@ -193,12 +162,11 @@ h1 {
   padding: 12px 16px;
   border-radius: 14px;
   text-align: center;
-  min-width: 170px;
 }
 .hero-badge-item b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 2px; }
 .hero-badge-item span { font-size: 11px; color: var(--muted); }
 
-/* SOBRE MIM (INVERTIDO: Foto à esquerda, Texto à direita) */
+/* SOBRE MIM */
 .bio-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; margin-bottom: 70px; }
 .bio-img-wrap { position: relative; }
 .bio-img-wrap::before {
@@ -224,10 +192,10 @@ h1 {
 .bio-text p { font-size: 15px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; }
 .bio-text strong { color: var(--ink); }
 
-/* VITRINE DE SERVIÇOS (Ligeiramente mais pequenos) */
-.services-showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 70px; }
+/* VITRINE DE SERVIÇOS */
+.services-showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 70px; }
 .showcase-card { 
-  padding: 24px 20px; 
+  padding: 30px 24px; 
   border: 1px solid var(--line); 
   border-radius: var(--radius); 
   background: #fff; 
@@ -237,10 +205,10 @@ h1 {
   justify-content: space-between;
 }
 .showcase-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 16px 32px rgba(196,154,61,0.12); }
-.showcase-icon { font-size: 24px; margin-bottom: 16px; width: 48px; height: 48px; background: var(--soft); display: grid; place-items: center; border-radius: 14px; border: 1px solid var(--line);}
-.showcase-card h3 { font-family: 'Cormorant Garamond', serif; margin: 0 0 6px; font-size: 21px; font-weight: 700; }
+.showcase-icon { font-size: 28px; margin-bottom: 18px; width: 56px; height: 56px; background: var(--soft); display: grid; place-items: center; border-radius: 16px; border: 1px solid var(--line);}
+.showcase-card h3 { font-family: 'Cormorant Garamond', serif; margin: 0 0 6px; font-size: 23px; font-weight: 700; }
 .showcase-card .svc-desc { margin: 0 0 16px; font-size: 13px; color: var(--muted); line-height: 1.6; flex-grow: 1; }
-.showcase-card .svc-price { font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 14px; }
+.showcase-card .svc-price { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 14px; }
 
 /* GALERIA & FILTROS */
 .gallery-section { margin-bottom: 70px; }
@@ -277,6 +245,11 @@ h1 {
 .gallery-tag { font-size: 10px; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 4px; }
 .gallery-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 700; margin: 0; color: var(--ink); }
 
+/* MAPA / LOCALIZAÇÃO */
+.map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; overflow: hidden; }
+.map-info { padding: 40px; display: flex; flex-direction: column; justify-content: center; background: #fff;}
+.map-iframe-container { width: 100%; height: 100%; min-height: 350px; background: var(--soft);}
+
 /* CURSOS BANNER */
 .course-banner { 
   background: radial-gradient(circle at top right, #F3E8CF 0%, var(--soft) 100%); 
@@ -305,7 +278,6 @@ h1 {
 
 /* AGENDAMENTO */
 .booking-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; margin-bottom: 70px; }
-.card { padding: 32px; }
 .step { display: flex; gap: 12px; align-items: center; margin: 32px 0 16px; }
 .step:first-child { margin-top: 0; }
 .step span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--gold-soft); color: var(--gold); font-weight: 800; font-size: 12px; }
@@ -368,36 +340,38 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 }
 .secondary-btn:hover { border-color: var(--gold); background: var(--soft); }
 
-/* SLIDER DE DEPOIMENTOS & AVALIAÇÃO */
-.rating-section { margin-bottom: 70px; border-radius: var(--radius); border: none; text-align: left; }
-.testimonials-wrapper { position: relative; max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 15px; }
-.testimonials-slider { 
-  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; 
-  scrollbar-width: none; padding: 10px 5px 30px; flex: 1; -webkit-overflow-scrolling: touch;
+/* CARROSSEL DE REVIEWS (DESLIZANTE) */
+.reviews-slider-container { position: relative; max-width: 100%; overflow: hidden; margin-bottom: 20px; padding: 10px 0 20px;}
+.reviews-slider { 
+  display: flex; 
+  gap: 20px; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  padding: 0 10px; 
 }
-.testimonials-slider::-webkit-scrollbar { display: none; }
+.reviews-slider::-webkit-scrollbar { display: none; }
 .review-card { 
-  min-width: 280px; max-width: 320px; flex: 0 0 auto; scroll-snap-align: start; 
-  padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); 
-  background: #fff; box-shadow: 0 10px 30px rgba(196,154,61,0.05); 
+  min-width: 300px; 
+  max-width: 320px; 
+  scroll-snap-align: center; 
+  flex: 0 0 auto; 
+  padding: 26px; 
+  border: 1px solid var(--line); 
+  border-radius: var(--radius); 
+  background: #fff; 
 }
 .review-stars { color: var(--gold); font-size: 18px; margin-bottom: 12px; letter-spacing: 2px; }
-.review-text { font-size: 14px; font-style: italic; color: var(--ink); line-height: 1.6; margin-bottom: 18px; white-space: normal; }
+.review-text { font-size: 14px; font-style: italic; color: var(--ink); line-height: 1.6; margin-bottom: 18px; white-space: normal;}
 .review-author { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
-.review-avatar-text { width: 42px; height: 42px; border-radius: 50%; background: var(--gold-soft); color: var(--gold); display: grid; place-items: center; font-weight: 800; font-size: 16px; border: 1px solid var(--line);}
+.review-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); background: var(--soft); }
 .review-author b { display: block; font-size: 13px; color: var(--ink); }
 .review-author span { font-size: 11px; color: var(--gold); font-weight: 600; }
 
-.slider-btn { background: var(--card); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: var(--gold); cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(196,154,61,0.1); z-index: 10; font-size: 18px;}
-.slider-btn:hover { background: var(--gold-soft); color: var(--gold-hover); transform: scale(1.1); }
-
-/* AVALIAÇÃO E LOCALIZAÇÃO */
-.location-card { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; padding: 0; overflow: hidden; }
-.location-info { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-.location-map { min-height: 350px; background: var(--soft); width: 100%; }
-
-/* CAIXA DE AVALIAÇÃO */
-.rating-box { max-width: 500px; margin: 40px auto 0; background: var(--soft); padding: 30px; border-radius: 16px; border: 1px solid var(--line); text-align: center;}
+/* SISTEMA DE AVALIAÇÃO RESTRITO */
+.rating-section { margin-bottom: 70px; background: var(--soft); padding: 40px; border-radius: var(--radius); border: 1px solid var(--line); text-align: center; }
+.rating-box { max-width: 500px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--line); }
 .star-rating { display: flex; justify-content: center; gap: 8px; flex-direction: row-reverse; margin-bottom: 20px; }
 .star-rating input { display: none; }
 .star-rating label { font-size: 32px; color: #ddd; cursor: pointer; transition: 0.2s; }
@@ -415,7 +389,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 .faq-item.active .faq-toggle { transform: rotate(180deg); }
 .faq-toggle { font-size: 16px; color: var(--gold); transition: 0.2s; }
 
-/* MODAIS (CENTRADOS) */
+/* MODAIS */
 .modal-overlay { position: fixed; inset: 0; background: rgba(56,48,39,0.65); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px;}
 .modal-overlay.active { display: flex; }
 .modal-content { width: 100%; max-width: 440px; padding: 30px; max-height: 90vh; overflow-y: auto;}
@@ -462,46 +436,43 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
 @media(max-width: 900px){ 
-    .booking-layout, .two-panels, .bio-grid, .location-card { grid-template-columns: 1fr; } 
+    .booking-layout, .two-panels, .bio-grid, .map-grid { grid-template-columns: 1fr; } 
     .summary { position: static; } 
     .hero { padding: 40px 15px; } 
-    
-    .topbar { flex-direction: column; gap: 15px; padding-bottom: 20px;}
-    .middle-nav { flex-wrap: wrap; justify-content: center; gap: 12px; width: 100%; order: 3;}
-    .action-nav { order: 2; width: 100%; justify-content: space-between; }
-    
+    .public-nav { justify-content: center; gap: 12px; width: 100%; }
+    .social-icons { border-left: none; padding-left: 0; }
     .fab-button { left: 50%; right: auto; transform: translateX(-50%); width: 90%; justify-content: center; }
     .fab-button.visible { bottom: 20px; transform: translateX(-50%); }
     .rating-section { padding: 30px 15px; }
-    .slider-btn { display: none; } /* Esconde setas no telemóvel para usar apenas o dedo */
+    .map-info { padding: 30px 20px; text-align: center;}
 }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR FIXA COM LOGO ORIGINAL E INSTAGRAM -->
+<!-- NAVBAR FIXA -->
 <div class="topbar-wrapper">
   <nav class="topbar">
     <a href="#" class="brand-logo" style="text-decoration: none;">
-      <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Logo" style="max-height: 100px; width: auto; display: block;">
+      <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Logo" class="logo-img">
     </a>
-    
-    <div class="middle-nav">
+    <div class="public-nav">
       <a href="#sobre">Sobre Mim</a>
       <a href="#servicos">Serviços</a>
       <a href="#portfolio">Inspirações</a>
       <a href="#avaliacoes">Avaliações</a>
       <button type="button" onclick="document.getElementById('modalCursos').classList.add('active')">Cursos</button>
-    </div>
-    
-    <div class="action-nav">
-      <a href="https://www.facebook.com/profile.php?id=100009264596367&mibextid=wwXIfr&rdid=7uLbAnCqyl3ywaGk&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1JUF8EmHiY%2F%3Fmibextid%3DwwXIfr#" target="_blank" class="social-icon" aria-label="Facebook">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/jefranco_nails/" target="_blank" class="social-icon" aria-label="Instagram">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-      </a>
-      <a href="#agenda" class="highlight">Agendar Horário</a>
+      
+      <div class="social-icons">
+          <a href="https://www.instagram.com/jefranco_nails/" target="_blank" title="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=100009264596367&mibextid=wwXIfr" target="_blank" title="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+      </div>
+
+      <a href="#agenda" class="highlight" style="margin-left: 8px;">Agendar Horário</a>
     </div>
   </nav>
 </div>
@@ -512,51 +483,41 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   <section class="hero" id="inicio">
     <span class="eyebrow">✨ Especialista em Nail Design de Luxo</span>
     <h1>Beleza e Durabilidade<br><i style="font-weight:400; color:var(--gold);">em cada detalhe</i></h1>
-    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas de Molde Russo & F1, naturalidade e extrema resistência. Sinta-se poderosa todos os dias.</p>
+    <p class="lead">Especialista em elevar a autoestima através de unhas impecáveis, com foco em técnicas modernas de Molde Russo & F1, naturalidade e extrema durabilidade. Sinta-se poderosa todos os dias.</p>
     
     <div class="hero-actions">
       <a href="#agenda" class="primary" style="width: auto; padding: 16px 32px;">📅 Agendar Meu Horário</a>
       <a href="#servicos" class="secondary-btn">Ver Tabela de Serviços</a>
     </div>
 
-    <!-- BADGES CENTRADOS E PEQUENOS COM DADOS DINÂMICOS DA AVALIAÇÃO -->
     <div class="hero-badges">
       <div class="hero-badge-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 6px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
         <b>Molde Russo & F1</b>
-        <span>Acabamento fino</span>
+        <span>Acabamento fino e natural</span>
       </div>
       <div class="hero-badge-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 6px;"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         <b>Até 30 Dias</b>
-        <span>Sem descamar</span>
+        <span>Sem descamar ou quebrar</span>
       </div>
       <div class="hero-badge-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <b id="badge-rating">5.0 Estrelas</b>
+        <b id="badge-stars">5.0 Estrelas</b>
         <span id="badge-count">Avaliação das clientes</span>
       </div>
       <div class="hero-badge-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 6px;"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.35 2.22 1.45 2.76 1.11 1.25-.78 2.06-2.11 2.24-3.44C7.42 16.32 9.06 14.94 9.06 14.94v-3.02a2.85 2.85 0 0 0-1.99 3.02z"/></svg>
         <b>100% Esterilizado</b>
         <span>Biossegurança total</span>
       </div>
     </div>
   </section>
 
-  <!-- SOBRE MIM (INVERTIDO: Foto à esquerda, Texto à direita) -->
+  <!-- SOBRE MIM -->
   <section id="sobre" class="bio-grid">
     <div class="bio-img-wrap">
-      <img 
-        src="images/jessica_franco_nail_designer_perfil.jpg" 
-        alt="Jéssica Franco Nail Designer" 
-        class="bio-img"
-        onerror="this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80'"
-      >
+      <img src="images/jessica_franco_nail_designer_perfil.jpg" alt="Jéssica Franco Nail Designer" class="bio-img">
     </div>
     <div class="bio-text">
-      <h2 class="section-title">Sobre a Jéssica Franco</h2>
-      <p class="section-subtitle">Trajetória e Propósito.</p>
+      <h2 class="section-title">Sobre a Jéssica</h2>
+      <p class="section-subtitle">Paixão, técnica e dedicação exclusiva à beleza das suas mãos.</p>
       <p>Olá! Sou a <strong>Jéssica Franco</strong>, especialista em Nail Design. O meu propósito vai muito além da estética; o meu objetivo é entregar-lhe confiança, conforto e unhas de excelência.</p>
       <p>Trabalho exclusivamente com técnicas de ponta (<strong>Molde Russo e F1</strong>) que garantem não só uma aparência fina e natural, mas também uma resistência invejável para o seu dia-a-dia.</p>
       <p>No meu estúdio, cada detalhe foi pensado para lhe proporcionar um momento de relaxamento e autocuidado. A sua saúde, segurança e satisfação são as minhas maiores prioridades.</p>
@@ -566,15 +527,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 
   <!-- VITRINE DE SERVIÇOS -->
   <section id="servicos">
-    <h2 class="section-title" style="justify-content: center;">O Que Ofereço</h2>
-    <p class="section-subtitle" style="text-align: center;">Serviços executados com produtos de altíssima performance, técnica consciente e acabamento de alto padrão.</p>
+    <h2 class="section-title">O que ofereço</h2>
+    <p class="section-subtitle">Procedimentos de alta performance com produtos certificados e acabamento fino.</p>
     
     <div class="services-showcase">
         <div class="showcase-card">
           <div>
             <div class="showcase-icon">✨</div>
             <h3>Alongamento de Unhas</h3>
-            <p class="svc-desc">Técnica avançada de reconstrução e curvatura sem lixamento excessivo. Garante estrutura leve, fina, natural e de altíssima resistência.</p>
+            <p class="svc-desc">Alongamentos esculpidos com precisão em Molde Russo ou F1. Extrema resistência sem perder a curvatura natural e a delicadeza.</p>
           </div>
           <div>
             <div class="svc-price">R$ 160,00</div>
@@ -586,7 +547,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <div>
             <div class="showcase-icon">💅</div>
             <h3>Banho de Gel</h3>
-            <p class="svc-desc">Camada protetora em gel de alta densidade aplicada sobre a unha natural para evitar quebras, lascas e descamações, mantendo o comprimento.</p>
+            <p class="svc-desc">Ideal para quem já tem o comprimento desejado mas procura proteger as unhas naturais contra quebras, mantendo o brilho por semanas.</p>
           </div>
           <div>
             <div class="svc-price">R$ 130,00</div>
@@ -597,8 +558,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         <div class="showcase-card">
           <div>
             <div class="showcase-icon">🛡️</div>
-            <h3>Blindagem (Mãos)</h3>
-            <p class="svc-desc">Ideal para fortalecer a lâmina natural contra agentes externos. Acompanha acabamento de cutícula perfeito e esmaltação duradoura.</p>
+            <h3>Blindagem Mãos</h3>
+            <p class="svc-desc">Uma camada protetora leve que fortalece a lâmina natural. Acompanha esmaltação em gel para um acabamento duradouro e impecável.</p>
           </div>
           <div>
             <div class="svc-price">R$ 75,00</div>
@@ -609,8 +570,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         <div class="showcase-card">
           <div>
             <div class="showcase-icon">👣</div>
-            <h3>Blindagem (Pés)</h3>
-            <p class="svc-desc">Cuidados especiais e proteção em gel nos pés para resistir ao atrito de calçados fechados, garantindo unhas impecáveis por até 40 dias.</p>
+            <h3>Blindagem Pés</h3>
+            <p class="svc-desc">Esmaltação em gel nos pés com proteção extra contra atrito de sapatos fechados. Durabilidade de até 40 dias.</p>
           </div>
           <div>
             <div class="svc-price">R$ 80,00</div>
@@ -622,8 +583,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 
   <!-- GALERIA / INSPIRAÇÕES -->
   <section id="portfolio" class="gallery-section">
-    <h2 class="section-title" style="justify-content: center;">Inspirações & Resultados</h2>
-    <p class="section-subtitle" style="text-align: center;">Confira a delicadeza dos acabamentos, curvatura e brilho característicos do estúdio.</p>
+    <h2 class="section-title">Galeria de Inspirações</h2>
+    <p class="section-subtitle">Confira alguns dos trabalhos recentes realizados no estúdio.</p>
 
     <div class="gallery-tabs">
       <button type="button" class="gallery-tab-btn active" onclick="filterGallery('all', this)">Todas as Obras</button>
@@ -703,11 +664,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </section>
 
-  <!-- CURSOS BANNER -->
-  <section class="course-banner"> 
-    <h2>Deseja aprender a minha técnica?</h2> 
-    <p>As vagas para as minhas formações presenciais de Molde Russo e F1 são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e receba a notificação antecipada da próxima turma.</p> 
-    <button type="button" onclick="document.getElementById('modalCursos').classList.add('active')" class="primary" style="width: auto; background: var(--ink);">Entrar na Lista de Espera VIP</button> 
+  <!-- MAPA / LOCALIZAÇÃO -->
+  <section id="localizacao" style="margin-bottom: 70px;">
+    <h2 class="section-title">Onde Estamos</h2>
+    <p class="section-subtitle">Localização de fácil acesso e ambiente acolhedor.</p>
+    <div class="card map-grid" style="padding: 0;">
+      <div class="map-info">
+          <h3 style="font-size: 24px; font-weight: 700; color: var(--ink); margin: 0 0 10px 0;">Estúdio Jéssica Franco</h3>
+          <p style="font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px;">
+              São Sebastião - SP, Morro do abrigo<br>
+              Travessa Matao, número 77 fundos<br>
+              11604-195, Brazil
+          </p>
+          <a href="https://www.google.com/maps/place/Tv.+Mat%C3%A3o,+77+-+Praia+de+S%C3%A3o+Francisco,+S%C3%A3o+Sebasti%C3%A3o+-+SP,+11604-195,+Brazil/@-23.7627735,-45.4213551,17z/data=!3m1!4b1!4m6!3m5!1s0x94d29b7dae793cdd:0xfb17e3708dce5cb!8m2!3d-23.7627784!4d-45.4187802!16s%2Fg%2F11g0tlxct2" target="_blank" class="primary" style="width: auto; display: inline-block;">Abrir no Google Maps</a>
+      </div>
+      <div class="map-iframe-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3663.0760416972045!2d-45.4213551!3d-23.7627735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94d29b7dae793cdd%3A0xfb17e3708dce5cb!2sTv.%20Mat%C3%A3o%2C%2077%20-%20Praia%20de%20S%C3%A3o%20Francisco%2C%20S%C3%A3o%20Sebasti%C3%A3o%20-%20SP%2C%2011604-195%2C%20Brazil!5e0!3m2!1sen!2spt!4v1700000000000!5m2!1sen!2spt" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER DE CURSOS -->
+  <section id="cursos" class="course-banner">
+    <h2>Deseja aprender a minha técnica?</h2>
+    <p>As vagas para as minhas formações presenciais de Molde Russo e F1 são limitadas e esgotam rapidamente. Inscreva-se na lista de espera VIP e receba a notificação antecipada da próxima turma.</p>
+    <button type="button" onclick="document.getElementById('modalCursos').classList.add('active')" class="primary" style="width: auto; background: var(--ink);">Entrar na Lista de Espera VIP</button>
   </section>
 
   <!-- SISTEMA DE AGENDAMENTO -->
@@ -775,7 +756,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         <button type="submit" class="primary" id="btnBooking" disabled>Preencha os dados para confirmar</button>
       </form>
 
-      <!-- RESUMO DA COMPRA -->
       <aside class="card summary">
         <h3>Resumo</h3>
         <div class="summary-row"><span>Serviço</span><b id="sumService">-</b></div>
@@ -788,38 +768,35 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
     </div>
   </div>
 
-  <!-- SLIDER DE DEPOIMENTOS E AVALIAÇÃO INTELIGENTE (NOVO) -->
-  <section id="avaliacoes" class="rating-section" style="background: transparent; border: none; padding: 0;">
+  <!-- SISTEMA DE AVALIAÇÃO INTELIGENTE (VERIFICADA E CARROSSEL) -->
+  <section id="avaliacoes" class="rating-section">
     <h2 class="section-title" style="justify-content: center;">Avaliações das Clientes</h2>
-    <p class="section-subtitle" style="text-align: center; margin-bottom: 24px;">A experiência de quem já frequenta o estúdio.</p>
+    <p class="section-subtitle" style="text-align: center; margin-bottom: 24px;">A experiência de quem já frequenta o nosso espaço.</p>
 
-    <!-- O Carrossel (Slider) Deslizante -->
-    <div class="testimonials-wrapper">
-       <button class="slider-btn left" onclick="slideTestimonials(-1)">&#10094;</button>
-       <div id="dynamic-testimonials" class="testimonials-slider">
-           <p style="color: var(--muted); text-align: center; width: 100%; padding: 20px;">A carregar avaliações...</p>
-       </div>
-       <button class="slider-btn right" onclick="slideTestimonials(1)">&#10095;</button>
+    <!-- CARROSSEL DE REVIEWS (Preenchido via JS) -->
+    <div class="reviews-slider-container">
+        <div class="reviews-slider" id="reviews-slider">
+            <div style="width:100%; text-align:center; padding: 20px; color: var(--muted); font-size:14px;">A carregar avaliações recentes...</div>
+        </div>
     </div>
     
-    <!-- Formulário Restrito Abaixo -->
-    <div class="rating-box" style="margin-top: 30px;">
-      <h3 style="margin-top: 0; font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--ink);">Já é cliente? Deixe o seu feedback!</h3>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Apenas clientes verificadas podem submeter avaliações.</p>
-      
-      <!-- Passo 1: Verificação de Telefone -->
+    <!-- ÁREA DE DEIXAR REVIEW -->
+    <div class="rating-box">
+      <h3 style="margin-top: 0; font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--ink);">Deixe a sua Avaliação</h3>
+      <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Exclusivo para clientes que já realizaram procedimentos.</p>
+
+      <!-- Passo 1: Verificação -->
       <div id="verify-area">
         <div style="display: flex; gap: 10px;">
-          <input type="tel" id="verifyPhone" placeholder="O seu WhatsApp (ex: 11999999999)" style="flex: 1; border-color: var(--line);">
+          <input type="tel" id="verifyPhone" placeholder="O seu WhatsApp..." style="flex: 1; border-color: var(--line);">
           <button type="button" onclick="verifyClient()" id="btnVerify" class="primary" style="margin-top: 0; width: auto;">Verificar</button>
         </div>
-        <p id="verify-msg" style="color: #d32f2f; font-size: 12px; margin-top: 10px; display: none; font-weight: 600;">Número não encontrado. Certifique-se que inseriu apenas números (com o indicativo).</p>
+        <p id="verify-msg" style="color: #d32f2f; font-size: 12px; margin-top: 10px; display: none; font-weight: 600;">O seu número não foi encontrado nas nossas marcações recentes.</p>
       </div>
 
-      <!-- Passo 2: Formulário de Avaliação (Escondido) -->
+      <!-- Passo 2: Formulário -->
       <form id="review-form-area" onsubmit="submitReview(event)">
-        <h4 style="margin-top: 0; font-size: 16px; color: var(--gold);">Bem-vinda de volta, <span id="clientNameDisplay">Cliente</span>!</h4>
-        
+        <h4 style="margin-top: 0; font-size: 15px; color: var(--gold);">Bem-vinda de volta, <span id="clientNameDisplay">Cliente</span>!</h4>
         <div class="star-rating">
           <input type="radio" id="star5" name="rating" value="5" required/><label for="star5">★</label>
           <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
@@ -828,36 +805,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
           <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
         </div>
 
-        <textarea id="reviewText" maxlength="150" rows="3" placeholder="Escreva o seu comentário sobre o serviço prestado..." oninput="document.getElementById('charCounter').innerText = this.value.length + '/150'"></textarea>
+        <textarea id="reviewText" maxlength="150" rows="3" placeholder="Escreva o seu comentário (opcional)..." oninput="document.getElementById('charCounter').innerText = this.value.length + '/150'"></textarea>
         <span class="char-count" id="charCounter">0/150</span>
 
         <button type="submit" id="btnSubmitReview" class="primary" style="margin-top: 20px;">Publicar Avaliação</button>
       </form>
-    </div>
-  </section>
-
-  <!-- LOCALIZAÇÃO -->
-  <section id="localizacao" style="max-width: 1000px; margin: 0 auto 70px;">
-    <h2 class="section-title" style="justify-content: center;">O Nosso Espaço</h2>
-    <p class="section-subtitle" style="text-align: center; margin-bottom: 32px;">Venha visitar-nos e desfrute de um ambiente acolhedor e exclusivo.</p>
-    
-    <div class="card location-card">
-      <div class="location-info">
-        <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0 0 16px; color: var(--ink);">Localização</h3>
-        <p style="color: var(--muted); font-size: 15px; line-height: 1.7; margin-bottom: 24px;">
-          <strong>Morro do Abrigo</strong><br>
-          Travessa Matão, Número 77 (Fundos)<br>
-          São Sebastião - SP<br>
-          11604-195, Brasil
-        </p>
-        <a href="https://www.google.com/maps/place/Tv.+Mat%C3%A3o,+77+-+Praia+de+S%C3%A3o+Francisco,+S%C3%A3o+Sebasti%C3%A3o+-+SP,+11604-195,+Brazil/@-23.7627735,-45.4213551,17z/data=!3m1!4b1!4m6!3m5!1s0x94d29b7dae793cdd:0xfb17e3708dce5cb!8m2!3d-23.7627784!4d-45.4187802!16s%2Fg%2F11g0tlxct2?entry=ttu&g_ep=EgoyMDI2MDgxMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="secondary-btn" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 12px 20px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          Abrir no Google Maps
-        </a>
-      </div>
-      <div class="location-map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.438259461148!2d-45.4213551!3d-23.7627784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94d29b7dae793cdd%3A0xfb17e3708dce5cb!2sTv.%20Mat%C3%A3o%2C%2077%20-%20Praia%20de%20S%C3%A3o%20Francisco%2C%20S%C3%A3o%20Sebasti%C3%A3o%20-%20SP%2C%2011604-195%2C%20Brazil!5e0!3m2!1spt-BR!2sbr!4v1714000000000!5m2!1spt-BR!2sbr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
     </div>
   </section>
 
@@ -895,16 +847,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
         Sim! No Banho de Gel e no Alongamento a esmaltação em gel simples já está 100% inclusa. Decorações especiais podem ser selecionadas na opção de Extras.
       </div>
     </div>
-
-    <div class="faq-item" onclick="this.classList.toggle('active')">
-      <div class="faq-question">
-        <span>O procedimento danifica a minha unha natural?</span>
-        <span class="faq-toggle">▼</span>
-      </div>
-      <div class="faq-answer">
-        Não! Trabalhamos com lixamento consciente e técnico sem agredir a lâmina natural, utilizando produtos certificados e hipoalergênicos.
-      </div>
-    </div>
   </section>
 
   <!-- FOOTER -->
@@ -919,33 +861,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   📅 Agendar Agora
 </a>
 
-<!-- MODAL ADDONS / CARRINHO MÚLTIPLO (CENTRALIZADO) -->
+<!-- MODAL ADDONS / CARRINHO MÚLTIPLO -->
 <div id="modalAddons" class="modal-overlay">
-  <div class="card modal-content">
+  <div class="card modal-content" style="max-width: 440px; padding: 25px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5px;">
       <h2 style="margin:0; font-size:22px; font-family:'Cormorant Garamond', serif;">Personalize o seu Momento</h2>
       <button type="button" onclick="fecharAddons()" style="border:none; background:transparent; font-size:24px; color:var(--muted);">&times;</button>
     </div>
     <p style="color:var(--muted); font-size:13px; margin-bottom:20px; line-height: 1.4;">Aproveite para realizar mais de um procedimento no mesmo dia e adicione extras como Nail Art.</p>
     
-    <!-- Grelha de Procedimentos Adicionais -->
-    <div id="additionalServicesGrid" style="margin-bottom: 20px;">
-      <!-- Serviços gerados via Javascript -->
-    </div>
-
-    <!-- Divisória Elegante -->
+    <div id="additionalServicesGrid" style="margin-bottom: 20px;"></div>
     <hr style="border: 0; border-top: 1px dashed var(--line); margin: 20px 0;">
-
-    <!-- Grelha de Extras (Nail Art) -->
-    <div id="addonsGrid">
-      <!-- Opções geradas via Javascript -->
-    </div>
+    <div id="addonsGrid"></div>
     
     <button type="button" class="primary" onclick="confirmarAddons()" style="margin-top: 25px;">Confirmar Seleção</button>
   </div>
 </div>
 
-<!-- MODAL CURSOS (CENTRALIZADO) -->
+<!-- MODAL CURSOS -->
 <div id="modalCursos" class="modal-overlay">
   <div class="card modal-content">
     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -968,11 +901,28 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
   </div>
 </div>
 
+<!-- MODAL SUCESSO AGENDAMENTO -->
+<div id="modalSuccessBooking" class="modal-overlay">
+  <div class="card modal-content" style="text-align: center; padding: 40px 30px;">
+    <div style="font-size: 50px; color: var(--gold); margin-bottom: 15px;">✨</div>
+    <h2 style="margin:0 0 10px; font-size:26px; font-family:'Cormorant Garamond', serif; color: var(--ink);">Reserva Efetuada!</h2>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:25px; line-height: 1.5;">O seu agendamento foi registado com sucesso no nosso sistema.</p>
+    <button type="button" id="btnSendWhatsapp" class="primary" style="margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+      Notificar pelo WhatsApp
+    </button>
+    <button type="button" onclick="document.getElementById('modalSuccessBooking').classList.remove('active')" style="margin-top: 15px; background: transparent; border: none; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer;">Fechar</button>
+  </div>
+</div>
+
 <div id="toast" class="toast">Mensagem</div>
 
 <!-- SCRIPT JS COMPLETO -->
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
+
+// IMPORTANTE: Insira aqui o seu número real com código de país (55 para Brasil) e DDD.
+let jessicaPhone = "5512992414347"; 
 
 const services = [
   {id:"alongamento", icon:"✨", name:"Alongamento de Unhas", desc:"Molde Russo ou Molde F1", price:160},
@@ -987,13 +937,6 @@ let selectedService = services[0];
 let selectedTime = null;
 let occupiedBookings = []; 
 let blockedDates = []; 
-
-// LÓGICA DO SLIDER DE AVALIAÇÕES
-function slideTestimonials(dir) {
-    const slider = document.getElementById('dynamic-testimonials');
-    const scrollAmount = 320; // Largura do card + gap
-    slider.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
-}
 
 // LÓGICA DE AVALIAÇÃO VERIFICADA
 let verifiedClientName = "";
@@ -1028,7 +971,7 @@ async function verifyClient() {
           verifiedClientPhone = clientFound['Telefone'];
           
           document.getElementById('verify-area').style.display = "none";
-          document.getElementById('clientNameDisplay').innerText = verifiedClientName.split(' ')[0];
+          document.getElementById('clientNameDisplay').innerText = verifiedClientName;
           document.getElementById('review-form-area').style.display = "block";
       } else {
           msg.innerText = "O seu número não foi encontrado nas nossas marcações recentes.";
@@ -1049,7 +992,15 @@ async function submitReview(e) {
     btn.innerText = "A enviar...";
     btn.disabled = true;
 
-    const rating = document.querySelector('input[name="rating"]:checked').value;
+    const ratingInput = document.querySelector('input[name="rating"]:checked');
+    if(!ratingInput) {
+        showToast("Por favor, selecione uma nota de estrelas.", true);
+        btn.innerText = "Publicar Avaliação";
+        btn.disabled = false;
+        return;
+    }
+
+    const rating = ratingInput.value;
     const text = document.getElementById('reviewText').value;
 
     const payload = {
@@ -1069,7 +1020,7 @@ async function submitReview(e) {
                 <p style="color: var(--muted); font-size: 14px;">O seu feedback ajuda o estúdio a continuar a oferecer um serviço de excelência.</p>
             </div>
         `;
-        fetchOccupiedTimes(); // Re-fetch para atualizar o slider imediatamente
+        fetchData(); // Recarrega os dados para mostrar o review recem criado no carrossel
     } catch(err) {
         showToast("Erro ao enviar a avaliação.", true);
         btn.innerText = "Publicar Avaliação";
@@ -1077,6 +1028,7 @@ async function submitReview(e) {
     }
 }
 
+// LOGICA DE CARRINHO E EXTRAS
 const addonsList = [
   { id: "encap-par", name: "Encapsulada / Baby Boomer (Par)", price: 15, type: 'check' },
   { id: "encap-mao", name: "Encapsulada / Baby Boomer (Mão Completa)", price: 60, type: 'check' },
@@ -1087,10 +1039,8 @@ const addonsList = [
 
 let selectedAdditionalServices = [];
 let tempAdditionalServices = {};
-
 let selectedAddons = [];
 let tempAddons = {};
-
 let currentTotalPrice = 0;
 
 function abrirAddons() {
@@ -1118,7 +1068,7 @@ function abrirAddons() {
           </div>`;
       }
   });
-  $("#additionalServicesGrid").innerHTML = hasOther ? extraSvcHtml : '';
+  document.getElementById("additionalServicesGrid").innerHTML = hasOther ? extraSvcHtml : '';
 
   let htmlAddons = '<h3 style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 15px; margin-bottom: 12px; color: var(--ink);">Nail Art & Extras</h3>';
   addonsList.forEach(a => {
@@ -1140,7 +1090,7 @@ function abrirAddons() {
       }
       htmlAddons += `</div>`;
   });
-  $("#addonsGrid").innerHTML = htmlAddons;
+  document.getElementById("addonsGrid").innerHTML = htmlAddons;
   document.getElementById('modalAddons').classList.add('active');
 }
 
@@ -1219,8 +1169,8 @@ function showToast(message, isError = false) {
 }
 
 function renderServices() {
-  $("#serviceGrid").innerHTML = services.map((s, i) => `
-    <div class="service ${s.id === selectedService.id ? "active":""}" onclick="selectSvc('${s.id}', this)">
+  document.getElementById("serviceGrid").innerHTML = services.map((s, i) => `
+    <div class="service ${s.id === selectedService.id ? "active":""}" onclick="selectServiceDirect('${s.id}')">
       <div class="badge">${s.icon}</div>
       <div><b>${s.name}</b><small>${s.desc}</small></div>
       <div class="price">${BRL.format(s.price)}</div>
@@ -1271,7 +1221,7 @@ function renderCalendarUI() {
     const daysInMonth = new Date(y, m + 1, 0).getDate();
 
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    $("#calTitle").textContent = `${monthNames[m]} ${y}`;
+    document.getElementById("calTitle").textContent = `${monthNames[m]} ${y}`;
 
     let html = "";
     for (let i = 0; i < firstDay; i++) { html += `<div class="cal-num empty"></div>`; }
@@ -1300,97 +1250,72 @@ function renderCalendarUI() {
             html += `<div class="${classes}" onclick="pickDate('${cellDateStr}')">${d}</div>`;
         }
     }
-    $("#calDays").innerHTML = html;
+    document.getElementById("calDays").innerHTML = html;
 }
 
 function pickDate(dateStr) {
     selectedDateStr = dateStr;
-    $("#date").value = dateStr;
+    document.getElementById("date").value = dateStr;
     renderCalendarUI(); 
     renderTimes(); 
 }
 
-async function fetchOccupiedTimes() {
+async function fetchData() {
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_all");
     const data = await res.json();
     
+    // Tratando Bloqueios
     if (data && data.blocked) {
-      blockedDates = data.blocked.map(b => {
-        let dStr = b['DataBloqueio'] || b['Data'];
-        return normalizeDateString(dStr);
-      });
+      blockedDates = data.blocked.map(b => normalizeDateString(b['DataBloqueio'] || b['Data']));
     }
 
+    // Tratando Agendamentos
     if (data && data.bookings) {
       occupiedBookings = data.bookings.filter(b => b['Status'] !== 'Cancelado').map(b => {
-        let dataStr = b['Data Agendamento'];
         let horaStr = String(b['Hora']);
         let timeMatch = horaStr.match(/\d{1,2}:\d{2}/);
-        let horaLimpa = timeMatch ? timeMatch[0] : horaStr;
-        return { date: normalizeDateString(dataStr), time: horaLimpa };
+        return { date: normalizeDateString(b['Data Agendamento']), time: timeMatch ? timeMatch[0] : horaStr };
       });
     }
-    
-    // Atualiza o Badge e Constrói o Slider Dinamicamente
+
+    // Tratando Avaliações do Carrossel e Badge
     if (data && data.reviews && data.reviews.length > 0) {
-        let totalStars = 0;
-        let validReviews = 0;
-        let recentReviewsHTML = '';
-
-        const sortedReviews = [...data.reviews].reverse();
-
-        sortedReviews.forEach((r, index) => {
-            let stars = parseFloat(r['Estrelas']);
-            if(!isNaN(stars)) {
-                totalStars += stars;
-                validReviews++;
-            }
+        const validReviews = data.reviews.filter(r => Number(r['Estrelas']) > 0);
+        if(validReviews.length > 0) {
+            const sum = validReviews.reduce((acc, r) => acc + Number(r['Estrelas']), 0);
+            const avg = (sum / validReviews.length).toFixed(1);
             
-            if(index < 10 && r['Comentario'] && r['Comentario'].trim() !== '') {
-                let starString = '★'.repeat(Math.floor(stars)) + '☆'.repeat(5 - Math.floor(stars));
-                let clientName = r['Cliente'] || 'Cliente Verificada';
-                let initial = clientName.charAt(0).toUpperCase();
-                
-                recentReviewsHTML += `
+            document.getElementById('badge-stars').innerText = `${avg} Estrelas`;
+            document.getElementById('badge-count').innerText = `${validReviews.length} avaliações verificadas`;
+            
+            const slider = document.getElementById('reviews-slider');
+            slider.innerHTML = validReviews.slice(-10).reverse().map(r => `
                 <div class="review-card">
-                    <div class="review-stars">${starString}</div>
+                    <div class="review-stars">${'★'.repeat(Number(r['Estrelas']))}${'☆'.repeat(5-Number(r['Estrelas']))}</div>
                     <p class="review-text">"${r['Comentario']}"</p>
                     <div class="review-author">
-                        <div class="review-avatar-text">${initial}</div>
+                        <div class="review-avatar" style="display:grid; place-items:center; font-weight:bold; color:var(--muted); font-size:18px;">${String(r['Cliente']).charAt(0).toUpperCase()}</div>
                         <div>
-                            <b>${clientName}</b>
+                            <b>${r['Cliente']}</b>
                             <span>Cliente Verificada</span>
                         </div>
                     </div>
-                </div>`;
-            }
-        });
-
-        if (validReviews > 0) {
-            let avg = (totalStars / validReviews).toFixed(1);
-            document.getElementById('badge-rating').innerText = avg + " Estrelas";
-            document.getElementById('badge-count').innerText = validReviews + (validReviews === 1 ? " avaliação" : " avaliações verificadas");
-        }
-
-        if(recentReviewsHTML !== '') {
-            document.getElementById('dynamic-testimonials').innerHTML = recentReviewsHTML;
-        } else {
-            document.getElementById('dynamic-testimonials').innerHTML = '<p style="color: var(--muted); text-align: center; width: 100%; padding: 20px;">As avaliações aparecerão aqui em breve.</p>';
+                </div>
+            `).join('');
         }
     } else {
-        document.getElementById('dynamic-testimonials').innerHTML = '<p style="color: var(--muted); text-align: center; width: 100%; padding: 20px;">Seja a primeira a avaliar o nosso estúdio.</p>';
+        document.getElementById('reviews-slider').innerHTML = `<div style="width:100%; text-align:center; padding: 20px; color: var(--muted); font-size:14px;">Ainda não existem avaliações. Seja a primeira a deixar o seu feedback!</div>`;
     }
-    
+
     renderCalendarUI(); 
-    if($("#date").value) renderTimes();
-  } catch(e) { console.error("Erro a ler os dados.", e); }
+    if(document.getElementById("date").value) renderTimes();
+  } catch(e) { console.error("Erro a ler dados.", e); }
 }
 
 function renderTimes() {
-  const dateVal = $("#date").value;
-  const timeGrid = $("#timeGrid");
-  const btnBooking = $("#btnBooking");
+  const dateVal = document.getElementById("date").value;
+  const timeGrid = document.getElementById("timeGrid");
   
   selectedTime = null;
   updateSum();
@@ -1433,17 +1358,6 @@ function renderTimes() {
   ).join("");
 }
 
-function selectSvc(id, el) {
-  document.querySelectorAll(".service").forEach(b => b.classList.remove("active"));
-  el.classList.add("active");
-  selectedService = services.find(s => s.id === id);
-  
-  selectedAdditionalServices = selectedAdditionalServices.filter(s => s.id !== id);
-  
-  abrirAddons();
-  updateSum();
-}
-
 function selectTime(time, el) {
   document.querySelectorAll(".time").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
@@ -1463,22 +1377,22 @@ function updateSum() {
 
   let addonsText = extraTextArray.join('<br>+ ');
 
-  $("#sumService").innerHTML = `${selectedService.name} ${addonsText ? `<div style="color:var(--gold); font-size:12px; margin-top:4px;">+ ${addonsText}</div>` : ''}`;
-  $("#sumPrice").textContent = BRL.format(currentTotalPrice);
+  document.getElementById("sumService").innerHTML = `${selectedService.name} ${addonsText ? `<div style="color:var(--gold); font-size:12px; margin-top:4px;">+ ${addonsText}</div>` : ''}`;
+  document.getElementById("sumPrice").textContent = BRL.format(currentTotalPrice);
   
-  if ($("#date").value) {
-      const [y, m, d] = $("#date").value.split('-');
-      $("#sumDate").textContent = `${d}/${m}/${y}`;
+  if (document.getElementById("date").value) {
+      const [y, m, d] = document.getElementById("date").value.split('-');
+      document.getElementById("sumDate").textContent = `${d}/${m}/${y}`;
   } else {
-      $("#sumDate").textContent = "Selecione";
+      document.getElementById("sumDate").textContent = "Selecione";
   }
   
-  $("#sumTime").textContent = selectedTime || "Selecione";
-  $("#sumNotes").textContent = $("#notes").value || "-";
+  document.getElementById("sumTime").textContent = selectedTime || "Selecione";
+  document.getElementById("sumNotes").textContent = document.getElementById("notes").value || "-";
   
-  const isReady = selectedService && selectedTime && $("#date").value;
-  $("#btnBooking").disabled = !isReady;
-  $("#btnBooking").textContent = isReady ? `Confirmar Reserva (${BRL.format(currentTotalPrice)})` : "Preencha os dados para confirmar";
+  const isReady = selectedService && selectedTime && document.getElementById("date").value;
+  document.getElementById("btnBooking").disabled = !isReady;
+  document.getElementById("btnBooking").textContent = isReady ? `Confirmar Reserva (${BRL.format(currentTotalPrice)})` : "Preencha os dados para confirmar";
 }
 
 function filterGallery(category, btn) {
@@ -1494,14 +1408,14 @@ function filterGallery(category, btn) {
   });
 }
 
-$("#notes").addEventListener("input", updateSum);
+document.getElementById("notes").addEventListener("input", updateSum);
 
-$("#bookingForm").onsubmit = async e => {
+document.getElementById("bookingForm").onsubmit = async e => {
   e.preventDefault();
   if(!selectedTime) return showToast("Por favor, selecione um horário.", true);
   
-  $("#btnBooking").textContent = "A registrar agendamento...";
-  $("#btnBooking").disabled = true;
+  document.getElementById("btnBooking").textContent = "A registar...";
+  document.getElementById("btnBooking").disabled = true;
 
   let extraTextArray = [];
   selectedAdditionalServices.forEach(s => extraTextArray.push(s.name));
@@ -1512,14 +1426,14 @@ $("#bookingForm").onsubmit = async e => {
 
   const payload = {
     type: 'booking',
-    client: $("#name").value,
-    phone: $("#phone").value,
+    client: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
     service: serviceNameFinal,
-    date: $("#date").value,
+    date: document.getElementById("date").value,
     time: selectedTime,
     price: currentTotalPrice,
-    paymentMethod: $("#paymentMethod").value,
-    notes: $("#notes").value
+    paymentMethod: document.getElementById("paymentMethod").value,
+    notes: document.getElementById("notes").value
   };
 
   try {
@@ -1527,67 +1441,69 @@ $("#bookingForm").onsubmit = async e => {
     const json = await res.json();
     if(json.status === "error") {
       showToast("Ops! Este horário acabou de ser preenchido. Escolha outro.", true);
-      fetchOccupiedTimes(); 
+      fetchData(); 
     } else {
-      showToast("Reserva confirmada com sucesso! Aguardamos você.");
-      
-      // NOVO: Redirecionamento automático para o WhatsApp da Jéssica
-      let dateArr = $("#date").value.split('-');
+      let dateArr = document.getElementById("date").value.split('-');
       let displayDate = `${dateArr[2]}/${dateArr[1]}/${dateArr[0]}`;
-      let wpMessage = `Olá Jéssica! O meu agendamento foi registado no site. ✨\n\n👤 *Nome:* ${$("#name").value}\n💅 *Serviço:* ${serviceNameFinal}\n📅 *Data:* ${displayDate}\n⏰ *Horário:* ${selectedTime}\n💳 *Pagamento:* ${$("#paymentMethod").value}\n\nAté breve!`;
+      let wpMessage = `Olá Jéssica! O meu agendamento foi registado no site. ✨\n\n👤 *Nome:* ${document.getElementById("name").value}\n💅 *Serviço:* ${serviceNameFinal}\n📅 *Data:* ${displayDate}\n⏰ *Horário:* ${selectedTime}\n💳 *Pagamento:* ${document.getElementById("paymentMethod").value}\n\nAté breve!`;
       
-      // ATENÇÃO: Substitua os zeros pelo seu número de WhatsApp com o código do país (ex: 5511999999999)
-      let jessicaPhone = "5512992414347"; 
-      window.open(`https://api.whatsapp.com/send?phone=${jessicaPhone}&text=${encodeURIComponent(wpMessage)}`, '_blank');
+      let waUrl = `https://api.whatsapp.com/send?phone=${jessicaPhone}&text=${encodeURIComponent(wpMessage)}`;
+      
+      document.getElementById('btnSendWhatsapp').onclick = function() {
+          window.open(waUrl, '_blank');
+          document.getElementById('modalSuccessBooking').classList.remove('active');
+      };
+      
+      document.getElementById('modalSuccessBooking').classList.add('active');
 
       e.target.reset();
       selectedTime = null;
       selectedDateStr = "";
-      $("#date").value = "";
+      document.getElementById("date").value = "";
       selectedAddons = [];
       selectedAdditionalServices = [];
       tempAddons = {};
       tempAdditionalServices = {};
       updateSum();
-      renderCalendarUI();
-      fetchOccupiedTimes(); 
+      fetchData(); 
     }
   } catch(err) {
     showToast("Erro na ligação com o servidor.", true);
   }
 
-  $("#btnBooking").textContent = "Preencha os dados para confirmar";
+  document.getElementById("btnBooking").textContent = "Preencha os dados para confirmar";
+  document.getElementById("btnBooking").disabled = false;
 };
 
-$("#courseForm").onsubmit = async e => {
+document.getElementById("courseForm").onsubmit = async e => {
   e.preventDefault();
-  $("#btnCourse").textContent = "Cadastrando...";
-  $("#btnCourse").disabled = true;
+  document.getElementById("btnCourse").textContent = "Cadastrando...";
+  document.getElementById("btnCourse").disabled = true;
 
   const payload = {
     type: 'course',
-    client: $("#cName").value,
-    phone: $("#cPhone").value,
-    level: $("#cLevel").value
+    client: document.getElementById("cName").value,
+    phone: document.getElementById("cPhone").value,
+    level: document.getElementById("cLevel").value
   };
 
   try {
     await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
     showToast("Inscrição na Lista VIP confirmada! Entraremos em contacto.");
   } catch(err) {
-    showToast("Inscrição na Lista VIP confirmada!");
+    showToast("Erro ao confirmar inscrição.", true);
   }
 
   e.target.reset();
   document.getElementById('modalCursos').classList.remove('active');
-  $("#btnCourse").textContent = "Quero Ser Notificada";
-  $("#btnCourse").disabled = false;
+  document.getElementById("btnCourse").textContent = "Quero Ser Notificada";
+  document.getElementById("btnCourse").disabled = false;
 };
 
 // Inicialização
 renderServices();
 updateSum();
-fetchOccupiedTimes(); 
+fetchData();
 </script>
 </body>
 </html>
