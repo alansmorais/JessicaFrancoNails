@@ -483,7 +483,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 <div class="topbar-wrapper">
   <nav class="topbar">
     <a href="#" class="brand-logo" style="text-decoration: none;">
-      <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Logo" style="max-height: 55px; width: auto; display: block;">
+      <img src="images/jessica_franco_nail_designer_logo.jpg" alt="Jéssica Franco Logo" style="max-height: 100px; width: auto; display: block;">
     </a>
     
     <div class="middle-nav">
@@ -1402,8 +1402,6 @@ function renderTimes() {
   const dayOfWeek = dateObj.getDay();
   const dateValStr = normalizeDateString(dateVal);
 
-  $("#dateError").style.display = "none";
-
   let horariosDoDia = [];
   if (dayOfWeek === 6) { 
     horariosDoDia = ["09:00", "11:30"]; 
@@ -1539,7 +1537,7 @@ $("#bookingForm").onsubmit = async e => {
       let wpMessage = `Olá Jéssica! O meu agendamento foi registado no site. ✨\n\n👤 *Nome:* ${$("#name").value}\n💅 *Serviço:* ${serviceNameFinal}\n📅 *Data:* ${displayDate}\n⏰ *Horário:* ${selectedTime}\n💳 *Pagamento:* ${$("#paymentMethod").value}\n\nAté breve!`;
       
       // ATENÇÃO: Substitua os zeros pelo seu número de WhatsApp com o código do país (ex: 5511999999999)
-      let jessicaPhone = "55 12 99241-4347"; 
+      let jessicaPhone = "5512992414347"; 
       window.open(`https://api.whatsapp.com/send?phone=${jessicaPhone}&text=${encodeURIComponent(wpMessage)}`, '_blank');
 
       e.target.reset();
