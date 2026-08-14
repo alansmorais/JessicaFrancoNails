@@ -44,6 +44,18 @@
     </style>
 </head>
 <body class="bg-brand-bg text-gray-800 font-sans h-screen flex overflow-hidden">
+    <!-- Ecrã de Login (Desativado temporariamente) -->
+    <div id="login-screen" class="fixed inset-0 bg-brand-dark flex-col items-center justify-center z-[100] hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center w-11/12 max-w-sm">
+            <div class="w-16 h-16 bg-blue-50 text-brand-active rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
+            <h2 class="text-brand-dark font-bold text-2xl mb-2">Acesso Restrito</h2>
+            <form id="loginForm">
+                <input type="password" id="adminPwd" placeholder="Palavra-passe" required class="w-full p-4 rounded-xl border border-gray-200 mb-5 text-center text-lg outline-none focus:border-brand-active focus:ring-2 focus:ring-blue-100 transition">
+                <button type="submit" id="btnLogin" class="w-full bg-brand-active text-white font-bold p-4 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-blue-500/30">Entrar no Painel</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Barra Lateral de Navegação -->
     <aside id="sidebar" class="w-64 bg-brand-dark text-gray-300 flex-col hidden md:flex z-[200] shadow-2xl fixed md:relative h-full inset-y-0 left-0 transition-all">
         <div class="h-16 flex items-center justify-between px-6 border-b border-gray-700/50 bg-gray-900/20">
@@ -159,17 +171,32 @@
             </div>
 
             <!-- TAB: CURSOS -->
-            <div id="tab-cursos" class="tab-content"><div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="text-xl font-bold mb-6">Inscrições na Lista do Curso</h3><div id="lista-cursos" class="space-y-3"></div></div></div>
+            <div id="tab-cursos" class="tab-content">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold mb-6">Inscrições na Lista do Curso</h3>
+                    <div id="lista-cursos" class="space-y-3"></div>
+                </div>
+            </div>
             
             <!-- TAB: FINANCEIRO -->
             <div id="tab-financeiro" class="tab-content">
                 <div class="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
                     <h3 class="text-xl font-bold mb-6">Registo Financeiro</h3>
                     <form id="financeForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <input type="date" id="finDate" required class="p-3 border rounded-xl"><select id="finCat" required class="p-3 border rounded-xl"><option value="Entrada">Entrada</option><option value="Saida">Saída (Custo)</option></select><input type="number" id="finValue" placeholder="Valor" required step="0.01" class="p-3 border rounded-xl"><input type="text" id="finDesc" placeholder="Descrição" required class="p-3 border rounded-xl md:col-span-2"><button type="submit" id="btnFin" class="md:col-span-5 bg-brand-active text-white font-bold p-3 rounded-xl">Registar Transação</button>
+                        <input type="date" id="finDate" required class="p-3 border rounded-xl">
+                        <select id="finCat" required class="p-3 border rounded-xl">
+                            <option value="Entrada">Entrada</option>
+                            <option value="Saida">Saída (Custo)</option>
+                        </select>
+                        <input type="number" id="finValue" placeholder="Valor" required step="0.01" class="p-3 border rounded-xl">
+                        <input type="text" id="finDesc" placeholder="Descrição" required class="p-3 border rounded-xl md:col-span-2">
+                        <button type="submit" id="btnFin" class="md:col-span-5 bg-brand-active text-white font-bold p-3 rounded-xl hover:bg-blue-600 transition">Registar Transação</button>
                     </form>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"><h3 class="font-bold mb-4">Histórico Transacional</h3><div id="lista-financeiro" class="space-y-3"></div></div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="font-bold mb-4">Histórico Transacional</h3>
+                    <div id="lista-financeiro" class="space-y-3"></div>
+                </div>
             </div>
 
             <!-- TAB: BLOQUEIO DE FERIAS E HORARIOS -->
@@ -192,7 +219,7 @@
                     <h4 class="font-bold text-gray-700 mb-3 border-t pt-4">Lista de Dias Bloqueados</h4>
                     <div id="lista-bloqueios" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-8"></div>
 
-                    <!-- NOVO: BLOQUEIO DE HORÁRIOS ESPECÍFICOS -->
+                    <!-- BLOQUEIO DE HORÁRIOS ESPECÍFICOS -->
                     <hr class="my-8 border-gray-200">
                     <h3 class="text-xl font-bold mb-6">Bloquear Horário Específico</h3>
                     <form id="blockHourForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -1090,6 +1117,49 @@
                             <button onclick="unblockDate('${b['DataBloqueio']}')" class="text-red-600 hover:text-red-800 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `).join('');
+                }
+
+                // Renderizar Cursos
+                const cursosList = document.getElementById('lista-cursos');
+                if(!data.courses || data.courses.length === 0) {
+                    cursosList.innerHTML = `<p class="text-gray-400 italic text-sm text-center">Nenhuma inscrição registada.</p>`;
+                } else {
+                    const coursesArr = [...data.courses].reverse();
+                    cursosList.innerHTML = coursesArr.map(c => `
+                        <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md transition">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${c['Nome'] || c['Cliente']}</h4>
+                                <p class="text-xs text-gray-500 mt-1">Whats: ${c['Telefone']} · Nível: ${c['Nivel']}</p>
+                            </div>
+                            <button onclick="window.open('https://api.whatsapp.com/send?phone=${String(c['Telefone']).replace(/\D/g,'')}', '_blank')" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition" title="Contactar no WhatsApp">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+
+                // Renderizar Financeiro
+                const financeList = document.getElementById('lista-financeiro');
+                if(!data.finance || data.finance.length === 0) {
+                    financeList.innerHTML = `<p class="text-gray-400 italic text-sm text-center">Nenhuma transação registada.</p>`;
+                } else {
+                    const financeArr = [...data.finance].reverse();
+                    financeList.innerHTML = financeArr.map(f => {
+                        const isEntrada = f['Categoria'] === 'Entrada';
+                        const valColor = isEntrada ? 'text-green-600' : 'text-red-600';
+                        const sign = isEntrada ? '+' : '-';
+                        let dataT = String(f['Data Transacao'] || f['Data Transação'] || '');
+                        if(dataT.includes('T')) dataT = dataT.split('T')[0];
+
+                        return `
+                        <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md transition">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${f['Descricao'] || f['Descrição']}</h4>
+                                <p class="text-xs text-gray-500 mt-1">${dataT} <span class="px-2 py-0.5 ml-2 rounded text-[10px] font-bold ${isEntrada ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}">${f['Categoria']}</span></p>
+                            </div>
+                            <div class="font-bold text-lg ${valColor}">${sign} R$ ${Number(f['Valor']||0).toFixed(2)}</div>
+                        </div>`;
+                    }).join('');
                 }
 
                 // Não soma as receitas nem marcações falsas de bloqueio
