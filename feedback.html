@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<meta name="color-scheme" content="light">
+<title>Avaliação e Recompensa — Jéssica Franco</title>
+
+<!-- GOOGLE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #FEFDFB; 
+  --card: #ffffff; 
+  --ink: #383027; 
+  --muted: #8b7d6b;
+  --line: #E9DDBE; 
+  --gold: #C49A3D; 
+  --gold-hover: #B08832;
+  --gold-soft: #F3E8CF; 
+  --soft: #FBF6EC;
+}
+
+* { box-sizing: border-box; }
+body { 
+  margin: 0; 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  background-color: var(--bg); 
+  color: var(--ink); 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+h1, h2, h3 { font-family: 'Cormorant Garamond', serif; margin: 0; }
+button, input, textarea { font: inherit; outline: none; }
+button { cursor: pointer; }
+
+/* CONTAINER PRINCIPAL */
+.glass-panel {
+  background: var(--card);
+  width: 100%;
+  max-width: 420px;
+  border-radius: 24px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 50px rgba(196, 154, 61, 0.1);
+  border: 1px solid var(--line);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* LOGO TOPO */
+.logo-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  border: 1px solid var(--line);
+  margin: 0 auto 20px;
+}
+
+/* STEPS DE TRANSIÇÃO */
+.step-container { display: none; animation: fadeIn 0.4s ease; }
+.step-container.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* TIPOGRAFIA */
+.title { font-size: 28px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.1; }
+.subtitle { font-size: 14px; color: var(--muted); margin-bottom: 25px; line-height: 1.5; }
+
+/* INPUTS */
+.input-field {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fafafa;
+  color: var(--ink);
+  font-size: 15px;
+  text-align: center;
+  transition: 0.2s;
+  margin-bottom: 15px;
+}
+.input-field:focus { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-soft); background: white; }
+
+/* BOTÕES */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--gold);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  transition: 0.2s;
+  box-shadow: 0 8px 20px rgba(196,154,61,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--gold-hover); transform: translateY(-2px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  background: white;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  transition: 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 15px;
+}
+.btn-secondary:hover { border-color: var(--gold); background: var(--soft); }
+
+/* ESTRELAS RATING */
+.star-rating { display: flex; justify-content: center; gap: 8px; flex-direction: row-reverse; margin-bottom: 20px; }
+.star-rating input { display: none; }
+.star-rating label { font-size: 40px; color: #e5e5e5; cursor: pointer; transition: 0.2s; }
+.star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: var(--gold); }
+
+/* TEXTAREA */
+textarea.input-field { text-align: left; resize: none; }
+.char-count { font-size: 11px; color: var(--muted); text-align: right; display: block; margin-top: -10px; margin-bottom: 20px; }
+
+/* CUPOM ESTILO */
+.coupon-box {
+  background: var(--soft);
+  border: 2px dashed var(--gold);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 25px 0;
+}
+.coupon-code {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 2px;
+}
+.coupon-desc { font-size: 12px; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-top: 5px; }
+
+/* MENSAGENS DE ERRO */
+.error-text { color: #d32f2f; font-size: 12px; font-weight: 600; margin-top: -5px; margin-bottom: 15px; display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="glass-panel">
+  <div class="logo-circle">✨</div>
+
+  <!-- PASSO 1: VERIFICAÇÃO COM CHAMARIZ -->
+  <div id="step-verify" class="step-container active">
+    <div style="background: var(--gold-soft); color: var(--gold); font-size: 10px; font-weight: 800; padding: 6px 12px; border-radius: 99px; display: inline-block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Presente Especial 🎁</div>
+    <h1 class="title">Avalie e Ganhe 10% OFF</h1>
+    <p class="subtitle">A sua opinião é muito importante para nós. Avalie o seu último procedimento e desbloqueie um desconto exclusivo para a sua próxima manutenção!</p>
+    
+    <input type="tel" id="verifyPhone" class="input-field" placeholder="O seu WhatsApp (apenas números)">
+    <div id="verify-error" class="error-text">O seu número não foi encontrado nas nossas marcações recentes.</div>
+    
+    <button type="button" id="btnVerify" class="btn-primary" onclick="verifyClient()">
+      Verificar e Ganhar Desconto
+    </button>
+  </div>
+
+  <!-- PASSO 2: AVALIAÇÃO -->
+  <div id="step-review" class="step-container">
+    <h1 class="title">Bem-vinda, <span id="clientNameDisplay" style="color: var(--gold);">Cliente</span>!</h1>
+    <p class="subtitle">Como avalia a sua experiência de hoje com a Jéssica Franco?</p>
+    
+    <form onsubmit="submitReview(event)">
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" required/><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4"/><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3"/><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2"/><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1"/><label for="star1">★</label>
+      </div>
+
+      <textarea id="reviewText" class="input-field" maxlength="150" rows="3" placeholder="Escreva um breve comentário (opcional)..." oninput="document.getElementById('charCounter').innerText = this.value.length + '/150'"></textarea>
+      <span class="char-count" id="charCounter">0/150</span>
+
+      <button type="submit" id="btnSubmitReview" class="btn-primary">
+        Enviar e Libertar Desconto
+      </button>
+    </form>
+  </div>
+
+  <!-- PASSO 3: SUCESSO E CUPÃO -->
+  <div id="step-success" class="step-container">
+    <div style="font-size: 50px; margin-bottom: 10px;">💖</div>
+    <h1 class="title">Muitíssimo Obrigada!</h1>
+    <p class="subtitle">O seu feedback ajuda a manter a excelência do nosso estúdio. Como prometido, aqui está o seu presente:</p>
+    
+    <div class="coupon-box">
+      <div class="coupon-code">JESSICA10</div>
+      <div class="coupon-desc">10% Off no Próximo Serviço</div>
+    </div>
+    
+    <p style="font-size: 11px; color: var(--muted); margin-bottom: 25px; font-style: italic;">
+      * Tire uma captura de ecrã (print) desta página e apresente-a no dia do seu próximo atendimento para validar o desconto.
+    </p>
+
+    <!-- Este botão direciona para a página principal, rolando logo para a área da agenda -->
+    <a href="index.html#agenda" class="btn-primary" style="text-decoration: none;">
+      📅 Agendar Próxima Visita
+    </a>
+    
+    <button type="button" onclick="resetForm()" class="btn-secondary" style="margin-top: 10px; border: none; background: transparent; padding: 10px; font-size: 13px; color: var(--muted);">Voltar ao Início</button>
+  </div>
+
+</div>
+
+<script>
+// A mesma URL do seu Apps Script atual!
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
+
+let verifiedClientName = "";
+let verifiedClientPhone = "";
+
+function switchStep(stepId) {
+  document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+  document.getElementById(stepId).classList.add('active');
+}
+
+async function verifyClient() {
+  const phoneInput = document.getElementById('verifyPhone').value.trim().replace(/\D/g, '');
+  const btn = document.getElementById('btnVerify');
+  const errorMsg = document.getElementById('verify-error');
+
+  if(phoneInput.length < 8) {
+      errorMsg.innerText = "Por favor, introduza um número de WhatsApp válido.";
+      errorMsg.style.display = "block";
+      return;
+  }
+
+  btn.innerHTML = '<span style="opacity: 0.7;">A procurar registo...</span>';
+  btn.disabled = true;
+  errorMsg.style.display = "none";
+
+  try {
+      // Procura na planilha de agendamentos se o número existe e está Confirmado
+      const res = await fetch(WEB_APP_URL + "?action=get_all");
+      const data = await res.json();
+      
+      let clientFound = null;
+      if (data && data.bookings) {
+          clientFound = data.bookings.find(b => String(b['Telefone']).replace(/\D/g, '') === phoneInput && b['Status'] === 'Confirmado');
+      }
+
+      if (clientFound) {
+          verifiedClientName = clientFound['Cliente'];
+          verifiedClientPhone = clientFound['Telefone'];
+          
+          // Sucesso! Avança para as estrelas
+          document.getElementById('clientNameDisplay').innerText = verifiedClientName;
+          switchStep('step-review');
+      } else {
+          errorMsg.innerText = "O seu número não foi encontrado nas marcações recentes. Apenas clientes podem avaliar.";
+          errorMsg.style.display = "block";
+      }
+  } catch(e) {
+      errorMsg.innerText = "Erro de ligação. Por favor, verifique a internet e tente novamente.";
+      errorMsg.style.display = "block";
+  }
+
+  btn.innerText = "Verificar e Ganhar Desconto";
+  btn.disabled = false;
+}
+
+async function submitReview(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitReview');
+    btn.innerHTML = '<span style="opacity: 0.7;">A libertar desconto...</span>';
+    btn.disabled = true;
+
+    const ratingInput = document.querySelector('input[name="rating"]:checked');
+    if(!ratingInput) {
+        alert("Por favor, selecione uma nota de 1 a 5 estrelas.");
+        btn.innerText = "Enviar e Libertar Desconto";
+        btn.disabled = false;
+        return;
+    }
+
+    const rating = ratingInput.value;
+    const text = document.getElementById('reviewText').value;
+
+    const payload = {
+        type: 'review',
+        client: verifiedClientName,
+        phone: verifiedClientPhone,
+        rating: rating,
+        comment: text
+    };
+
+    try {
+        // Envia para a Aba "Avaliacoes"
+        await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
+        // Sucesso! Mostra o Cupão
+        switchStep('step-success');
+    } catch(err) {
+        alert("Ocorreu um erro ao enviar. Tente novamente.");
+        btn.innerText = "Enviar e Libertar Desconto";
+        btn.disabled = false;
+    }
+}
+
+function resetForm() {
+  document.getElementById('verifyPhone').value = '';
+  document.getElementById('reviewText').value = '';
+  document.getElementById('charCounter').innerText = '0/150';
+  document.querySelectorAll('input[name="rating"]').forEach(el => el.checked = false);
+  switchStep('step-verify');
+}
+</script>
+
+</body>
+</html>
