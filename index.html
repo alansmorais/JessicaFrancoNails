@@ -1249,7 +1249,7 @@ function changeMonth(delta) {
 }
 
 function checkFullyBooked(dateStr, dateObj) {
-    let horariosDoDia = dateObj.getDay() === 6 ? ["09:00", "11:30"] : ["09:00", "11:30", "14:00", "16:30"];
+    let horariosDoDia = dateObj.getDay() === 6 ? ["10:00", "12:00"] : ["10:00", "12:00", "14:00", "16:30"];
     const hoje = new Date();
     const hojeStr = toLocalISOString(hoje);
     
@@ -1381,9 +1381,9 @@ function renderTimes() {
 
   let horariosDoDia = [];
   if (dayOfWeek === 6) { 
-    horariosDoDia = ["09:00", "11:30"]; 
+    horariosDoDia = ["10:00", "12:00"]; 
   } else { 
-    horariosDoDia = ["09:00", "11:30", "14:00", "16:30"]; 
+    horariosDoDia = ["10:00", "12:00", "14:00", "16:30"]; 
   }
 
   const hoje = new Date();
