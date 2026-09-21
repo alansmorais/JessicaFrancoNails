@@ -230,8 +230,8 @@
                         <div class="flex flex-col gap-1.5">
                             <label class="text-xs font-semibold text-gray-600">Horário</label>
                             <select id="blockedHourTime" required class="p-3 border rounded-xl">
-                                <option value="09:00">09:00</option>
-                                <option value="11:30">11:30</option>
+                                <option value="10:00">10:00</option>
+                                <option value="12:00">12:00</option>
                                 <option value="14:00">14:00</option>
                                 <option value="16:30">16:30</option>
                             </select>
@@ -308,8 +308,8 @@
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Horário</label>
                         <select id="admTime" required class="w-full p-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-blue-100 focus:border-brand-active transition text-sm">
-                            <option value="09:00">09:00</option>
-                            <option value="11:30">11:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="12:00">12:00</option>
                             <option value="14:00">14:00</option>
                             <option value="16:30">16:30</option>
                         </select>
@@ -952,7 +952,7 @@
             }
         }
 
-        const workHours = ['09:00','11:30','14:00','16:30'];
+        const workHours = ['10:00', '12:00', '14:00', '16:30'];
         const dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         
         let currentWeekOffset = 0;
@@ -1027,9 +1027,11 @@
                         if (b['Cliente'] === 'BLOQUEADO') {
                             bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill bg-gray-500 hover:opacity-90" title="Horário Bloqueado"><div class="font-bold text-[10px] md:text-xs opacity-90 text-center mt-1">BLOQUEADO</div></div></div>`;
                         } else {
-                            // SE FOR AGENDAMENTO NORMAL
+                            // SE FOR AGENDAMENTO NORMAL (COM CLIQUE PARA VER DETALHES)
                             const initials = String(b['Cliente']).substring(0,2).toUpperCase(); 
-                            bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90" title="${b['Cliente']} - ${b['Servico']}"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${b['Servico']}</div></div></div>`; 
+                            const safeClient = String(b['Cliente']).replace(/['"]/g, '');
+                            const safeService = String(b['Servico']).replace(/['"]/g, '');
+                            bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90 cursor-pointer" title="${safeClient} - ${safeService}" onclick="alert('📅 Agendamento:\\n\\n👤 Cliente: ${safeClient}\\n💅 Serviço: ${safeService}\\n⏰ Hora: ${b['Hora']}\\n📱 WhatsApp: ${b['Telefone']}');"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${safeService}</div></div></div>`; 
                         }
                     } else { 
                         bodyHTML += `<div class="cal-cell ${bgClass}"></div>`; 
@@ -1054,7 +1056,30 @@
                     globalBlockedDates = data.blocked.map(b => String(b['DataBloqueio']).trim());
                 }
 
-                if (data.bookings) { data.bookings = data.bookings.map(b => { let dataStr = String(b['Data Agendamento']); if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0]; let horaStr = String(b['Hora']); let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); if (timeMatch) b['Hora'] = timeMatch[0]; return b; }); }
+                if (data.bookings) { 
+                    data.bookings = data.bookings.map(b => { 
+                        let dataStr = String(b['Data Agendamento']); 
+                        if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0]; 
+                        let horaStr = String(b['Hora']); 
+                        let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); 
+                        if (timeMatch) b['Hora'] = timeMatch[0]; 
+                        return b; 
+                    }); 
+                    
+                    // ORDENAÇÃO: Crescente (Datas mais próximas no topo) e à prova de falhas
+                    data.bookings.sort((a, b) => {
+                        let dataA = String(a['Data Agendamento']).split('-');
+                        let dataB = String(b['Data Agendamento']).split('-');
+                        let horaA = a['Hora'] ? String(a['Hora']).split(':') : ['00','00'];
+                        let horaB = b['Hora'] ? String(b['Hora']).split(':') : ['00','00'];
+                        
+                        let timeA = new Date(dataA[0], dataA[1] - 1, dataA[2], horaA[0], horaA[1]).getTime() || 0;
+                        let timeB = new Date(dataB[0], dataB[1] - 1, dataB[2], horaB[0], horaB[1]).getTime() || 0;
+                        
+                        return timeA - timeB; // Crescente: Mais próximas primeiro (Ago, Set, Out...)
+                    });
+                }
+                
                 const currentTotalItems = (data.bookings ? data.bookings.length : 0) + (data.courses ? data.courses.length : 0);
                 if (lastTotalItems !== -1 && currentTotalItems > lastTotalItems) { playLoudNotification(); alert("🔔 NOVA MARCAÇÃO!"); }
                 lastTotalItems = currentTotalItems;
@@ -1062,8 +1087,20 @@
                 renderDynamicCalendar(data.bookings);
                 
                 const bookingsList = document.getElementById('lista-agendamentos');
-                if(!data.bookings || data.bookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhum registo.</div>`;
-                else bookingsList.innerHTML = data.bookings.reverse().map(b => {
+                
+                // FILTRAR: Mostrar apenas a partir do dia de HOJE
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0); // Ignora a hora atual para incluir as marcações de hoje de manhã
+                const startOfToday = hoje.getTime();
+                
+                const listBookings = (data.bookings || []).filter(b => {
+                    let dataB = String(b['Data Agendamento']).split('-');
+                    let bDate = new Date(dataB[0], dataB[1] - 1, dataB[2]).getTime() || 0;
+                    return bDate >= startOfToday; // Mantém apenas de hoje em diante
+                });
+
+                if(listBookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhuma marcação a partir de hoje.</div>`;
+                else bookingsList.innerHTML = listBookings.map(b => {
                     const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
                     const obs = b['Observações'] || b['Observacoes'] || '';
                     const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
