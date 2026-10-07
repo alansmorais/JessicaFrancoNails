@@ -588,7 +588,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
       <!-- 02: Banho em Gel com Esmaltação Magnética -->
       <div class="gallery-card" data-category="banho-gel">
         <div class="gallery-img-wrap">
-          <img src="images/Unhas-banho-gel.jpeg" alt="Banho em gel no molde com esmaltação magnética" class="gallery-img" loading="lazy">
+          <img src="images/Unhas-esmaltacao-magnetica.jpeg" alt="Banho em gel no molde com esmaltação magnética" class="gallery-img" loading="lazy">
         </div>
         <div class="gallery-info">
           <span class="gallery-tag">BANHO EM GEL</span>
@@ -612,7 +612,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
       <!-- 04: Encapsulada Flores Secas -->
       <div class="gallery-card" data-category="encapsulada">
         <div class="gallery-img-wrap">
-          <img src="images/Unhas-esmaltacao-magnetica.jpeg" alt="Banho em gel com esmaltação magnética e encapsulada de flores secas" class="gallery-img" loading="lazy">
+          <img src="images/Unhas-banho-gel.jpeg" alt="Banho em gel com esmaltação magnética e encapsulada de flores secas" class="gallery-img" loading="lazy">
         </div>
         <div class="gallery-info">
           <span class="gallery-tag">ENCAPSULADA</span>
@@ -940,14 +940,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shado
 </div>
 
 <div id="toast" class="toast">Mensagem</div>
-
+<!-- SCRIPT JS COMPLETO -->
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzobu7mOdovnSLYvIL5M4o4KN635uwu5uEh2Tan7KcxvLJZZExAUXQqfIRWX42FL_lQTw/exec";
 
 // Número de WhatsApp oficial para receber a notificação
 let jessicaPhone = "5512992414347"; 
 
-const services = [
+let services = [
   {id:"alongamento", icon:"✨", name:"Alongamento de Unhas", desc:"Molde Russo ou Molde F1", price:160},
   {id:"banho", icon:"💅", name:"Banho de Gel", desc:"Esmaltação em gel simples inclusa", price:130},
   {id:"blindagem-maos", icon:"🛡️", name:"Blindagem (Mãos)", desc:"Esmaltação em gel nas mãos", price:75},
@@ -1211,6 +1211,25 @@ function renderServices() {
     </div>`).join("");
 }
 
+function renderServicesShowcase() {
+  const showcaseContainer = document.querySelector('.services-showcase');
+  if (!showcaseContainer || !services || services.length === 0) return;
+
+  showcaseContainer.innerHTML = services.map(s => `
+    <div class="showcase-card">
+      <div>
+        <div class="showcase-icon">${s.icon || '✨'}</div>
+        <h3>${s.name}</h3>
+        <p class="svc-desc">${s.desc || 'Procedimento com alta durabilidade e acabamento fino.'}</p>
+      </div>
+      <div>
+        <div class="svc-price">${BRL.format(s.price)}</div>
+        <a href="#agenda" onclick="selectServiceDirect('${s.id}')" class="secondary-btn" style="width:100%; text-align:center; padding:12px;">Agendar Serviço</a>
+      </div>
+    </div>
+  `).join('');
+}
+
 function selectServiceDirect(id) {
   const svc = services.find(s => s.id === id);
   if(svc) {
@@ -1302,6 +1321,25 @@ async function fetchData() {
     // Tratando Bloqueios
     if (data && data.blocked) {
       blockedDates = data.blocked.map(b => normalizeDateString(b['DataBloqueio'] || b['Data']));
+    }
+
+    // Tratando Serviços & Preços Atualizados pelo Painel
+    if (data && data.services && data.services.length > 0) {
+      services = data.services.map(s => ({
+        id: String(s['ID'] || s['id'] || s['Nome']).trim(),
+        name: String(s['Nome'] || s['name']).trim(),
+        desc: String(s['Descricao'] || s['desc'] || '').trim(),
+        price: Number(s['Preco'] || s['price'] || 0),
+        icon: String(s['Icone'] || s['icon'] || '✨').trim()
+      }));
+
+      // Mantém o serviço selecionado atualizado com o novo preço
+      const currentSelectedId = selectedService ? selectedService.id : services[0].id;
+      selectedService = services.find(s => s.id === currentSelectedId) || services[0];
+
+      renderServices();
+      renderServicesShowcase();
+      updateSum();
     }
 
     // Tratando Agendamentos
@@ -1535,6 +1573,7 @@ document.getElementById("courseForm").onsubmit = async e => {
 };
 
 renderServices();
+renderServicesShowcase();
 updateSum();
 fetchData();
 </script>
