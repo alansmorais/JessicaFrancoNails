@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -118,7 +118,13 @@
                             </div>
                         </div>
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 lg:p-6 flex-1 flex flex-col">
-                            <h3 class="font-bold text-gray-800 mb-4 border-b border-gray-100 pb-3">Lista Completa</h3>
+                            <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                                <div>
+                                    <h3 class="font-bold text-gray-800">Próximos Agendamentos</h3>
+                                    <p class="text-xs text-gray-400">Apenas atendimentos a acontecer</p>
+                                </div>
+                                <span id="badge-proximos-count" class="text-xs font-bold px-2.5 py-1 bg-blue-50 text-brand-active rounded-full border border-blue-100">0 a acontecer</span>
+                            </div>
                             <div id="lista-agendamentos" class="space-y-3 overflow-y-auto max-h-[400px] pr-2"></div>
                         </div>
                     </div>
@@ -1179,15 +1185,17 @@
         }
 
         function getWeekDates() {
-            let curr = new Date(); 
-            curr.setDate(curr.getDate() + currentWeekOffset);
-            let dayOfWeek = curr.getDay(); 
-            let diff = curr.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-            let monday = new Date(curr.setDate(diff)); 
+            let base = new Date();
+            // Adiciona o offset de semanas
+            base.setDate(base.getDate() + currentWeekOffset);
+            let dayOfWeek = base.getDay(); // 0 = Domingo, 1 = Segunda...
+            // Distância até segunda-feira (se for domingo = -6, senão 1 - dayOfWeek)
+            let diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            
+            let monday = new Date(base.getFullYear(), base.getMonth(), base.getDate() + diffToMonday);
             let week = [];
             for (let i = 0; i < 6; i++) { 
-                let nextDay = new Date(monday); 
-                nextDay.setDate(monday.getDate() + i); 
+                let nextDay = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
                 week.push(nextDay); 
             }
             return week;
@@ -1198,6 +1206,55 @@
             const m = String(date.getMonth() + 1).padStart(2, '0');
             const d = String(date.getDate()).padStart(2, '0');
             return `${y}-${m}-${d}`;
+        }
+
+        // Função robusta para garantir que qualquer data do Sheets vire YYYY-MM-DD no painel
+        function normalizeAdminDate(val) {
+            if (!val) return "";
+            let str = String(val).trim();
+            if (str.includes('T')) str = str.split('T')[0];
+            
+            // Caso venha DD/MM/YYYY
+            let dmy = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (dmy) {
+                return `${dmy[3]}-${dmy[2].padStart(2, '0')}-${dmy[1].padStart(2, '0')}`;
+            }
+            // Caso venha YYYY-MM-DD
+            let ymd = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (ymd) {
+                return `${ymd[1]}-${ymd[2].padStart(2, '0')}-${ymd[3].padStart(2, '0')}`;
+            }
+            return str;
+        }
+
+        // Função para garantir que a hora seja sempre HH:mm
+        function normalizeAdminTime(val) {
+            if (!val) return "";
+            let str = String(val).trim();
+            let match = str.match(/\b(\d{1,2}:\d{2})\b/);
+            if (match) {
+                let parts = match[1].split(':');
+                return `${parts[0].padStart(2, '0')}:${parts[1]}`;
+            }
+            return str;
+        }
+
+        // Função para converter data e hora do agendamento num timestamp numérico preciso
+        function getBookingTimestamp(b) {
+            if (!b || !b['Data Agendamento']) return 0;
+            let dStr = normalizeAdminDate(b['Data Agendamento']);
+            let dParts = dStr.split('-');
+            if (dParts.length !== 3) return 0;
+            let tStr = normalizeAdminTime(b['Hora']);
+            let tParts = tStr && tStr.includes(':') ? tStr.split(':') : ['00', '00'];
+            return new Date(
+                parseInt(dParts[0], 10),
+                parseInt(dParts[1], 10) - 1,
+                parseInt(dParts[2], 10),
+                parseInt(tParts[0], 10) || 0,
+                parseInt(tParts[1], 10) || 0,
+                0
+            ).getTime() || 0;
         }
         
         function getColorForService(service) { const s = String(service).toLowerCase(); if(s.includes("alongamento")) return "bg-brand-purple"; if(s.includes("banho")) return "bg-brand-blue"; if(s.includes("blindagem")) return "bg-brand-red"; return "bg-brand-green"; }
@@ -1218,8 +1275,17 @@
             });
             document.getElementById('cal-headers').innerHTML = headersHTML;
             
+            // Mapeia usando a data e a hora normalizadas
             let bookingMap = {};
-            if(bookings) bookings.forEach(b => { bookingMap[`${b['Data Agendamento']}_${b['Hora']}`] = b; });
+            if(bookings) {
+                bookings.forEach(b => {
+                    let d = normalizeAdminDate(b['Data Agendamento']);
+                    let h = normalizeAdminTime(b['Hora']);
+                    if (d && h) {
+                        bookingMap[`${d}_${h}`] = b;
+                    }
+                });
+            }
             
             let bodyHTML = '';
             workHours.forEach(hour => {
@@ -1229,7 +1295,7 @@
                     const b = bookingMap[`${dateStr}_${hour}`];
                     const bgClass = (dateStr === todayStr) ? 'bg-blue-50/20' : '';
                     
-                    const isBlockedDate = globalBlockedDates.includes(dateStr);
+                    const isBlockedDate = globalBlockedDates.some(bd => normalizeAdminDate(bd) === dateStr);
                     const isSaturdayAfternoon = (index === 5 && (hour === '14:00' || hour === '16:30'));
 
                     if (isBlockedDate) {
@@ -1242,9 +1308,9 @@
                             bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill bg-gray-500 hover:opacity-90" title="Horário Bloqueado"><div class="font-bold text-[10px] md:text-xs opacity-90 text-center mt-1">BLOQUEADO</div></div></div>`;
                         } else {
                             // SE FOR AGENDAMENTO NORMAL (COM CLIQUE PARA VER DETALHES)
-                            const initials = String(b['Cliente']).substring(0,2).toUpperCase(); 
-                            const safeClient = String(b['Cliente']).replace(/['"]/g, '');
-                            const safeService = String(b['Servico']).replace(/['"]/g, '');
+                            const initials = String(b['Cliente'] || '').substring(0,2).toUpperCase(); 
+                            const safeClient = String(b['Cliente'] || '').replace(/['"]/g, '');
+                            const safeService = String(b['Servico'] || '').replace(/['"]/g, '');
                             bodyHTML += `<div class="cal-cell ${bgClass}"><div class="event-pill ${getColorForService(b['Servico'])} hover:opacity-90 cursor-pointer" title="${safeClient} - ${safeService}" onclick="alert('📅 Agendamento:\\n\\n👤 Cliente: ${safeClient}\\n💅 Serviço: ${safeService}\\n⏰ Hora: ${b['Hora']}\\n📱 WhatsApp: ${b['Telefone']}');"><div class="font-bold text-[10px] md:text-xs opacity-90">${initials}</div><div class="truncate text-[9px] md:text-[11px] mt-1 hidden sm:block">${safeService}</div></div></div>`; 
                         }
                     } else { 
@@ -1267,7 +1333,7 @@
                 buildContactsList(allBookings);
 
                 if (data.blocked) {
-                    globalBlockedDates = data.blocked.map(b => String(b['DataBloqueio']).trim());
+                    globalBlockedDates = data.blocked.map(b => normalizeAdminDate(b['DataBloqueio']));
                 }
 
                 // Tratando Serviços vindos da Planilha
@@ -1286,26 +1352,13 @@
 
                 if (data.bookings) { 
                     data.bookings = data.bookings.map(b => { 
-                        let dataStr = String(b['Data Agendamento']); 
-                        if (dataStr.includes('T')) b['Data Agendamento'] = dataStr.split('T')[0]; 
-                        let horaStr = String(b['Hora']); 
-                        let timeMatch = horaStr.match(/\d{1,2}:\d{2}/); 
-                        if (timeMatch) b['Hora'] = timeMatch[0]; 
+                        b['Data Agendamento'] = normalizeAdminDate(b['Data Agendamento']);
+                        b['Hora'] = normalizeAdminTime(b['Hora']);
                         return b; 
                     }); 
                     
-                    // ORDENAÇÃO: Crescente (Datas mais próximas no topo) e à prova de falhas
-                    data.bookings.sort((a, b) => {
-                        let dataA = String(a['Data Agendamento']).split('-');
-                        let dataB = String(b['Data Agendamento']).split('-');
-                        let horaA = a['Hora'] ? String(a['Hora']).split(':') : ['00','00'];
-                        let horaB = b['Hora'] ? String(b['Hora']).split(':') : ['00','00'];
-                        
-                        let timeA = new Date(dataA[0], dataA[1] - 1, dataA[2], horaA[0], horaA[1]).getTime() || 0;
-                        let timeB = new Date(dataB[0], dataB[1] - 1, dataB[2], horaB[0], horaB[1]).getTime() || 0;
-                        
-                        return timeA - timeB; // Crescente: Mais próximas primeiro (Ago, Set, Out...)
-                    });
+                    // ORDENAÇÃO: Crescente (Datas e horas mais próximas no topo)
+                    data.bookings.sort((a, b) => getBookingTimestamp(a) - getBookingTimestamp(b));
                 }
                 
                 const currentTotalItems = (data.bookings ? data.bookings.length : 0) + (data.courses ? data.courses.length : 0);
@@ -1316,61 +1369,69 @@
                 
                 const bookingsList = document.getElementById('lista-agendamentos');
                 
-                // FILTRAR: Mostrar apenas a partir do dia de HOJE
-                const hoje = new Date();
-                hoje.setHours(0, 0, 0, 0); // Ignora a hora atual para incluir as marcações de hoje de manhã
-                const startOfToday = hoje.getTime();
-                
+                // FILTRAR: Apenas agendamentos que ainda estão para acontecer (futuro)
+                // Inclui uma margem de 30 minutos para o atendimento que estiver a decorrer no momento
+                const agora = Date.now();
+                const margemAtual = agora - (30 * 60 * 1000);
+
                 const listBookings = (data.bookings || []).filter(b => {
-                    let dataB = String(b['Data Agendamento']).split('-');
-                    let bDate = new Date(dataB[0], dataB[1] - 1, dataB[2]).getTime() || 0;
-                    return bDate >= startOfToday; // Mantém apenas de hoje em diante
+                    const bTime = getBookingTimestamp(b);
+                    return bTime >= margemAtual;
                 });
 
-                if(listBookings.length === 0) bookingsList.innerHTML = `<div class="text-center py-5 text-gray-400">Nenhuma marcação a partir de hoje.</div>`;
-                else bookingsList.innerHTML = listBookings.map(b => {
-                    const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                    const obs = b['Observações'] || b['Observacoes'] || '';
-                    const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
-                    
-                    const safeObs = obs.replace(/['"]/g, " ");
-                    const isBlockedHour = b['Cliente'] === 'BLOQUEADO';
-                    
-                    let titleHtml = isBlockedHour 
-                        ? `<h4 class="font-bold text-gray-500 text-sm md:text-lg">🚫 Horário Bloqueado</h4>`
-                        : `<h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4><p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p>${obsHtml}`;
-                        
-                    let actionButtons = isBlockedHour
-                        ? `<button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Remover Bloqueio de Horário"><i data-lucide="trash-2" class="w-5 h-5"></i></button>`
-                        : `
-                            <button onclick="openPDFPreview('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}', '${b['Valor']}', '${b['Tipo Pagamento']}', '${safeObs}')" class="p-1 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Ver Recibo em PDF">
-                                <i data-lucide="file-text" class="w-5 h-5"></i>
-                            </button>
-                            <button onclick="shareBooking('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-green-600 hover:bg-green-50 rounded-lg transition" title="Partilhar Texto">
-                                <i data-lucide="share-2" class="w-5 h-5"></i>
-                            </button>
-                            <button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar Agendamento">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
-                            </button>
-                        `;
+                const badgeCount = document.getElementById('badge-proximos-count');
+                if (badgeCount) {
+                    const totalAtendimentos = listBookings.filter(b => b['Cliente'] !== 'BLOQUEADO').length;
+                    badgeCount.innerText = `${totalAtendimentos} a acontecer`;
+                }
 
-                    return `
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4 ${isBlockedHour ? 'opacity-70' : ''}">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full ${isBlockedHour ? 'bg-gray-200 text-gray-500' : 'bg-blue-50 text-brand-active'} flex items-center justify-center font-bold border ${isBlockedHour ? 'border-gray-300' : 'border-blue-100'}"><span class="text-sm">${b['Hora']}</span></div>
-                                <div>
-                                    ${titleHtml}
+                if(listBookings.length === 0) {
+                    bookingsList.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">Nenhum agendamento futuro pendente.</div>`;
+                } else {
+                    bookingsList.innerHTML = listBookings.map(b => {
+                        const isConfirmed = b['Status'] === 'Confirmado'; const statusColor = isConfirmed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                        const obs = b['Observações'] || b['Observacoes'] || '';
+                        const obsHtml = obs ? `<p class="text-xs text-gray-500 mt-1 italic bg-gray-50 p-2 rounded border border-gray-100">"${obs}"</p>` : '';
+                        
+                        const safeObs = obs.replace(/['"]/g, " ");
+                        const isBlockedHour = b['Cliente'] === 'BLOQUEADO';
+                        
+                        let titleHtml = isBlockedHour 
+                            ? `<h4 class="font-bold text-gray-500 text-sm md:text-lg">🚫 Horário Bloqueado</h4>`
+                            : `<h4 class="font-bold text-gray-800 text-sm md:text-lg">${b['Cliente']}</h4><p class="text-xs text-gray-500 mt-1">${b['Servico']} · ${b['Telefone']}</p>${obsHtml}`;
+                            
+                        let actionButtons = isBlockedHour
+                            ? `<button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Remover Bloqueio de Horário"><i data-lucide="trash-2" class="w-5 h-5"></i></button>`
+                            : `
+                                <button onclick="openPDFPreview('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}', '${b['Valor']}', '${b['Tipo Pagamento']}', '${safeObs}')" class="p-1 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Ver Recibo em PDF">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                                </button>
+                                <button onclick="shareBooking('${b['Cliente']}', '${b['Telefone']}', '${b['Servico']}', '${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-green-600 hover:bg-green-50 rounded-lg transition" title="Partilhar Texto">
+                                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                                </button>
+                                <button onclick="deleteBooking('${b['Data Agendamento']}', '${b['Hora']}')" class="p-1 text-red-500 hover:bg-red-50 rounded-lg transition" title="Eliminar Agendamento">
+                                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                </button>
+                            `;
+
+                        return `
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition bg-white gap-4 ${isBlockedHour ? 'opacity-70' : ''}">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full ${isBlockedHour ? 'bg-gray-200 text-gray-500' : 'bg-blue-50 text-brand-active'} flex items-center justify-center font-bold border ${isBlockedHour ? 'border-gray-300' : 'border-blue-100'}"><span class="text-sm">${b['Hora']}</span></div>
+                                    <div>
+                                        ${titleHtml}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex sm:flex-col items-end justify-between sm:justify-start gap-1">
-                                <span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${isBlockedHour ? 'bg-gray-200 text-gray-600' : statusColor}">${isBlockedHour ? 'Bloqueado' : b['Status']}</span>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span>
-                                    ${actionButtons}
+                                <div class="flex sm:flex-col items-end justify-between sm:justify-start gap-1">
+                                    <span class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold ${isBlockedHour ? 'bg-gray-200 text-gray-600' : statusColor}">${isBlockedHour ? 'Bloqueado' : b['Status']}</span>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-[10px] text-gray-400">${b['Data Agendamento']}</span>
+                                        ${actionButtons}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`;
-                }).join('');
+                            </div>`;
+                    }).join('');
+                }
 
                 const bloqueiosList = document.getElementById('lista-bloqueios');
                 if(!data.blocked || data.blocked.length === 0) {
@@ -1428,7 +1489,7 @@
                 }
 
                 // Não soma as receitas nem marcações falsas de bloqueio
-                const validBookings = data.bookings ? data.bookings.filter(b => b['Cliente'] !== 'BLOQUEADO') : [];
+                const validBookings = listBookings.filter(b => b['Cliente'] !== 'BLOQUEADO');
                 document.getElementById('stat-agendamentos').innerText = validBookings.length;
                 let receita = 0; const clientesMap = new Map();
                 validBookings.forEach(b => { if(b['Status'] === 'Confirmado' && b['Valor']) receita += Number(b['Valor']); if(!clientesMap.has(b['Telefone'])) clientesMap.set(b['Telefone'], b['Cliente']); });
